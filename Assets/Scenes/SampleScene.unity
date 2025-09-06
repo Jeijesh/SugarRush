@@ -2765,6 +2765,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2859,7 +2860,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 5.625
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2890,6 +2891,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c88f5cead0c0b2a4eb05b5900433f8d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ComponentVersion: 1
+  m_AssetsPPU: 32
+  m_RefResolutionX: 640
+  m_RefResolutionY: 360
+  m_CropFrame: 0
+  m_GridSnapping: 0
+  m_FilterMode: 0
+  m_UpscaleRT: 0
+  m_PixelSnapping: 0
+  m_CropFrameX: 0
+  m_CropFrameY: 0
+  m_StretchFill: 0
 --- !u!1 &521846130
 GameObject:
   m_ObjectHideFlags: 0
@@ -3581,8 +3606,8 @@ Transform:
   m_GameObject: {fileID: 608713328}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 967235854}
@@ -3605,13 +3630,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 608713328}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b801f68816967f6aafee9bd0f14e61f, type: 3}
+  m_Script: {fileID: 11500000, guid: ac963e4a2781fec19bc6a01c700d2ace, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leftPoint: {fileID: 1928560353}
-  centerPoint: {fileID: 551059327}
-  rightPoint: {fileID: 1660505461}
-  moveSpeed: 2
+  rotateAmount: 3
+  rotateSpeed: 1
+  positionSwayAmount: {x: 0.1, y: 0.2, z: 0}
+  positionSwaySpeed: 1
 --- !u!1 &613749951
 GameObject:
   m_ObjectHideFlags: 0
@@ -3681,7 +3706,7 @@ MonoBehaviour:
   m_LightType: 4
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.33579564, g: 0.36499572, b: 0.9245283, a: 1}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
@@ -4633,7 +4658,7 @@ MonoBehaviour:
   hair2Woman: {fileID: 3378221320868930086, guid: e80d5351e0f7b02f2adaf5bc5b9c5c23, type: 3}
   hair2WomanOffset: {x: 0, y: -0.8}
   hair3Woman: {fileID: 5213521789248732317, guid: 3cedfc98bf3359026bcb5961077510a0, type: 3}
-  hair3WomanOffset: {x: 0, y: 0.1}
+  hair3WomanOffset: {x: 0, y: 0}
   hair1Man: {fileID: -3739957133524300147, guid: 93d1997bad121ef99a16bfd6c36bf4cb, type: 3}
   hair1ManOffset: {x: 0, y: 0.7}
   hair2Man: {fileID: -7514906054742553019, guid: 56dc3e1e19a275c7d9efab175b824f04, type: 3}
@@ -4643,19 +4668,19 @@ MonoBehaviour:
   clothes1WomanNormal: {fileID: 7742721119102333528, guid: d6c0156acd339618b9fdf7efb5256a09, type: 3}
   clothes1WomanNormalOffset: {x: 0, y: 0.1}
   clothes2WomanNormal: {fileID: 21300000, guid: 6461abebe9525867299a00673091694d, type: 3}
-  clothes2WomanNormalOffset: {x: 0, y: 2.9}
+  clothes2WomanNormalOffset: {x: 0, y: 3}
   clothes3WomanNormal: {fileID: 8160665548908520629, guid: 1fd20fab4e64605efab2d369aa66702f, type: 3}
-  clothes3WomanNormalOffset: {x: 0, y: -0.1}
+  clothes3WomanNormalOffset: {x: 0, y: 0}
   clothes1WomanOverweight: {fileID: 4381418198244357952, guid: 35322cb7f6541dd43bd1addc96b5e7c5, type: 3}
   clothes1WomanOverweightOffset: {x: 0, y: 0}
   clothes2WomanOverweight: {fileID: 8408742677998291522, guid: b38e1d51ed55acb6e9353dd4f56ad689, type: 3}
   clothes2WomanOverweightOffset: {x: 0, y: 0.3}
   clothes3WomanOverweight: {fileID: 2660509500868812510, guid: 95517620e64da3b34b934ace1652e091, type: 3}
-  clothes3WomanOverweightOffset: {x: 0, y: -0.1}
+  clothes3WomanOverweightOffset: {x: 0, y: 0}
   clothes1ManNormal: {fileID: 4009355068965086491, guid: e033cc63582f1f1fd8c59dcec27f2d24, type: 3}
-  clothes1ManNormalOffset: {x: 0, y: 0.3}
+  clothes1ManNormalOffset: {x: 0, y: 0.4}
   clothes2ManNormal: {fileID: 3410439384014351281, guid: be9cd3f47278bd958ad478f977b401a8, type: 3}
-  clothes2ManNormalOffset: {x: 0, y: 0.4}
+  clothes2ManNormalOffset: {x: 0, y: 0.3}
   clothes3ManNormal: {fileID: -5776421600631150107, guid: 539afcdfc975c447fa3218fc8375b3fc, type: 3}
   clothes3ManNormalOffset: {x: 0, y: 0.1}
   clothes1ManOverweight: {fileID: -1303488210474810115, guid: c56639538d053bcb7b5f59fc433aa29a, type: 3}
@@ -7168,6 +7193,93 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1303152407}
   m_CullTransparentMesh: 1
+--- !u!1 &1308696395
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1308696397}
+  - component: {fileID: 1308696396}
+  m_Layer: 0
+  m_Name: retro-pixel-art-hospital-bed-with-night-sky-0tw3hr03beba7e6t_0
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!212 &1308696396
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1308696395}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: -1
+  m_Sprite: {fileID: 6881831582485419765, guid: 91a90702c5e0496b1b29e1ddb7988d8c, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 19.2, y: 8.64}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!4 &1308696397
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1308696395}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.05, y: 1.3, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1314437859
 GameObject:
   m_ObjectHideFlags: 0
@@ -9182,6 +9294,93 @@ MonoBehaviour:
   deltaText: {fileID: 570973209}
   timerText: {fileID: 776219735}
   finalScoreText: {fileID: 1927649320}
+--- !u!1 &1811313413
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1811313415}
+  - component: {fileID: 1811313414}
+  m_Layer: 0
+  m_Name: Table
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!212 &1811313414
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1811313413}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 100
+  m_Sprite: {fileID: 5213521789248732317, guid: 8c236af235e21b3f289bea6f41d432dd, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 20, y: 11.25}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!4 &1811313415
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1811313413}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1819416571
 GameObject:
   m_ObjectHideFlags: 0
@@ -11985,3 +12184,5 @@ SceneRoots:
   - {fileID: 608713329}
   - {fileID: 1798480877}
   - {fileID: 1292591653}
+  - {fileID: 1811313415}
+  - {fileID: 1308696397}
