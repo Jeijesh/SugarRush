@@ -5,14 +5,13 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    [Header("Patient Settings")]
-    public GameObject patientPrefab;
-    public Transform spawnPoint;
+    [Header("Managers")]
     public PatientManager patientManager;
     public PatientVisualManager visualManager;
+    public PatientUI patientUI;
 
-    private GameObject currentPatientGO;
-    private Patient currentPatient;
+    [Header("Spawn")]
+    public Transform spawnPoint;
 
     [Header("Timer")]
     public float totalTime = 60f;
@@ -24,6 +23,8 @@ public class GameManager : MonoBehaviour
     public int penaltyPerDeviation = 150;
     public int multiplier = 5;
     private int score = 0;
+
+    private Patient currentPatient;
 
     private void Awake()
     {
@@ -64,37 +65,29 @@ public class GameManager : MonoBehaviour
         int submittedRisk = Patient.ConvertRiskToNumeric(userRisk);
         int deviation = Mathf.Abs(patientRisk - submittedRisk);
 
-        int delta = Mathf.RoundToInt((basePoints - penaltyPerDeviation * deviation) * multiplier / Mathf.Max(remainingTime, 1f));
+        int delta = Mathf.RoundToInt((basePoints - penaltyPerDeviation * deviation) 
+                                     * multiplier / Mathf.Max(remainingTime, 1f));
         score += delta;
         ScoreManager.Instance.UpdateScore(score, delta);
 
-        PatientMover mover = currentPatientGO.GetComponent<PatientMover>();
-        if (mover != null) mover.OnPatientSubmitted();
+        // setelah submit, langsung next patient
+SpawnNextPatient();    }
 
-        StartCoroutine(WaitPatientRightThenNext(mover));
-    }
-
-    private IEnumerator WaitPatientRightThenNext(PatientMover mover)
+    private IEnumerator NextPatientCoroutine()
     {
-        if (mover != null)
-            while (!mover.IsAtRight()) yield return null;
-
-        if (currentPatientGO != null) Destroy(currentPatientGO);
-
+        yield return new WaitForSeconds(0.5f); // delay kecil biar enak transition
         SpawnNextPatient();
     }
 
     private void SpawnNextPatient()
     {
         currentPatient = patientManager.GeneratePatient();
-        currentPatientGO = Instantiate(patientPrefab, spawnPoint.position, Quaternion.identity);
-
-        PatientMover mover = currentPatientGO.GetComponent<PatientMover>();
 
         if (visualManager != null)
             visualManager.SetupPatient(currentPatient);
 
-        PatientUI.Instance.ShowPatient(currentPatient);
+        if (patientUI != null)
+            patientUI.ShowPatient(currentPatient);
     }
 
     public int GetScore() => score;

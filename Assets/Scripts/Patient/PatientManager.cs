@@ -3,8 +3,9 @@ using UnityEngine;
 public class PatientManager : MonoBehaviour
 {
     private Color[] skinTones = { new Color32(255,224,189,255), new Color32(241,194,125,255), new Color32(224,172,105,255), new Color32(198,134,66,255), new Color32(141,85,36,255), new Color32(92,60,30,255) };
-    private Color[] youngHairColors = { Color.black, new Color32(139,69,19,255), new Color32(255,215,0,255), new Color32(210,180,140,255) };
-    private Color[] oldHairColors = { Color.white, Color.grey };
+    private Color[] youngHairColors = { new Color32(20,20,20,255), new Color32(90,50,30,255), new Color32(184,134,11,255), new Color32(160,130,100,255) };
+    private Color[] oldHairColors   = { new Color32(230,230,230,255), new Color32(180,180,180,255) };
+
     private Color[] clothesColors = { new Color32(102,153,204,255), new Color32(119,178,117,255), new Color32(178,102,102,255), new Color32(204,153,102,255), new Color32(153,119,178,255), new Color32(229,229,153,255) };
 
     private string[] femaleNames = { "Dewi","Ayu","Indah","Siti","Ratna","Lestari","Anita","Fitri","Rina","Yulia" };

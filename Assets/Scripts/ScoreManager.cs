@@ -9,7 +9,6 @@ public class ScoreManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI deltaText;
     public TextMeshProUGUI timerText;
-    public GameObject endScreen;
     public TextMeshProUGUI finalScoreText;
 
     private void Awake()
@@ -20,18 +19,22 @@ public class ScoreManager : MonoBehaviour
 
     public void UpdateScore(int totalScore, int delta)
     {
-        if(scoreText!=null) scoreText.text = $"Score: {totalScore}";
-        if(deltaText!=null) deltaText.text = delta>=0? $"+{delta}":"-";
+        if (scoreText != null) 
+            scoreText.text = $"Score: {totalScore}";
+
+        if (deltaText != null) 
+            deltaText.text = delta >= 0 ? $"+{delta}" : $"-{Mathf.Abs(delta)}";
     }
 
     public void UpdateTimer(float time)
     {
-        if(timerText!=null) timerText.text = $"Time: {Mathf.CeilToInt(time)}s";
+        if (timerText != null) 
+            timerText.text = $"Time: {Mathf.CeilToInt(time)}s";
     }
 
     public void ShowFinalScore(int finalScore)
     {
-        if(endScreen!=null) endScreen.SetActive(true);
-        if(finalScoreText!=null) finalScoreText.text = $"Final Score: {finalScore}";
+        if (finalScoreText != null) 
+            finalScoreText.text = $"Final Score: {finalScore}";
     }
 }
