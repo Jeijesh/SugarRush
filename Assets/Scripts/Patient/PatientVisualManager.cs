@@ -78,70 +78,74 @@ public class PatientVisualManager : MonoBehaviour
         defaultClothesPos = clothesRenderer.transform.localPosition;
     }
 
-    public void SetupPatient(Patient patient)
+public void SetupPatient(Patient patient)
+{
+    bool isMale = patient.gender == 1;
+    bool isYoung = patient.age < 45;
+    bool isOverweight = patient.bodyType == 1;
+
+    // Body
+    bodyRenderer.sprite = !isMale ? (isOverweight ? overweightWoman : normalWoman) : (isOverweight ? overweightMan : normalMan);
+    bodyRenderer.color = patient.skinColor;
+
+    // Face
+    faceRenderer.sprite = !isMale ? (isYoung ? youngWoman : oldWoman) : (isYoung ? youngMan : oldMan);
+    faceRenderer.color = patient.skinColor;
+
+    // Hair
+    Sprite chosenHair;
+    Vector2 chosenHairOffset = Vector2.zero;
+
+    if (isMale)
     {
-        bool isMale = patient.gender == 1;
-        bool isYoung = patient.age < 45;
-        bool isOverweight = patient.bodyType == 1;
-
-        // Body
-        if (!isMale) bodyRenderer.sprite = isOverweight ? overweightWoman : normalWoman;
-        else bodyRenderer.sprite = isOverweight ? overweightMan : normalMan;
-        bodyRenderer.color = patient.skinColor;
-
-        // Face
-        if (!isMale) faceRenderer.sprite = isYoung ? youngWoman : oldWoman;
-        else faceRenderer.sprite = isYoung ? youngMan : oldMan;
-        faceRenderer.color = patient.skinColor;
-
-        // Hair
-        Sprite chosenHair;
-        Vector2 chosenHairOffset = Vector2.zero;
-        if (isMale)
-        {
-            int index = Random.Range(0, 3);
-            if (index == 0) { chosenHair = hair1Man; chosenHairOffset = hair1ManOffset; }
-            else if (index == 1) { chosenHair = hair2Man; chosenHairOffset = hair2ManOffset; }
-            else { chosenHair = hair3Man; chosenHairOffset = hair3ManOffset; }
-        }
-        else
-        {
-            int index = Random.Range(0, 3);
-            if (index == 0) { chosenHair = hair1Woman; chosenHairOffset = hair1WomanOffset; }
-            else if (index == 1) { chosenHair = hair2Woman; chosenHairOffset = hair2WomanOffset; }
-            else { chosenHair = hair3Woman; chosenHairOffset = hair3WomanOffset; }
-        }
-        hairRenderer.sprite = chosenHair;
-        hairRenderer.color = patient.hairColor;
-        hairRenderer.transform.localPosition = defaultHairPos + (Vector3)chosenHairOffset;
-
-        // Clothes
-        Sprite[] clothesOptions;
-        Vector2[] clothesOffsets;
-        if (!isMale && !isOverweight)
-        {
-            clothesOptions = new Sprite[] { clothes1WomanNormal, clothes2WomanNormal, clothes3WomanNormal };
-            clothesOffsets = new Vector2[] { clothes1WomanNormalOffset, clothes2WomanNormalOffset, clothes3WomanNormalOffset };
-        }
-        else if (!isMale && isOverweight)
-        {
-            clothesOptions = new Sprite[] { clothes1WomanOverweight, clothes2WomanOverweight, clothes3WomanOverweight };
-            clothesOffsets = new Vector2[] { clothes1WomanOverweightOffset, clothes2WomanOverweightOffset, clothes3WomanOverweightOffset };
-        }
-        else if (isMale && !isOverweight)
-        {
-            clothesOptions = new Sprite[] { clothes1ManNormal, clothes2ManNormal, clothes3ManNormal };
-            clothesOffsets = new Vector2[] { clothes1ManNormalOffset, clothes2ManNormalOffset, clothes3ManNormalOffset };
-        }
-        else
-        {
-            clothesOptions = new Sprite[] { clothes1ManOverweight, clothes2ManOverweight, clothes3ManOverweight };
-            clothesOffsets = new Vector2[] { clothes1ManOverweightOffset, clothes2ManOverweightOffset, clothes3ManOverweightOffset };
-        }
-
-        int clothesIndex = Random.Range(0, clothesOptions.Length);
-        clothesRenderer.sprite = clothesOptions[clothesIndex];
-        clothesRenderer.color = patient.clothesColor;
-        clothesRenderer.transform.localPosition = defaultClothesPos + (Vector3)clothesOffsets[clothesIndex];
+        int index = Random.Range(0, 3);
+        if (index == 0) { chosenHair = hair1Man; chosenHairOffset = hair1ManOffset; }
+        else if (index == 1) { chosenHair = hair2Man; chosenHairOffset = hair2ManOffset; }
+        else { chosenHair = hair3Man; chosenHairOffset = hair3ManOffset; }
     }
+    else
+    {
+        int index = Random.Range(0, 3);
+        if (index == 0) { chosenHair = hair1Woman; chosenHairOffset = hair1WomanOffset; }
+        else if (index == 1) { chosenHair = hair2Woman; chosenHairOffset = hair2WomanOffset; }
+        else { chosenHair = hair3Woman; chosenHairOffset = hair3WomanOffset; }
+    }
+
+    // Gunakan hairColor yang sudah di-set di PatientManager.GeneratePatient()
+    hairRenderer.sprite = chosenHair;
+    hairRenderer.color = patient.hairColor;
+    hairRenderer.transform.localPosition = defaultHairPos + (Vector3)chosenHairOffset;
+
+    // Clothes
+    Sprite[] clothesOptions;
+    Vector2[] clothesOffsets;
+
+    if (!isMale && !isOverweight)
+    {
+        clothesOptions = new Sprite[] { clothes1WomanNormal, clothes2WomanNormal, clothes3WomanNormal };
+        clothesOffsets = new Vector2[] { clothes1WomanNormalOffset, clothes2WomanNormalOffset, clothes3WomanNormalOffset };
+    }
+    else if (!isMale && isOverweight)
+    {
+        clothesOptions = new Sprite[] { clothes1WomanOverweight, clothes2WomanOverweight, clothes3WomanOverweight };
+        clothesOffsets = new Vector2[] { clothes1WomanOverweightOffset, clothes2WomanOverweightOffset, clothes3WomanOverweightOffset };
+    }
+    else if (isMale && !isOverweight)
+    {
+        clothesOptions = new Sprite[] { clothes1ManNormal, clothes2ManNormal, clothes3ManNormal };
+        clothesOffsets = new Vector2[] { clothes1ManNormalOffset, clothes2ManNormalOffset, clothes3ManNormalOffset };
+    }
+    else
+    {
+        clothesOptions = new Sprite[] { clothes1ManOverweight, clothes2ManOverweight, clothes3ManOverweight };
+        clothesOffsets = new Vector2[] { clothes1ManOverweightOffset, clothes2ManOverweightOffset, clothes3ManOverweightOffset };
+    }
+
+    int clothesIndex = Random.Range(0, clothesOptions.Length);
+    clothesRenderer.sprite = clothesOptions[clothesIndex];
+    clothesRenderer.color = patient.clothesColor;
+    clothesRenderer.transform.localPosition = defaultClothesPos + (Vector3)clothesOffsets[clothesIndex];
+}
+
+    
 }

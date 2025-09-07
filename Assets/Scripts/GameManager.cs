@@ -53,45 +53,45 @@ public class GameManager : MonoBehaviour
         ScoreManager.Instance.UpdateTimer(remainingTime);
     }
 
-public void SubmitAnswer(int submittedScore)
-{
-    if (currentPatient == null || gameEnded) return;
-
-    int patientScore = currentPatient.GetTotalScore();
-    int deviation = Mathf.Abs(patientScore - submittedScore);
-
-    float timeUsed = Time.time - patientStartTime;
-    int delta = 0;
-
-    // Dasar skor
-    int baseScore = 400;
-
-    if (submittedScore == patientScore) // jawaban benar
+    public void SubmitAnswer(int submittedScore)
     {
-        // bonus waktu linear: 10 detik awal = +100, 30 detik = +0
-        float timeFactor = Mathf.Clamp01((30f - timeUsed) / 20f); // 10→30s mapped ke 1→0
-        int timeBonus = Mathf.RoundToInt(timeFactor * 100f);
-        delta = baseScore + timeBonus;
+        if (currentPatient == null || gameEnded) return;
+
+        int patientScore = currentPatient.GetTotalScore();
+        int deviation = Mathf.Abs(patientScore - submittedScore);
+
+        float timeUsed = Time.time - patientStartTime;
+        int delta = 0;
+
+        // Dasar skor
+        int baseScore = 400;
+
+        if (submittedScore == patientScore) // jawaban benar
+        {
+            // bonus waktu linear: 10 detik awal = +100, 30 detik = +0
+            float timeFactor = Mathf.Clamp01((30f - timeUsed) / 20f);
+            int timeBonus = Mathf.RoundToInt(timeFactor * 100f);
+            delta = baseScore + timeBonus;
+        }
+        else // jawaban salah
+        {
+            delta = baseScore - 100 * deviation;
+
+            float timeFactor = Mathf.Clamp01((30f - timeUsed) / 20f);
+            int timeAdjustment = Mathf.RoundToInt(timeFactor * 100f);
+            delta += timeAdjustment;
+        }
+
+        delta = Mathf.Clamp(delta, -400, 500);
+
+        score += delta;
+        ScoreManager.Instance.UpdateScore(score, delta);
+
+        // 🔥 efek shake kamera
+        StartCoroutine(CameraShake(0.15f, 0.05f));
+
+        SpawnNextPatient();
     }
-    else // jawaban salah
-    {
-        // kurangi dari dasar per deviasi
-        delta = baseScore - 100 * deviation;
-
-        // opsional: penalti tambahan jika submit terlalu lama
-        float timeFactor = Mathf.Clamp01((30f - timeUsed) / 20f);
-        int timeAdjustment = Mathf.RoundToInt(timeFactor * 100f);
-        delta += timeAdjustment; // bonus waktu tetap berlaku
-    }
-
-    delta = Mathf.Clamp(delta, -400, 500); // pastikan delta tetap di range
-
-    score += delta;
-    ScoreManager.Instance.UpdateScore(score, delta);
-
-    SpawnNextPatient();
-}
-
 
     private void SpawnNextPatient()
     {
@@ -105,4 +105,26 @@ public void SubmitAnswer(int submittedScore)
     }
 
     public int GetScore() => score;
+
+    // 🔥 fungsi camera shake
+    private IEnumerator CameraShake(float duration, float magnitude)
+    {
+        if (Camera.main == null) yield break;
+
+        Vector3 originalPos = Camera.main.transform.localPosition;
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            float offsetX = Random.Range(-1f, 1f) * magnitude;
+            float offsetY = Random.Range(-1f, 1f) * magnitude;
+
+            Camera.main.transform.localPosition = originalPos + new Vector3(offsetX, offsetY, 0f);
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        Camera.main.transform.localPosition = originalPos;
+    }
 }

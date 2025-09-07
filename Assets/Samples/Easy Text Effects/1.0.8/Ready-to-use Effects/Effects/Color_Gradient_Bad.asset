@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16860026da54450394f6a38fe250e740, type: 3}
+  m_Name: Color_Gradient_Bad
+  m_EditorClassIdentifier: 
+  effectTag: gradient
+  startCharIndex: 0
+  charLength: 132
+  animationType: 2
+  fixedDuration: 0
+  durationPerChar: 1
+  timeBetweenChars: 0.1
+  noDelayForChars: 1
+  reverseCharOrder: 0
+  easingCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  clampBetween0And1: 0
+  timeType: 0
+  colorType: 0
+  startColor: {r: 1, g: 1, b: 1, a: 1}
+  endColor: {r: 1, g: 0, b: 0, a: 1}
+  gradient:
+    serializedVersion: 2
+    key0: {r: 0.45882353, g: 0.6745098, b: 1, a: 1}
+    key1: {r: 0.3074855, g: 0.30153078, b: 0.8301887, a: 1}
+    key2: {r: 0.45072356, g: 0.40970984, b: 0.9339623, a: 1}
+    key3: {r: 0.3137255, g: 0.32156864, b: 0.83921576, a: 0}
+    key4: {r: 0.4575472, g: 0.6728062, b: 1, a: 0}
+    key5: {r: 0.5842584, g: 0.3160377, b: 1, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 15613
+    ctime2: 34502
+    ctime3: 53199
+    ctime4: 65535
+    ctime5: 65535
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 65535
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 2
+    m_ColorSpace: 0
+    m_NumColorKeys: 5
+    m_NumAlphaKeys: 2
+  orientation: 0
+  stride: 20
+  startAlpha: 0
+  endAlpha: 1
