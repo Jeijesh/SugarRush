@@ -10,21 +10,16 @@ public class GameManager : MonoBehaviour
     public PatientVisualManager visualManager;
     public PatientUI patientUI;
 
-    [Header("Spawn")]
-    public Transform spawnPoint;
-
     [Header("Timer")]
     public float totalTime = 60f;
     private float remainingTime;
     private bool gameEnded = false;
 
     [Header("Score")]
-    public int basePoints = 500;
-    public int penaltyPerDeviation = 150;
-    public int multiplier = 5;
     private int score = 0;
 
     private Patient currentPatient;
+    private float patientStartTime;
 
     private void Awake()
     {
@@ -42,7 +37,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator TimerCoroutine()
     {
-        while (remainingTime > 0)
+        while (remainingTime > 0f)
         {
             remainingTime -= Time.deltaTime;
             ScoreManager.Instance.UpdateTimer(remainingTime);
@@ -54,38 +49,57 @@ public class GameManager : MonoBehaviour
     private void EndGame()
     {
         gameEnded = true;
-        ScoreManager.Instance.ShowFinalScore(score);
+        remainingTime = 0f;
+        ScoreManager.Instance.UpdateTimer(remainingTime);
     }
 
-    public void SubmitAnswer(string userRisk)
+public void SubmitAnswer(int submittedScore)
+{
+    if (currentPatient == null || gameEnded) return;
+
+    int patientScore = currentPatient.GetTotalScore();
+    int deviation = Mathf.Abs(patientScore - submittedScore);
+
+    float timeUsed = Time.time - patientStartTime;
+    int delta = 0;
+
+    // Dasar skor
+    int baseScore = 400;
+
+    if (submittedScore == patientScore) // jawaban benar
     {
-        if (currentPatient == null || gameEnded) return;
-
-        int patientRisk = currentPatient.GetNumericRisk();
-        int submittedRisk = Patient.ConvertRiskToNumeric(userRisk);
-        int deviation = Mathf.Abs(patientRisk - submittedRisk);
-
-        int delta = Mathf.RoundToInt((basePoints - penaltyPerDeviation * deviation) 
-                                     * multiplier / Mathf.Max(remainingTime, 1f));
-        score += delta;
-        ScoreManager.Instance.UpdateScore(score, delta);
-
-        // setelah submit, langsung next patient
-SpawnNextPatient();    }
-
-    private IEnumerator NextPatientCoroutine()
-    {
-        yield return new WaitForSeconds(0.5f); // delay kecil biar enak transition
-        SpawnNextPatient();
+        // bonus waktu linear: 10 detik awal = +100, 30 detik = +0
+        float timeFactor = Mathf.Clamp01((30f - timeUsed) / 20f); // 10→30s mapped ke 1→0
+        int timeBonus = Mathf.RoundToInt(timeFactor * 100f);
+        delta = baseScore + timeBonus;
     }
+    else // jawaban salah
+    {
+        // kurangi dari dasar per deviasi
+        delta = baseScore - 100 * deviation;
+
+        // opsional: penalti tambahan jika submit terlalu lama
+        float timeFactor = Mathf.Clamp01((30f - timeUsed) / 20f);
+        int timeAdjustment = Mathf.RoundToInt(timeFactor * 100f);
+        delta += timeAdjustment; // bonus waktu tetap berlaku
+    }
+
+    delta = Mathf.Clamp(delta, -400, 500); // pastikan delta tetap di range
+
+    score += delta;
+    ScoreManager.Instance.UpdateScore(score, delta);
+
+    SpawnNextPatient();
+}
+
 
     private void SpawnNextPatient()
     {
         currentPatient = patientManager.GeneratePatient();
+        patientStartTime = Time.time;
 
         if (visualManager != null)
             visualManager.SetupPatient(currentPatient);
-
         if (patientUI != null)
             patientUI.ShowPatient(currentPatient);
     }
