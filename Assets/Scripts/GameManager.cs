@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
         }
         else // jawaban salah
         {
-            delta = baseScore - 100 * deviation;
+            delta = baseScore - 75 * deviation;
 
             float timeFactor = Mathf.Clamp01((30f - timeUsed) / 20f);
             int timeAdjustment = Mathf.RoundToInt(timeFactor * 100f);

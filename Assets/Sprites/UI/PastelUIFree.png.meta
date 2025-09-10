@@ -2206,10 +2206,10 @@ TextureImporter:
         x: 182
         y: 76
         width: 54
-        height: 17
+        height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 3, y: 4, z: 21, w: 1}
       customData: 
       outline: []
       physicsShape: []
@@ -2771,6 +2771,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: PastelUIFree_107
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 26
+        width: 33
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9330c1308cc503cedbdc93669828f91e
+      internalID: -470056211
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -2795,6 +2817,7 @@ TextureImporter:
       PastelUIFree_104: -8766073030112549281
       PastelUIFree_105: 9155664432876302265
       PastelUIFree_106: -3986666429398924317
+      PastelUIFree_107: -470056211
       PastelUIFree_11: -4573227430228828510
       PastelUIFree_12: 5763676056390503012
       PastelUIFree_13: -607857820910772859

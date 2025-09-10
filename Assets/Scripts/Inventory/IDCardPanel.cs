@@ -44,19 +44,41 @@ public class IDCardPanel : MonoBehaviour
 
     public void ClosePanel() => panel.SetActive(false);
 
-    private void SpawnDirt()
-    {
-        if(dirtPrefab==null || dirtParent==null) return;
-        foreach(Transform child in dirtParent) Destroy(child.gameObject);
+private void SpawnDirt()
+{
+    if (dirtPrefab == null || dirtParent == null) return;
 
-        for(int i=0;i<dirtCount;i++)
-        {
-            GameObject dirt = Instantiate(dirtPrefab, dirtParent);
-            RectTransform rt = dirt.GetComponent<RectTransform>();
-            rt.anchoredPosition = new Vector2(
-                Random.Range(-dirtParent.rect.width/2,dirtParent.rect.width/2),
-                Random.Range(-dirtParent.rect.height/2,dirtParent.rect.height/2)
-            );
-        }
+    // hapus sisa dirt lama
+    foreach (Transform child in dirtParent) Destroy(child.gameObject);
+
+    // spawn dirt random
+    for (int i = 0; i < dirtCount; i++)
+    {
+        GameObject dirt = Instantiate(dirtPrefab, dirtParent);
+        RectTransform rt = dirt.GetComponent<RectTransform>();
+
+        // posisi random
+        rt.anchoredPosition = new Vector2(
+            Random.Range(-dirtParent.rect.width / 2, dirtParent.rect.width / 2),
+            Random.Range(-dirtParent.rect.height / 2, dirtParent.rect.height / 2)
+        );
+
+        // rotasi random kecil biar variasi
+        rt.localRotation = Quaternion.Euler(0, 0, Random.Range(-15f, 15f));
     }
+
+    // tambahkan 1 dirt di kanan atas
+    GameObject topRightDirt = Instantiate(dirtPrefab, dirtParent);
+    RectTransform tr = topRightDirt.GetComponent<RectTransform>();
+
+    // kanan atas relatif terhadap rect
+    tr.anchoredPosition = new Vector2(
+        dirtParent.rect.width / 2 - 50f,   // offset sedikit biar nggak mepet banget
+        dirtParent.rect.height / 2 - 50f
+    );
+
+    // rotasi acak juga
+    tr.localRotation = Quaternion.Euler(0, 0, Random.Range(-15f, 15f));
+}
+
 }
