@@ -6,132 +6,170 @@ using System.Collections;
 public class GlukometerShellGame : MonoBehaviour
 {
     [Header("UI References")]
-    public Button[] strips;                  // 3 tombol strip
+    public Button[] strips;                  // 3 tombol strip (button objects)
     public TextMeshProUGUI feedbackText;
     public TextMeshProUGUI countdownText;
     public Button exitButton;
 
     [Header("Settings")]
-    public float shuffleDuration = 0.5f;     // durasi animasi pindah posisi
-    public int shuffleCount = 5;             // berapa kali acak
-    public float countdownTime = 3f;         // waktu tunggu sebelum bisa klik
+    public float shuffleDuration = 0.5f;     // durasi animasi pindah posisi (saat swap dua posisi)
+    public int shuffleCount = 5;             // berapa kali swap terjadi
+    public int countdownTime = 3;            // detik sebelum shuffle mulai / sebelum player boleh klik
 
-    private Vector3[] startPositions;        // posisi awal tiap strip
-    private int correctIndex;
+    // internal
+    private Vector3[] startPositions;        // posisi awal slot (lokal) — tetap
+    private int[] posToButton;               // mapping positionIndex -> buttonIndex (siapa menempati posisi itu)
     private bool canClick = false;
     private Patient lastPatient;
 
-    private void Start()
+    // NOTE: specification: button index 0 adalah yang "benar"
+    private const int ORIGINAL_CORRECT_BUTTON_INDEX = 0;
+
+    void Start()
     {
-        // Simpan posisi awal
+        // safety
+        if (strips == null || strips.Length < 1)
+        {
+            Debug.LogError("Assign strips (buttons) di inspector!");
+            enabled = false;
+            return;
+        }
+
+        // simpan posisi awal (anggap tiap button awalnya berada di slot pos i)
         startPositions = new Vector3[strips.Length];
+        posToButton = new int[strips.Length];
+
         for (int i = 0; i < strips.Length; i++)
         {
             startPositions[i] = strips[i].transform.localPosition;
+            posToButton[i] = i; // awal: posisi i ditempati button i
+
+            // register click listener (capture index)
             int idx = i;
+            strips[i].onClick.RemoveAllListeners();
             strips[i].onClick.AddListener(() => OnStripClicked(idx));
         }
 
         if (exitButton != null)
             exitButton.onClick.AddListener(ClosePanel);
 
+        // mulai pertama kali
         ResetGame();
     }
 
-    private void Update()
+    void Update()
     {
-        // Cek pasien aktif
+        // reset otomatis bila pasien berubah (sama gaya ScalePanel)
         if (PatientUI.Instance != null && PatientUI.Instance.currentPatient != null)
         {
             Patient p = PatientUI.Instance.currentPatient;
-            if (p != lastPatient) // pasien baru
+            if (p != lastPatient)
             {
-                ResetGame();
                 lastPatient = p;
+                ResetGame();
             }
         }
     }
 
-    private void ResetGame()
+    void ResetGame()
     {
         StopAllCoroutines();
 
-        // Reset posisi strip
-        for (int i = 0; i < strips.Length; i++)
-            strips[i].transform.localPosition = startPositions[i];
+        // kembalikan semua button ke posisi awal dan mapping
+        for (int pos = 0; pos < strips.Length; pos++)
+        {
+            strips[pos].transform.localPosition = startPositions[pos];
+            posToButton[pos] = pos;
+            strips[pos].interactable = false;
+        }
 
-        correctIndex = Random.Range(0, strips.Length); // tentukan strip benar
         canClick = false;
+        if (feedbackText != null) feedbackText.text = "Menyiapkan...";
+        if (countdownText != null) countdownText.text = "";
 
-        if (feedbackText != null) feedbackText.text = "Tunggu...";
-        if (countdownText != null) countdownText.text = countdownTime.ToString("F0");
-
-        StartCoroutine(CountdownAndShuffle());
+        // mulai countdown lalu shuffle
+        StartCoroutine(CountdownThenShuffle());
     }
 
-    private IEnumerator CountdownAndShuffle()
+    IEnumerator CountdownThenShuffle()
     {
-        // countdown sebelum mulai klik
-        float timer = countdownTime;
-        while (timer > 0f)
+        // countdown visible sekali
+        float t = countdownTime;
+        while (t > 0f)
         {
-            if (countdownText != null) countdownText.text = timer.ToString("F0");
+            if (countdownText != null) countdownText.text = Mathf.CeilToInt(t).ToString();
             yield return new WaitForSeconds(1f);
-            timer -= 1f;
+            t -= 1f;
         }
 
-        if (countdownText != null) countdownText.text = "Mulai!";
+        if (countdownText != null) countdownText.text = "";
 
-        // Shuffle beberapa kali
-        for (int i = 0; i < shuffleCount; i++)
+        // jalankan shuffleCount kali (swap 2 posisi tiap iterasi)
+        for (int k = 0; k < shuffleCount; k++)
         {
-            yield return StartCoroutine(ShuffleOnce());
-            yield return new WaitForSeconds(0.1f);
+            // pilih dua posisi acak (position indices)
+            int posA = Random.Range(0, posToButton.Length);
+            int posB = Random.Range(0, posToButton.Length);
+            while (posB == posA) posB = Random.Range(0, posToButton.Length);
+
+            // animasi swap button yang menempati posA <-> posB
+            yield return StartCoroutine(AnimateSwapPositions(posA, posB));
+            // kecil jeda antar swap biar lebih kelihatan
+            yield return new WaitForSeconds(0.05f);
         }
 
-        // Setelah shuffle selesai, player bisa klik
+        // aktifkan klik setelah shuffle selesai
         canClick = true;
+        for (int i = 0; i < strips.Length; i++) strips[i].interactable = true;
+
         if (feedbackText != null) feedbackText.text = "Pilih strip!";
     }
 
-    private IEnumerator ShuffleOnce()
+    // animasi memindahkan button yang menempati posA ke posB, dan posB ke posA
+    private IEnumerator AnimateSwapPositions(int posA, int posB)
     {
-        // Pilih dua index acak untuk ditukar
-        int i = Random.Range(0, strips.Length);
-        int j = Random.Range(0, strips.Length);
-        while (j == i) j = Random.Range(0, strips.Length);
+        // button indices yang sekarang menempati posisi posA dan posB
+        int btnA = posToButton[posA];
+        int btnB = posToButton[posB];
 
-        Vector3 startPosI = strips[i].transform.localPosition;
-        Vector3 startPosJ = strips[j].transform.localPosition;
+        Vector3 fromA = strips[btnA].transform.localPosition;
+        Vector3 fromB = strips[btnB].transform.localPosition;
+        Vector3 toA = startPositions[posB]; // btnA akan ke posisi posB
+        Vector3 toB = startPositions[posA]; // btnB akan ke posisi posA
 
         float elapsed = 0f;
         while (elapsed < shuffleDuration)
         {
             elapsed += Time.deltaTime;
-            float t = elapsed / shuffleDuration;
-            strips[i].transform.localPosition = Vector3.Lerp(startPosI, startPosJ, t);
-            strips[j].transform.localPosition = Vector3.Lerp(startPosJ, startPosI, t);
+            float t = Mathf.Clamp01(elapsed / shuffleDuration);
+            strips[btnA].transform.localPosition = Vector3.Lerp(fromA, toA, t);
+            strips[btnB].transform.localPosition = Vector3.Lerp(fromB, toB, t);
             yield return null;
         }
 
-        strips[i].transform.localPosition = startPosJ;
-        strips[j].transform.localPosition = startPosI;
+        // pastikan posisi akhir tepat
+        strips[btnA].transform.localPosition = toA;
+        strips[btnB].transform.localPosition = toB;
 
-        // update correctIndex kalau strip benar ikut dipindahkan
-        if (correctIndex == i) correctIndex = j;
-        else if (correctIndex == j) correctIndex = i;
+        // swap mapping: posisi sekarang ditempati oleh tombol yang saling bertukar
+        int tmp = posToButton[posA];
+        posToButton[posA] = posToButton[posB];
+        posToButton[posB] = tmp;
     }
 
-    private void OnStripClicked(int index)
+    // idx = index tombol di array strips[] (button object index)
+    private void OnStripClicked(int idx)
     {
         if (!canClick) return;
 
+        // ambil pasien saat ini
         Patient p = PatientUI.Instance != null ? PatientUI.Instance.currentPatient : null;
         if (p == null) return;
 
         string glucoseText = p.glucose == 1 ? "High" : "Normal";
 
-        if (index == correctIndex)
+        // cek apakah tombol yang diklik adalah button index 0 (original correct)
+        if (idx == ORIGINAL_CORRECT_BUTTON_INDEX)
         {
             if (feedbackText != null) feedbackText.text = $"Glucose: {glucoseText}\n(Result: Benar)";
         }
@@ -140,7 +178,9 @@ public class GlukometerShellGame : MonoBehaviour
             if (feedbackText != null) feedbackText.text = $"Glucose: {glucoseText}\n(Result: Salah)";
         }
 
-        canClick = false; // cuma sekali klik
+        // nonaktifkan klik sampai reset pasien berikutnya
+        canClick = false;
+        foreach (var b in strips) b.interactable = false;
     }
 
     private void ClosePanel()
