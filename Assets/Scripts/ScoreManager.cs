@@ -85,26 +85,27 @@ public class ScoreManager : MonoBehaviour
             }
         }
     }
+public void UpdateScore(int totalScore, int delta)
+{
+    if (scoreText != null)
+        scoreText.text = $"Score: {totalScore}";
 
-    public void UpdateScore(int totalScore, int delta)
+    // Spawn delta hanya jika delta ≠ 0
+    if (delta != 0 && deltaScoreText != null)
     {
-        if (scoreText != null)
-            scoreText.text = $"Score: {totalScore}";
-
-        // Spawn delta hanya jika delta ≠ 0
-        if (delta != 0 && deltaScoreText != null)
-        {
-            deltaScoreText.text = delta > 0 ? $"+{delta}" : $"{delta}";
-            deltaScoreText.transform.position = deltaStartPos;
-            deltaScoreText.alpha = 1f;
-            deltaScoreText.gameObject.SetActive(true);
-            deltaTimer = 0f;
-            deltaActive = true;
-        }
-
-        // Spawn feedback
-        ShowFeedback(delta);
+        deltaScoreText.text = delta > 0 ? $"+{delta}" : $"{delta}";
+        deltaScoreText.color = delta > 0 ? Color.green : Color.red;  // ⬅ Warna hijau/merah
+        deltaScoreText.transform.position = deltaStartPos;
+        deltaScoreText.alpha = 1f;
+        deltaScoreText.gameObject.SetActive(true);
+        deltaTimer = 0f;
+        deltaActive = true;
     }
+
+    // Spawn feedback
+    ShowFeedback(delta);
+}
+
 
     private void ShowFeedback(int delta)
     {

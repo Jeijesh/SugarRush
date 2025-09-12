@@ -122,7 +122,11 @@ private void ResetTape()
     if (tapeBar != null)
     {
         tapeBar.anchoredPosition = startPos;
-        tapeBar.sizeDelta = new Vector2(0f, tapeBar.sizeDelta.y); // reset ke 0
+
+        // kasih lebar minimal biar kepala tape kelihatan
+        float minHeadWidth = 80f;
+        tapeBar.sizeDelta = new Vector2(minHeadWidth, tapeBar.sizeDelta.y);
+
         tapeBar.gameObject.SetActive(true);
     }
 
@@ -132,8 +136,9 @@ private void ResetTape()
     if (feedbackText != null)
         feedbackText.text = "Hold Space to measure!";
     if (valueText != null)
-        valueText.text = "0.0 cm"; // mulai dari 0
+        valueText.text = $"{minWaist:F1} cm"; // mulai dari batas min
 }
+
 
 
     private void SetTargetZone(float target)
