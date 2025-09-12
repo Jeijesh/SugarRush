@@ -1,23 +1,28 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class FruitCatchMinigame : MonoBehaviour
 {
     [Header("References")]
-    public RectTransform fruitPrefab;     // prefab buah (UI Image)
-    public RectTransform spawnArea;       // parent area tempat buah jatuh (UI Panel)
-    public RectTransform basket;          // basket (UI Image)
+    public RectTransform[] fruitPrefabs;
+    public RectTransform spawnArea;        
+    public RectTransform basket;           
     public TextMeshProUGUI feedbackText;
+    public Button exitButton;
 
     [Header("Settings")]
-    public float gameDuration = 10f;
+    public float gameDuration = 10f;          
     public float spawnIntervalEasy = 1.5f;
     public float spawnIntervalHard = 0.8f;
-    public float fallSpeedEasy = 200f;   // pixel/sec
+    public float fallSpeedEasy = 200f;   
     public float fallSpeedHard = 350f;
-    public float basketBoundary = 300f;  // max offset kiri/kanan dari posisi awal
+    public float basketBoundary = 300f;  
 
-    private float timer;
+    [Header("Audio")]
+    public AudioSource audioSource;       // 🔹 audio source (drag dari Inspector)
+    public AudioClip catchSound;          // 🔹 suara buah ketangkap
+
     private float spawnTimer;
     private bool running = false;
     private Patient lastPatient;
@@ -26,14 +31,20 @@ public class FruitCatchMinigame : MonoBehaviour
     private float currentFallSpeed;
     private Vector2 basketStartPos;
 
+    private int fruitsToSpawn;
+    private int fruitsSpawned;
+    public int fruitsActive;
+
     private void Start()
     {
-        basketStartPos = basket.anchoredPosition; // simpan posisi awal basket
+        basketStartPos = basket.anchoredPosition;
+
+        if (exitButton != null)
+            exitButton.onClick.AddListener(ClosePanel);
     }
 
     private void Update()
     {
-        // 🔹 Reset kalau pasien baru
         if (PatientUI.Instance != null && PatientUI.Instance.currentPatient != null)
         {
             Patient p = PatientUI.Instance.currentPatient;
@@ -46,7 +57,7 @@ public class FruitCatchMinigame : MonoBehaviour
 
         if (!running) return;
 
-        // 🔹 Gerak basket mengikuti kursor
+        // basket follow mouse
         Vector2 localPoint;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             spawnArea, Input.mousePosition, null, out localPoint);
@@ -54,17 +65,16 @@ public class FruitCatchMinigame : MonoBehaviour
         float clampedX = Mathf.Clamp(localPoint.x, basketStartPos.x - basketBoundary, basketStartPos.x + basketBoundary);
         basket.anchoredPosition = new Vector2(clampedX, basketStartPos.y);
 
-        // 🔹 Timer jalan
-        timer -= Time.deltaTime;
+        // spawn logic
         spawnTimer -= Time.deltaTime;
-
-        if (spawnTimer <= 0f)
+        if (spawnTimer <= 0f && fruitsSpawned < fruitsToSpawn)
         {
             SpawnFruit();
+            fruitsSpawned++;
             spawnTimer = currentSpawnInterval;
         }
 
-        if (timer <= 0f)
+        if (fruitsSpawned >= fruitsToSpawn && fruitsActive <= 0)
         {
             EndGame();
         }
@@ -72,7 +82,6 @@ public class FruitCatchMinigame : MonoBehaviour
 
     private void SetupGame(Patient p)
     {
-        // 🔹 Hapus semua buah lama
         foreach (Transform child in spawnArea)
         {
             if (child != basket) Destroy(child.gameObject);
@@ -80,7 +89,6 @@ public class FruitCatchMinigame : MonoBehaviour
 
         basket.anchoredPosition = basketStartPos;
 
-        // 🔹 Difficulty
         if (p.fruit == 1)
         {
             currentSpawnInterval = spawnIntervalEasy;
@@ -92,19 +100,25 @@ public class FruitCatchMinigame : MonoBehaviour
             currentFallSpeed = fallSpeedHard;
         }
 
-        timer = gameDuration;
+        fruitsToSpawn = Mathf.CeilToInt(gameDuration / currentSpawnInterval);
+        fruitsSpawned = 0;
+        fruitsActive = 0;
+
         spawnTimer = 0f;
         running = true;
-
         feedbackText.text = "";
     }
 
     private void SpawnFruit()
     {
-        RectTransform fruit = Instantiate(fruitPrefab, spawnArea);
+        int index = Random.Range(0, fruitPrefabs.Length);
+        RectTransform fruit = Instantiate(fruitPrefabs[index], spawnArea);
+
         float randomX = Random.Range(-basketBoundary, basketBoundary);
         fruit.anchoredPosition = new Vector2(randomX, spawnArea.rect.height / 2f + 50f);
-        fruit.gameObject.AddComponent<FruitFall>().Init(this, currentFallSpeed, basket);
+
+        fruitsActive++;
+        fruit.gameObject.AddComponent<FruitFall>().Init(this, currentFallSpeed, basket, spawnArea);
     }
 
     private void EndGame()
@@ -116,19 +130,26 @@ public class FruitCatchMinigame : MonoBehaviour
         }
     }
 
-    // 🔹 Inner class: logic buah jatuh
+    private void ClosePanel()
+    {
+        gameObject.SetActive(false);
+    }
+
+    // Inner class
     private class FruitFall : MonoBehaviour
     {
         private float speed;
         private RectTransform rect;
         private RectTransform basket;
         private FruitCatchMinigame game;
+        private RectTransform spawnArea;
 
-        public void Init(FruitCatchMinigame game, float fallSpeed, RectTransform basket)
+        public void Init(FruitCatchMinigame game, float fallSpeed, RectTransform basket, RectTransform spawnArea)
         {
             this.game = game;
             this.speed = fallSpeed;
             this.basket = basket;
+            this.spawnArea = spawnArea;
             rect = GetComponent<RectTransform>();
         }
 
@@ -138,18 +159,29 @@ public class FruitCatchMinigame : MonoBehaviour
 
             rect.anchoredPosition -= new Vector2(0, speed * Time.deltaTime);
 
-            // hilang kalau jatuh di bawah layar
-            if (rect.anchoredPosition.y < -Screen.height / 2f)
+            // buah jatuh keluar
+            if (rect.anchoredPosition.y < -spawnArea.rect.height / 2f - 50f)
             {
                 Destroy(gameObject);
                 return;
             }
 
-            // deteksi tabrakan kasar pakai posisi
+            // buah kena basket
             if (RectTransformUtility.RectangleContainsScreenPoint(basket, rect.position))
             {
+                // 🔹 play sound saat ketangkap
+                if (game.audioSource != null && game.catchSound != null)
+                {
+                    game.audioSource.PlayOneShot(game.catchSound);
+                }
+
                 Destroy(gameObject);
             }
+        }
+
+        private void OnDestroy()
+        {
+            if (game != null) game.fruitsActive--;
         }
     }
 }

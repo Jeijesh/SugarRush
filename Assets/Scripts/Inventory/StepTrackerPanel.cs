@@ -1,13 +1,16 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class ActivityMinigame : MonoBehaviour
 {
     [Header("UI References")]
-    public RectTransform patient;
+    public RectTransform patient;   // container patient (UI)
+    public Image patientImage;      // UI Image patient
     public RectTransform finishLine;
     public Button toggleButton;     // gabungan start/stop
+    public TextMeshProUGUI toggleButtonText; // teks pada toggle button
     public Button submitButton;     // reset manual
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI feedbackText;
@@ -16,12 +19,20 @@ public class ActivityMinigame : MonoBehaviour
     public float countdownTime = 3f;
     public float trackLength = 1200f;
 
+    [Header("Animation")]
+    public List<Sprite> runSprites; // array/list animasi lari
+    public float frameRate = 0.1f;  // durasi per frame
+    public Sprite idleSprite;       // sprite idle (opsional)
+
     private Vector2 startPos;
     private bool isMoving = false;
     private bool isStopped = false;
     private float timer;
     private float moveSpeed;
     private int toggleClicks = 0;
+
+    private float animTimer = 0f;
+    private int animIndex = 0;
 
     private Patient lastPatient;
 
@@ -42,33 +53,49 @@ public class ActivityMinigame : MonoBehaviour
             submitButton.onClick.AddListener(OnSubmit);
     }
 
-    private void Update()
+private void Update()
+{
+    // 🔹 Deteksi pasien baru via PatientUI
+    if (PatientUI.Instance != null && PatientUI.Instance.currentPatient != null)
     {
-        // Deteksi pasien baru via PatientUI
-        if (PatientUI.Instance != null && PatientUI.Instance.currentPatient != null)
+        Patient current = PatientUI.Instance.currentPatient;
+        if (current != lastPatient)
         {
-            Patient current = PatientUI.Instance.currentPatient;
-            if (current != lastPatient)
-            {
-                lastPatient = current;
-                ResetMinigame(current.activity);
-            }
+            lastPatient = current;
+            ResetMinigame(current.activity);
         }
+    }
 
-        if (!isMoving || isStopped) return;
+    if (!isMoving || isStopped) return;
 
-        // Timer jalan terus (boleh negatif)
-        timer -= Time.deltaTime;
-        UpdateTimerUI();
+    // Timer berjalan terus (bisa ke minus)
+    timer -= Time.deltaTime;
+    UpdateTimerUI();
 
-        // Move patient
-        patient.anchoredPosition += new Vector2(moveSpeed * Time.deltaTime, 0f);
+    // Gerak patient
+    patient.anchoredPosition += new Vector2(moveSpeed * Time.deltaTime, 0f);
 
-        // Clamp posisi pasien
-        if (patient.anchoredPosition.x >= startPos.x + trackLength)
+    // 🔹 Animasi sprite berjalan
+    AnimateRun();
+
+    // 🔹 Kalau pasien melewati trackLength → langsung gagal
+    if (patient.anchoredPosition.x >= startPos.x + trackLength)
+    {
+        patient.anchoredPosition = startPos + new Vector2(trackLength, 0f);
+        ForceFail();
+    }
+}
+
+    private void AnimateRun()
+    {
+        if (patientImage == null || runSprites.Count == 0) return;
+
+        animTimer += Time.deltaTime;
+        if (animTimer >= frameRate)
         {
-            patient.anchoredPosition = startPos + new Vector2(trackLength, 0f);
-            StopMinigame();
+            animTimer = 0f;
+            animIndex = (animIndex + 1) % runSprites.Count;
+            patientImage.sprite = runSprites[animIndex];
         }
     }
 
@@ -77,7 +104,10 @@ public class ActivityMinigame : MonoBehaviour
         toggleClicks++;
 
         if (toggleClicks == 1)
+        {
             StartMinigame(lastPatient != null ? lastPatient.activity : 1);
+            if (toggleButtonText != null) toggleButtonText.text = "Stop";
+        }
         else if (toggleClicks == 2)
         {
             StopMinigame();
@@ -94,33 +124,78 @@ public class ActivityMinigame : MonoBehaviour
         float baseSpeed = trackLength / countdownTime;
         moveSpeed = (activity == 1)
             ? Random.Range(baseSpeed * 1.0f, baseSpeed * 1.2f)
-            : Random.Range(baseSpeed * 0.4f, baseSpeed * 0.8f);
+            : Random.Range(baseSpeed * 0.4f, baseSpeed * 0.6f);
 
         timer = countdownTime;
+        animIndex = 0;
+        animTimer = 0f;
+
+        if (runSprites.Count > 0 && patientImage != null)
+            patientImage.sprite = runSprites[0];
 
         if (feedbackText != null)
             feedbackText.text = "Minigame Started!";
     }
 
-    private void StopMinigame()
+private void StopMinigame()
+{
+    if (!isMoving || isStopped) return;
+
+    isStopped = true;
+
+    float finishX = finishLine != null ? finishLine.anchoredPosition.x : startPos.x + trackLength;
+    float patientX = patient != null ? patient.anchoredPosition.x : startPos.x;
+
+    if (feedbackText != null)
     {
-        if (!isMoving || isStopped) return;
+        bool passedFinish = patientX >= finishX;
+        bool withinTolerance = (timer > -0.3f && timer < 0.3f);
 
-        isStopped = true;
-
-        float finishX = finishLine != null ? finishLine.anchoredPosition.x : startPos.x + trackLength;
-        float patientX = patient != null ? patient.anchoredPosition.x : startPos.x;
-
-        if (feedbackText != null)
+        if (passedFinish || (!passedFinish && withinTolerance))
         {
-            if (patientX >= finishX && timer >= 0f)
-                feedbackText.text = "Active!";
+            // ✅ success → tampilkan sesuai kondisi pasien
+            if (lastPatient != null)
+            {
+                if (lastPatient.activity == 1)
+                    feedbackText.text = "Active!";
+                else
+                    feedbackText.text = "Inactive!";
+            }
             else
-                feedbackText.text = "Failed!";
+            {
+                feedbackText.text = "Success!";
+            }
         }
-
-        isMoving = false;
+        else
+        {
+            feedbackText.text = "Failed!";
+        }
     }
+
+    // 🔹 Hentikan animasi (sprite diam di tempat)
+    isMoving = false;
+
+    if (idleSprite != null && patientImage != null)
+        patientImage.sprite = idleSprite;
+
+    if (toggleButtonText != null) toggleButtonText.text = "Start";
+}
+
+
+
+private void ForceFail()
+{
+    isStopped = true;
+    isMoving = false;
+
+    if (feedbackText != null)
+        feedbackText.text = "Failed! (Too late)";
+
+    if (idleSprite != null && patientImage != null)
+        patientImage.sprite = idleSprite;
+
+    if (toggleButtonText != null) toggleButtonText.text = "Start";
+}
 
     private void UpdateTimerUI()
     {
@@ -140,10 +215,21 @@ public class ActivityMinigame : MonoBehaviour
         if (toggleButton != null)
             toggleButton.gameObject.SetActive(true);
 
+        if (toggleButtonText != null)
+            toggleButtonText.text = "Start";
+
         timer = countdownTime;
         isMoving = false;
         isStopped = false;
         toggleClicks = 0;
+
+        animIndex = 0;
+        animTimer = 0f;
+
+        if (idleSprite != null && patientImage != null)
+            patientImage.sprite = idleSprite;
+        else if (runSprites.Count > 0 && patientImage != null)
+            patientImage.sprite = runSprites[0];
 
         if (feedbackText != null)
             feedbackText.text = "Press Start to play!";
