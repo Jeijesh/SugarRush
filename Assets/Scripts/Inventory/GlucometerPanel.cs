@@ -1,37 +1,37 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Collections;
 
 public class GlukometerShellGame : MonoBehaviour
 {
     [Header("UI References")]
-    public Button[] strips;                  // 3 strip buttons
-    public TextMeshProUGUI feedbackText;
+    public Button[] strips;                  // tombol strip
     public Button exitButton;
+    public TextMeshProUGUI feedbackText;     // hasil Glukometer
+    public TextMeshProUGUI successText;
+    public TextMeshProUGUI failedText;
 
     [Header("Settings")]
-    public float shuffleDuration = 0.5f;     // duration of swap animation
-    public int shuffleCount = 5;             // number of swaps
+    public float shuffleDuration = 0.5f;     // durasi swap animasi
+    public int shuffleCount = 5;             // jumlah swap
 
     [Header("Audio")]
-    public AudioSource audioSource;          // assign in inspector
-    public AudioClip swapSound;              // sound played when swapping
+    public AudioSource audioSource;
+    public AudioClip swapSound;
 
-    // internal
-    private Vector3[] startPositions;        // initial slot positions
-    private int[] posToButton;               // mapping: positionIndex -> buttonIndex
+    private Vector3[] startPositions;        // posisi awal tombol
+    private int[] posToButton;               // mapping posisi -> tombol
     private bool canClick = false;
     private Patient lastPatient;
 
-    // specification: button index 0 is the "correct" one
-    private const int ORIGINAL_CORRECT_BUTTON_INDEX = 0;
+    private const int CORRECT_BUTTON_INDEX = 0; // tombol benar
 
-    void Start()
+    private void Start()
     {
         if (strips == null || strips.Length < 1)
         {
-            Debug.LogError("Assign strips (buttons) in the inspector!");
+            Debug.LogError("Assign strips in inspector!");
             enabled = false;
             return;
         }
@@ -55,7 +55,7 @@ public class GlukometerShellGame : MonoBehaviour
         ResetGame();
     }
 
-    void Update()
+    private void Update()
     {
         if (PatientUI.Instance != null && PatientUI.Instance.currentPatient != null)
         {
@@ -68,7 +68,7 @@ public class GlukometerShellGame : MonoBehaviour
         }
     }
 
-    void ResetGame()
+    private void ResetGame()
     {
         StopAllCoroutines();
 
@@ -77,23 +77,28 @@ public class GlukometerShellGame : MonoBehaviour
             strips[pos].transform.localPosition = startPositions[pos];
             posToButton[pos] = pos;
             strips[pos].interactable = false;
+            Image img = strips[pos].GetComponent<Image>();
+            if (img != null) img.color = Color.white;
         }
 
         canClick = false;
-        if (feedbackText != null) feedbackText.text = "Preparing...";
 
-        StartCoroutine(BlinkCorrectStripThenShuffle());
+        if (successText != null) successText.gameObject.SetActive(false);
+        if (failedText != null) failedText.gameObject.SetActive(false);
+        if (feedbackText != null) feedbackText.text = "";
+
+        StartCoroutine(BlinkCorrectThenShuffle());
     }
 
-    IEnumerator BlinkCorrectStripThenShuffle()
+    private IEnumerator BlinkCorrectThenShuffle()
     {
-        Image img = strips[ORIGINAL_CORRECT_BUTTON_INDEX].GetComponent<Image>();
-        if (img != null)
+        Image correctImg = strips[CORRECT_BUTTON_INDEX].GetComponent<Image>();
+        if (correctImg != null)
         {
-            img.color = Color.white;
-            img.color = Color.green;
-            yield return new WaitForSeconds(1f);
-            img.color = Color.white;
+            Color original = correctImg.color;
+            correctImg.color = Color.green;
+            yield return new WaitForSeconds(0.5f);
+            correctImg.color = original;
         }
 
         for (int k = 0; k < shuffleCount; k++)
@@ -102,19 +107,16 @@ public class GlukometerShellGame : MonoBehaviour
             int posB = Random.Range(0, posToButton.Length);
             while (posB == posA) posB = Random.Range(0, posToButton.Length);
 
-            yield return StartCoroutine(AnimateSwapPositions(posA, posB));
+            yield return StartCoroutine(AnimateSwap(posA, posB));
             yield return new WaitForSeconds(0.05f);
         }
 
         canClick = true;
-        for (int i = 0; i < strips.Length; i++) strips[i].interactable = true;
-
-        if (feedbackText != null) feedbackText.text = "Pick a strip!";
+        foreach (var b in strips) b.interactable = true;
     }
 
-    private IEnumerator AnimateSwapPositions(int posA, int posB)
+    private IEnumerator AnimateSwap(int posA, int posB)
     {
-        // 🔊 Play swap sound
         if (audioSource != null && swapSound != null)
             audioSource.PlayOneShot(swapSound);
 
@@ -151,16 +153,33 @@ public class GlukometerShellGame : MonoBehaviour
         Patient p = PatientUI.Instance != null ? PatientUI.Instance.currentPatient : null;
         if (p == null) return;
 
-        string glucoseText = p.glucose == 1 ? "High" : "Normal";
+        bool success = (idx == CORRECT_BUTTON_INDEX);
 
-        if (idx == ORIGINAL_CORRECT_BUTTON_INDEX)
+        int glucoseValue = success ? p.glucose : 1 - p.glucose;
+        p.glucose = glucoseValue;
+
+        if (PatientUI.Instance != null)
         {
-            if (feedbackText != null) feedbackText.text = $"Glucose: {glucoseText}\n(Result: Correct)";
+            PatientUI.Instance.FillField("Glucose");
+            PatientUI.Instance.RefreshDropdowns(p);
+        }
+
+        if (feedbackText != null)
+            feedbackText.text = $"Glucose: {(glucoseValue == 1 ? "High" : "Normal")}";
+
+        if (success)
+        {
+            if (successText != null) successText.gameObject.SetActive(true);
+            if (failedText != null) failedText.gameObject.SetActive(false);
         }
         else
         {
-            if (feedbackText != null) feedbackText.text = $"Glucose: {glucoseText}\n(Result: Wrong)";
+            if (failedText != null) failedText.gameObject.SetActive(true);
+            if (successText != null) successText.gameObject.SetActive(false);
         }
+
+        if (ScoreManager.Instance != null)
+            ScoreManager.Instance.AddGameResult(success);
 
         canClick = false;
         foreach (var b in strips) b.interactable = false;

@@ -20,13 +20,16 @@ public class ScalePanel : MonoBehaviour
     public int minValue = 15;
     public int maxValue = 40;
 
+    [Header("Audio")]
+    public AudioSource moveAudio;   // AudioSource untuk sound effect bar
+
     private bool movingRight = true;
     private float leftLimit = -475f;
     private float rightLimit = 475f;
     private float fixedY = -250f;
     private bool barStopped = false;
     private Patient lastPatient;
-    private float targetBMI;   // simpan BMI asli pasien
+    private float targetBMI;  
 
     private void Start()
     {
@@ -43,7 +46,7 @@ public class ScalePanel : MonoBehaviour
         if (PatientUI.Instance != null && PatientUI.Instance.currentPatient != null)
         {
             Patient p = PatientUI.Instance.currentPatient;
-            if (p != lastPatient) // pasien baru
+            if (p != lastPatient) 
             {
                 ResetPanel();
                 targetBMI = Mathf.Clamp(p.bmi, minValue, maxValue);
@@ -54,12 +57,17 @@ public class ScalePanel : MonoBehaviour
 
         if (barStopped || movingBar == null || !movingBar.gameObject.activeSelf) return;
 
+        // -------- Gerakan bar ----------
         float step = movingSpeed * Time.deltaTime * (movingRight ? 1f : -1f);
         Vector3 pos = movingBar.localPosition;
         pos.x += step;
         pos.x = Mathf.Clamp(pos.x, leftLimit, rightLimit);
         pos.y = fixedY;
         movingBar.localPosition = pos;
+
+        // Play audio setiap frame bar bergerak
+        if (moveAudio != null && !moveAudio.isPlaying)
+            moveAudio.Play();
 
         if (pos.x >= rightLimit) movingRight = false;
         else if (pos.x <= leftLimit) movingRight = true;
@@ -70,12 +78,18 @@ public class ScalePanel : MonoBehaviour
         if (valueText != null) 
             valueText.text = value.ToString("F1");
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            barStopped = true;
-            SetVisuals(false); // matikan semua visual
-            CheckHit(value);
-        }
+if (Input.GetKeyDown(KeyCode.Space))
+{
+    barStopped = true;
+    
+    // Stop suara bar bergerak
+    if (moveAudio != null && moveAudio.isPlaying)
+        moveAudio.Stop();
+
+    SetVisuals(false); 
+    CheckHit(value);
+}
+
     }
 
     private void CheckHit(float value)
@@ -92,7 +106,6 @@ public class ScalePanel : MonoBehaviour
 
             if (barCenter >= targetLeft && barCenter <= targetRight)
             {
-                // 🎯 Kena target → pakai BMI asli pasien
                 p.bmi = Mathf.Clamp(targetBMI, minValue, maxValue);
                 success = true;
 
@@ -102,7 +115,6 @@ public class ScalePanel : MonoBehaviour
             }
             else
             {
-                // ❌ Miss → pakai nilai bar
                 p.bmi = Mathf.Clamp(value, minValue, maxValue);
                 success = false;
 
@@ -111,21 +123,17 @@ public class ScalePanel : MonoBehaviour
                 if (valueText != null) valueText.text = value.ToString("F1");
             }
 
-            // Hapus BMI dari field kosong & update UI
             PatientUI.Instance.FillField("BMI");
             PatientUI.Instance.RefreshDropdowns(p);
         }
 
-        // ⬇️ Update skor lewat ScoreManager
         if (ScoreManager.Instance != null)
-        {
             ScoreManager.Instance.AddGameResult(success);
-        }
     }
 
     public void ResetPanel()
     {
-        SetVisuals(true); // nyalakan lagi semua visual
+        SetVisuals(true);
         if (movingBar != null)
             movingBar.localPosition = new Vector3(leftLimit, fixedY, 0f);
 

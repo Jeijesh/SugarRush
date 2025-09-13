@@ -6,15 +6,24 @@ using System.Collections;
 public class BloodPressureMinigame : MonoBehaviour
 {
     [Header("UI References")]
-    public TextMeshProUGUI feedbackText;
-    public TextMeshProUGUI counterText;
-    public TextMeshProUGUI bpText;       // Text untuk menampilkan BP / status
-    public Image pumpImage;
+    public TextMeshProUGUI statusText;   // Status Normal/High
+    public TextMeshProUGUI timerText;    // Timer
+    public TextMeshProUGUI counterText;  // Pumps
+    public TextMeshProUGUI bpText;       // 110/80 dll
+    public Image pumpImage;               // Pump UI
+    public Button exitButton;
+    public TextMeshProUGUI successText;
+    public TextMeshProUGUI failText;
+
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip pumpSfx;
 
     [Header("Settings")]
-    public float pumpDuration = 3f;      // durasi game
-    public int targetClicks = 10;        // klik ideal
-    public float clickEffectRatio = 0.05f; // proporsi naik per klik
+    public float pumpDuration = 5f;      // durasi game
+    public int targetClicks = 10;        // jumlah klik ideal
+    public float clickEffectRatio = 0.05f;
+    public float pumpAnimScale = 1.05f;
 
     private Patient lastPatient;
     private bool running = false;
@@ -24,18 +33,22 @@ public class BloodPressureMinigame : MonoBehaviour
 
     private int systolic;
     private int diastolic;
-    private int patientSystolic;  // nilai asli pasien
+    private int patientSystolic;
     private int patientDiastolic;
+
+    private Coroutine pumpCoroutine;
 
     private void Awake()
     {
         if (pumpImage != null)
             originalScale = pumpImage.rectTransform.localScale;
+
+        if (exitButton != null)
+            exitButton.onClick.AddListener(() => gameObject.SetActive(false));
     }
 
     private void Update()
     {
-        // 🔹 Deteksi pasien baru secara real-time
         if (PatientUI.Instance != null && PatientUI.Instance.currentPatient != null)
         {
             Patient p = PatientUI.Instance.currentPatient;
@@ -48,35 +61,26 @@ public class BloodPressureMinigame : MonoBehaviour
 
         if (!running) return;
 
-        // 🔹 Hitung klik pemain
+        timer -= Time.deltaTime;
+        UpdateUI();
+
+        if (timer <= 0f)
+        {
+            EndGame(clickCount >= targetClicks);
+            return;
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             clickCount++;
-            if (counterText != null)
-                counterText.text = $"Pumps: {clickCount}";
-
             ApplyClickEffect();
-            UpdateBPText();
+            PlayPumpAnimation();
+            PlayPumpAudio();
 
-            // 🔹 Animasi pompa membesar → mengecil
-            if (pumpImage != null)
-            {
-                StopAllCoroutines();
-                StartCoroutine(PumpAnimation());
-            }
-
-            // 🔹 Cek target klik tercapai
             if (clickCount >= targetClicks)
             {
-                FinalizeBP();
+                EndGame(true);
             }
-        }
-
-        // 🔹 Timer berjalan
-        timer -= Time.deltaTime;
-        if (timer <= 0f)
-        {
-            EndGame();
         }
     }
 
@@ -86,11 +90,12 @@ public class BloodPressureMinigame : MonoBehaviour
         timer = pumpDuration;
         running = true;
 
-        // Start dari 0/0
         systolic = 0;
         diastolic = 0;
 
-        // Simpan nilai asli pasien
+        lastPatient = p;
+
+        // Ambil nilai pasien
         if (p.bp == 0) // Normal
         {
             patientSystolic = Random.Range(110, 121);
@@ -102,76 +107,68 @@ public class BloodPressureMinigame : MonoBehaviour
             patientDiastolic = Random.Range(85, 96);
         }
 
-        if (feedbackText != null)
-            feedbackText.text = "Pump the cuff! (Click fast)";
-        if (counterText != null)
-            counterText.text = "Pumps: 0";
+        // Reset UI
+        if (counterText != null) counterText.text = $"Pumps: 0/{targetClicks}";
+        if (bpText != null) bpText.text = $"{systolic}/{diastolic}";
+        UpdateStatusText();
 
-        if (pumpImage != null)
-            pumpImage.rectTransform.localScale = originalScale;
+        if (pumpImage != null) pumpImage.rectTransform.localScale = originalScale;
+        if (successText != null) successText.gameObject.SetActive(false);
+        if (failText != null) failText.gameObject.SetActive(false);
+    }
 
-        UpdateBPText();
+    private void UpdateUI()
+    {
+        if (bpText != null) bpText.text = $"{systolic}/{diastolic}";
+        UpdateStatusText();
+
+        if (counterText != null) counterText.text = $"Pumps: {clickCount}/{targetClicks}";
+        if (timerText != null) timerText.text = $"Time: {timer:F1}s";
+    }
+
+    private void UpdateStatusText()
+    {
+        if (statusText != null)
+        {
+            string status = (systolic >= 130 || diastolic >= 85) ? "High" : "Normal";
+            statusText.text = $"Status: {status}";
+        }
     }
 
     private void ApplyClickEffect()
     {
-        // Naikkan tekanan per klik secara dinamis menuju pasien
-        systolic += Mathf.CeilToInt((patientSystolic * clickEffectRatio));
-        diastolic += Mathf.CeilToInt((patientDiastolic * clickEffectRatio));
+        if (targetClicks <= 0) return;
 
-        // Jangan melebihi pasien
+        int systolicStep = Mathf.CeilToInt((patientSystolic - systolic) / (float)(targetClicks - clickCount + 1));
+        int diastolicStep = Mathf.CeilToInt((patientDiastolic - diastolic) / (float)(targetClicks - clickCount + 1));
+
+        systolic += systolicStep;
+        diastolic += diastolicStep;
+
         systolic = Mathf.Min(systolic, patientSystolic);
         diastolic = Mathf.Min(diastolic, patientDiastolic);
     }
 
-    private void FinalizeBP()
+    private void PlayPumpAnimation()
     {
-        // Setelah target klik tercapai → langsung set ke nilai pasien
-        systolic = patientSystolic;
-        diastolic = patientDiastolic;
+        if (pumpCoroutine != null)
+            StopCoroutine(pumpCoroutine);
 
-        if (feedbackText != null)
-            feedbackText.text = "Target reached!";
-
-        UpdateBPText();
+        if (pumpImage != null)
+            pumpCoroutine = StartCoroutine(PumpAnimCoroutine());
     }
 
-private void UpdateBPText()
-{
-    if (bpText == null) return;
-
-    string status;
-
-    if (systolic >= 130 || diastolic >= 85) status = "High";
-    else if (systolic >= 110 && systolic <= 120 && diastolic >= 70 && diastolic <= 80) status = "Normal";
-    else status = "Low";
-
-    bpText.text = $"BP: {systolic}/{diastolic}\nStatus: {status}";
-}
-
-
-    private void EndGame()
-    {
-        running = false;
-
-        if (lastPatient == null) return;
-
-        if (feedbackText != null)
-            feedbackText.text += "\nGame Over";
-
-        UpdateBPText();
-    }
-
-    private IEnumerator PumpAnimation()
+    private IEnumerator PumpAnimCoroutine()
     {
         if (pumpImage == null) yield break;
 
         RectTransform rt = pumpImage.rectTransform;
-        Vector3 targetScale = originalScale * 1.05f;
+        Vector3 targetScale = originalScale * pumpAnimScale;
 
         float t = 0f;
         while (t < 0.1f)
         {
+            if (rt == null) yield break;
             t += Time.deltaTime;
             rt.localScale = Vector3.Lerp(originalScale, targetScale, t / 0.1f);
             yield return null;
@@ -180,11 +177,51 @@ private void UpdateBPText()
         t = 0f;
         while (t < 0.1f)
         {
+            if (rt == null) yield break;
             t += Time.deltaTime;
             rt.localScale = Vector3.Lerp(targetScale, originalScale, t / 0.1f);
             yield return null;
         }
 
-        rt.localScale = originalScale;
+        if (rt != null) rt.localScale = originalScale;
+    }
+
+    private void PlayPumpAudio()
+    {
+        if (audioSource != null && pumpSfx != null)
+            audioSource.PlayOneShot(pumpSfx);
+    }
+
+    private void EndGame(bool success)
+    {
+        running = false;
+        if (lastPatient == null) return;
+
+        // Show feedback
+        if (success)
+        {
+            if (successText != null) successText.gameObject.SetActive(true);
+            if (failText != null) failText.gameObject.SetActive(false);
+        }
+        else
+        {
+            if (failText != null) failText.gameObject.SetActive(true);
+            if (successText != null) successText.gameObject.SetActive(false);
+        }
+
+        // Update patient BP value
+        lastPatient.bp = (systolic >= 130 || diastolic >= 85) ? 1 : 0;
+
+        // Update UI
+        if (PatientUI.Instance != null)
+        {
+            PatientUI.Instance.FillField("BP");
+            PatientUI.Instance.RefreshDropdowns(lastPatient);
+        }
+
+        if (ScoreManager.Instance != null)
+            ScoreManager.Instance.AddGameResult(success);
+
+        UpdateUI();
     }
 }

@@ -8,7 +8,12 @@ public class FruitCatchMinigame : MonoBehaviour
     public RectTransform[] fruitPrefabs;
     public RectTransform spawnArea;        
     public RectTransform basket;           
-    public TextMeshProUGUI feedbackText;
+
+    [Header("Feedback Texts")]
+    public TextMeshProUGUI successText;
+    public TextMeshProUGUI failedText;
+    public TextMeshProUGUI intakeText;
+
     public Button exitButton;
 
     [Header("Settings")]
@@ -20,8 +25,8 @@ public class FruitCatchMinigame : MonoBehaviour
     public float basketBoundary = 300f;  
 
     [Header("Audio")]
-    public AudioSource audioSource;       // 🔹 audio source (drag dari Inspector)
-    public AudioClip catchSound;          // 🔹 suara buah ketangkap
+    public AudioSource audioSource;
+    public AudioClip catchSound;
 
     private float spawnTimer;
     private bool running = false;
@@ -33,7 +38,8 @@ public class FruitCatchMinigame : MonoBehaviour
 
     private int fruitsToSpawn;
     private int fruitsSpawned;
-    public int fruitsActive;
+    private int fruitsActive;
+    private int fruitsCaught;
 
     private void Start()
     {
@@ -41,6 +47,10 @@ public class FruitCatchMinigame : MonoBehaviour
 
         if (exitButton != null)
             exitButton.onClick.AddListener(ClosePanel);
+
+        if (successText != null) successText.gameObject.SetActive(false);
+        if (failedText != null) failedText.gameObject.SetActive(false);
+        if (intakeText != null) intakeText.text = "";
     }
 
     private void Update()
@@ -57,7 +67,7 @@ public class FruitCatchMinigame : MonoBehaviour
 
         if (!running) return;
 
-        // basket follow mouse
+        // Basket mengikuti mouse
         Vector2 localPoint;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             spawnArea, Input.mousePosition, null, out localPoint);
@@ -65,7 +75,7 @@ public class FruitCatchMinigame : MonoBehaviour
         float clampedX = Mathf.Clamp(localPoint.x, basketStartPos.x - basketBoundary, basketStartPos.x + basketBoundary);
         basket.anchoredPosition = new Vector2(clampedX, basketStartPos.y);
 
-        // spawn logic
+        // Spawn buah
         spawnTimer -= Time.deltaTime;
         if (spawnTimer <= 0f && fruitsSpawned < fruitsToSpawn)
         {
@@ -74,6 +84,7 @@ public class FruitCatchMinigame : MonoBehaviour
             spawnTimer = currentSpawnInterval;
         }
 
+        // Selesai jika semua buah spawn dan tidak ada buah aktif
         if (fruitsSpawned >= fruitsToSpawn && fruitsActive <= 0)
         {
             EndGame();
@@ -82,6 +93,7 @@ public class FruitCatchMinigame : MonoBehaviour
 
     private void SetupGame(Patient p)
     {
+        // Hapus semua buah sebelumnya
         foreach (Transform child in spawnArea)
         {
             if (child != basket) Destroy(child.gameObject);
@@ -89,6 +101,7 @@ public class FruitCatchMinigame : MonoBehaviour
 
         basket.anchoredPosition = basketStartPos;
 
+        // Tentukan difficulty berdasarkan data pasien
         if (p.fruit == 1)
         {
             currentSpawnInterval = spawnIntervalEasy;
@@ -103,10 +116,14 @@ public class FruitCatchMinigame : MonoBehaviour
         fruitsToSpawn = Mathf.CeilToInt(gameDuration / currentSpawnInterval);
         fruitsSpawned = 0;
         fruitsActive = 0;
+        fruitsCaught = 0;
 
         spawnTimer = 0f;
         running = true;
-        feedbackText.text = "";
+
+        if (successText != null) successText.gameObject.SetActive(false);
+        if (failedText != null) failedText.gameObject.SetActive(false);
+        if (intakeText != null) intakeText.text = $"Patient's fruit intake: {fruitsCaught}/{fruitsToSpawn}";
     }
 
     private void SpawnFruit()
@@ -124,10 +141,32 @@ public class FruitCatchMinigame : MonoBehaviour
     private void EndGame()
     {
         running = false;
+
+        // Success jika tangkap ≥ 90% buah yang spawn
+        bool success = fruitsCaught >= Mathf.CeilToInt(fruitsToSpawn * 0.9f);
+
+        if (successText != null) successText.gameObject.SetActive(success);
+        if (failedText != null) failedText.gameObject.SetActive(!success);
+
+        if (intakeText != null)
+            intakeText.text = $"Patient's fruit intake: {fruitsCaught}/{fruitsToSpawn}";
+
+        // Update dropdown pasien: 0 = insufficient, 1 = sufficient
         if (lastPatient != null)
         {
-            feedbackText.text = (lastPatient.fruit == 1) ? "Sufficient" : "Insufficient";
+            int requiredFruits = 3; // threshold sufficient
+            lastPatient.fruit = (fruitsCaught >= requiredFruits) ? 1 : 0;
+
+            if (PatientUI.Instance != null)
+            {
+                PatientUI.Instance.FillField("Fruit");
+                PatientUI.Instance.RefreshDropdowns(lastPatient);
+            }
         }
+
+        // Update score
+        if (ScoreManager.Instance != null)
+            ScoreManager.Instance.AddGameResult(success);
     }
 
     private void ClosePanel()
@@ -135,7 +174,7 @@ public class FruitCatchMinigame : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    // Inner class
+    // Inner class untuk buah jatuh
     private class FruitFall : MonoBehaviour
     {
         private float speed;
@@ -159,21 +198,22 @@ public class FruitCatchMinigame : MonoBehaviour
 
             rect.anchoredPosition -= new Vector2(0, speed * Time.deltaTime);
 
-            // buah jatuh keluar
+            // Buah jatuh di luar spawn area
             if (rect.anchoredPosition.y < -spawnArea.rect.height / 2f - 50f)
             {
                 Destroy(gameObject);
                 return;
             }
 
-            // buah kena basket
+            // Buah kena basket
             if (RectTransformUtility.RectangleContainsScreenPoint(basket, rect.position))
             {
-                // 🔹 play sound saat ketangkap
                 if (game.audioSource != null && game.catchSound != null)
-                {
                     game.audioSource.PlayOneShot(game.catchSound);
-                }
+
+                game.fruitsCaught++;
+                if (game.intakeText != null)
+                    game.intakeText.text = $"Patient's fruit intake: {game.fruitsCaught}/{game.fruitsToSpawn}";
 
                 Destroy(gameObject);
             }

@@ -6,23 +6,28 @@ using System.Collections.Generic;
 public class ActivityMinigame : MonoBehaviour
 {
     [Header("UI References")]
-    public RectTransform patient;   // container patient (UI)
-    public Image patientImage;      // UI Image patient
+    public RectTransform patient;   
+    public Image patientImage;      
     public RectTransform finishLine;
-    public Button toggleButton;     // gabungan start/stop
-    public TextMeshProUGUI toggleButtonText; // teks pada toggle button
-    public Button submitButton;     // reset manual
+    public Button toggleButton;     
+    public TextMeshProUGUI toggleButtonText; 
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI feedbackText;
+    public TextMeshProUGUI successText;
+    public TextMeshProUGUI failText;
+    public Button closeButton;
 
     [Header("Settings")]
     public float countdownTime = 3f;
     public float trackLength = 1200f;
 
     [Header("Animation")]
-    public List<Sprite> runSprites; // array/list animasi lari
-    public float frameRate = 0.1f;  // durasi per frame
-    public Sprite idleSprite;       // sprite idle (opsional)
+    public List<Sprite> runSprites; 
+    public float frameRate = 0.1f;  
+    public Sprite idleSprite;       
+
+    [Header("Audio")]
+    public AudioSource runAudio; // drag SFX running di sini
 
     private Vector2 startPos;
     private bool isMoving = false;
@@ -48,43 +53,64 @@ public class ActivityMinigame : MonoBehaviour
 
         if (toggleButton != null)
             toggleButton.onClick.AddListener(OnToggle);
-
-        if (submitButton != null)
-            submitButton.onClick.AddListener(OnSubmit);
+        
+        if (closeButton != null)
+            closeButton.onClick.AddListener(CloseMinigame);
     }
 
-private void Update()
-{
-    // 🔹 Deteksi pasien baru via PatientUI
-    if (PatientUI.Instance != null && PatientUI.Instance.currentPatient != null)
+    private void CloseMinigame()
     {
-        Patient current = PatientUI.Instance.currentPatient;
-        if (current != lastPatient)
+        gameObject.SetActive(false);
+        ResetMinigame();
+        if (runAudio != null && runAudio.isPlaying) runAudio.Stop();
+    }
+
+    private void Update()
+    {
+        if (PatientUI.Instance != null && PatientUI.Instance.currentPatient != null)
         {
-            lastPatient = current;
-            ResetMinigame(current.activity);
+            Patient current = PatientUI.Instance.currentPatient;
+            if (current != lastPatient)
+            {
+                lastPatient = current;
+                ResetMinigame(current.activity);
+            }
+        }
+
+        if (!isMoving || isStopped) 
+        {
+            if (runAudio != null && runAudio.isPlaying)
+                runAudio.Stop();
+            return;
+        }
+
+        // play running SFX
+        if (runAudio != null && !runAudio.isPlaying)
+            runAudio.Play();
+
+        // Update timer
+        timer -= Time.deltaTime;
+        if (timerText != null)
+            timerText.text = $"Time: {timer:F1}s";
+
+        // Move patient
+        patient.anchoredPosition += new Vector2(moveSpeed * Time.deltaTime, 0f);
+
+        AnimateRun();
+
+        // Update feedback text
+        if (feedbackText != null && lastPatient != null)
+        {
+            bool passedFinish = patient.anchoredPosition.x >= finishLine.anchoredPosition.x;
+            feedbackText.text = $"Current patient's activity level: {(passedFinish ? "Active" : "Inactive")}";
+        }
+
+        // Auto-fail jika patient melewati end track
+        if (patient.anchoredPosition.x >= startPos.x + trackLength + 50f)
+        {
+            ForceFail();
         }
     }
-
-    if (!isMoving || isStopped) return;
-
-    // Timer berjalan terus (bisa ke minus)
-    timer -= Time.deltaTime;
-    UpdateTimerUI();
-
-    // Gerak patient
-    patient.anchoredPosition += new Vector2(moveSpeed * Time.deltaTime, 0f);
-
-    // 🔹 Animasi sprite berjalan
-    AnimateRun();
-
-    // 🔹 Kalau pasien melewati trackLength → langsung gagal
-    if (patient.anchoredPosition.x >= startPos.x + trackLength)
-    {
-        patient.anchoredPosition = startPos + new Vector2(trackLength, 0f);
-        ForceFail();
-    }
-}
 
     private void AnimateRun()
     {
@@ -111,8 +137,6 @@ private void Update()
         else if (toggleClicks == 2)
         {
             StopMinigame();
-            if (toggleButton != null) toggleButton.gameObject.SetActive(false);
-            if (patient != null) patient.gameObject.SetActive(false);
         }
     }
 
@@ -133,77 +157,83 @@ private void Update()
         if (runSprites.Count > 0 && patientImage != null)
             patientImage.sprite = runSprites[0];
 
-        if (feedbackText != null)
-            feedbackText.text = "Minigame Started!";
+        if (feedbackText != null && lastPatient != null)
+            feedbackText.text = $"Current patient's activity level: {(lastPatient.activity == 1 ? "Active" : "Inactive")}";
+
+        if (successText != null) successText.gameObject.SetActive(false);
+        if (failText != null) failText.gameObject.SetActive(false);
     }
 
-private void StopMinigame()
-{
-    if (!isMoving || isStopped) return;
-
-    isStopped = true;
-
-    float finishX = finishLine != null ? finishLine.anchoredPosition.x : startPos.x + trackLength;
-    float patientX = patient != null ? patient.anchoredPosition.x : startPos.x;
-
-    if (feedbackText != null)
+    private void StopMinigame()
     {
+        if (!isMoving || isStopped) return;
+
+        isStopped = true;
+
+        if (runAudio != null && runAudio.isPlaying) runAudio.Stop();
+
+        float finishX = finishLine != null ? finishLine.anchoredPosition.x : startPos.x + trackLength;
+        float patientX = patient != null ? patient.anchoredPosition.x : startPos.x;
+
         bool passedFinish = patientX >= finishX;
-        bool withinTolerance = (timer > -0.3f && timer < 0.3f);
+        bool success = false;
 
-        if (passedFinish || (!passedFinish && withinTolerance))
+        if (lastPatient != null)
         {
-            // ✅ success → tampilkan sesuai kondisi pasien
-            if (lastPatient != null)
-            {
-                if (lastPatient.activity == 1)
-                    feedbackText.text = "Active!";
-                else
-                    feedbackText.text = "Inactive!";
-            }
+            if (lastPatient.activity == 1)
+                success = passedFinish;
             else
-            {
-                feedbackText.text = "Success!";
-            }
+                success = (timer > -0.3f && timer < 0.3f && !passedFinish);
+
+            PatientUI.Instance.currentPatient.activity = passedFinish ? 1 : 0;
+            PatientUI.Instance.FillField("Activity");
+            PatientUI.Instance.RefreshDropdowns(PatientUI.Instance.currentPatient);
         }
-        else
-        {
-            feedbackText.text = "Failed!";
-        }
+
+        UpdateFeedback(success);
+
+        if (ScoreManager.Instance != null)
+            ScoreManager.Instance.AddGameResult(success);
+
+        isMoving = false;
+
+        if (idleSprite != null && patientImage != null)
+            patientImage.sprite = idleSprite;
+
+        if (toggleButtonText != null)
+            toggleButtonText.text = "Start";
     }
 
-    // 🔹 Hentikan animasi (sprite diam di tempat)
-    isMoving = false;
-
-    if (idleSprite != null && patientImage != null)
-        patientImage.sprite = idleSprite;
-
-    if (toggleButtonText != null) toggleButtonText.text = "Start";
-}
-
-
-
-private void ForceFail()
-{
-    isStopped = true;
-    isMoving = false;
-
-    if (feedbackText != null)
-        feedbackText.text = "Failed! (Too late)";
-
-    if (idleSprite != null && patientImage != null)
-        patientImage.sprite = idleSprite;
-
-    if (toggleButtonText != null) toggleButtonText.text = "Start";
-}
-
-    private void UpdateTimerUI()
+    private void ForceFail()
     {
-        if (timerText != null)
-            timerText.text = $"Time: {timer:F1}s";
+        isStopped = true;
+        isMoving = false;
+
+        if (runAudio != null && runAudio.isPlaying) runAudio.Stop();
+
+        if (feedbackText != null && lastPatient != null)
+            feedbackText.text = $"Current patient's activity level: Active";
+
+        if (lastPatient != null)
+        {
+            PatientUI.Instance.currentPatient.activity = 1;
+            PatientUI.Instance.FillField("Activity");
+            PatientUI.Instance.RefreshDropdowns(PatientUI.Instance.currentPatient);
+        }
+
+        if (failText != null) failText.gameObject.SetActive(true);
+        if (successText != null) successText.gameObject.SetActive(false);
+
+        if (ScoreManager.Instance != null)
+            ScoreManager.Instance.AddGameResult(false);
+
+        if (idleSprite != null && patientImage != null)
+            patientImage.sprite = idleSprite;
+
+        if (toggleButtonText != null)
+            toggleButtonText.text = "Start";
     }
 
-    // Reset minigame, patient muncul, tombol toggle muncul
     private void ResetMinigame(int activity = 1)
     {
         if (patient != null)
@@ -232,13 +262,26 @@ private void ForceFail()
             patientImage.sprite = runSprites[0];
 
         if (feedbackText != null)
-            feedbackText.text = "Press Start to play!";
+            feedbackText.text = "Current patient's activity level: Inactive";
 
-        UpdateTimerUI();
+        if (successText != null) successText.gameObject.SetActive(false);
+        if (failText != null) failText.gameObject.SetActive(false);
+
+        if (timerText != null)
+            timerText.text = $"Time: {timer:F1}s";
     }
 
-    private void OnSubmit()
+    private void UpdateFeedback(bool success)
     {
-        ResetMinigame(lastPatient != null ? lastPatient.activity : 1);
+        if (success)
+        {
+            if (successText != null) successText.gameObject.SetActive(true);
+            if (failText != null) failText.gameObject.SetActive(false);
+        }
+        else
+        {
+            if (failText != null) failText.gameObject.SetActive(true);
+            if (successText != null) successText.gameObject.SetActive(false);
+        }
     }
 }

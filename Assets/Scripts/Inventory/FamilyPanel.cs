@@ -7,13 +7,20 @@ using System.Collections.Generic;
 public class FamilyHistoryGame : MonoBehaviour
 {
     [Header("UI References")]
-    public Button[] boxes;                    // kotak interaktif (misalnya 4 kotak)
+    public Button[] boxes;                    
     public TextMeshProUGUI feedbackText;
+    public TextMeshProUGUI successText;
+    public TextMeshProUGUI failedText;
     public Button exitButton;
 
     [Header("Settings")]
-    public float flashDuration = 0.5f;        // durasi kedip kotak
-    public float delayBetweenFlashes = 0.3f;  // jeda antar kotak
+    public float flashDuration = 0.5f;        
+    public float delayBetweenFlashes = 0.3f;  
+
+    [Header("Audio")]
+    public AudioSource clickAudio;    // drag SFX klik di sini
+    public AudioSource successAudio;  // drag SFX sukses
+    public AudioSource failAudio;     // drag SFX gagal
 
     private List<int> generatedSequence = new List<int>(); 
     private List<int> playerInput = new List<int>();
@@ -26,7 +33,6 @@ public class FamilyHistoryGame : MonoBehaviour
         if (exitButton != null)
             exitButton.onClick.AddListener(ClosePanel);
 
-        // Tambahkan listener pada setiap box
         for (int i = 0; i < boxes.Length; i++)
         {
             int idx = i;
@@ -41,7 +47,7 @@ public class FamilyHistoryGame : MonoBehaviour
         if (PatientUI.Instance != null && PatientUI.Instance.currentPatient != null)
         {
             Patient p = PatientUI.Instance.currentPatient;
-            if (p != lastPatient) // pasien baru
+            if (p != lastPatient)
             {
                 ResetGame();
                 lastPatient = p;
@@ -56,24 +62,23 @@ public class FamilyHistoryGame : MonoBehaviour
         playerInput.Clear();
         canClick = false;
 
+        if (successText != null) successText.gameObject.SetActive(false);
+        if (failedText != null) failedText.gameObject.SetActive(false);
+
+        if (feedbackText != null)
+            feedbackText.text = ""; 
+
         Patient p = PatientUI.Instance != null ? PatientUI.Instance.currentPatient : null;
         if (p == null) return;
 
-        // Tentukan panjang urutan sesuai family history
         requiredClicks = p.family == 0 ? 1 : (p.family == 1 ? 2 : 3);
 
-        // Generate urutan acak
         for (int i = 0; i < requiredClicks; i++)
         {
             generatedSequence.Add(Random.Range(0, boxes.Length));
         }
 
-        // Mainkan urutan kedipan
         StartCoroutine(PlaySequence());
-
-        // Info awal
-        string familyText = p.family == 0 ? "None" : p.family == 1 ? "Level1" : "Level2";
-        if (feedbackText != null) feedbackText.text = $"Family: {familyText}\nTunggu giliran...";
     }
 
     private IEnumerator PlaySequence()
@@ -85,7 +90,8 @@ public class FamilyHistoryGame : MonoBehaviour
             Image img = boxes[idx].GetComponent<Image>();
             Color originalColor = img.color;
 
-            img.color = Color.yellow; 
+            img.color = Color.yellow;
+            if (clickAudio != null) clickAudio.Play(); // SFX saat flash
             yield return new WaitForSeconds(flashDuration);
             img.color = originalColor;
 
@@ -93,7 +99,8 @@ public class FamilyHistoryGame : MonoBehaviour
         }
 
         canClick = true;
-        if (feedbackText != null) feedbackText.text = "Ikuti urutan!";
+        if (feedbackText != null)
+            feedbackText.text = "Klik kotak sesuai urutan!";
     }
 
     private void OnBoxClicked(int index)
@@ -101,9 +108,9 @@ public class FamilyHistoryGame : MonoBehaviour
         if (!canClick) return;
 
         playerInput.Add(index);
-
-        // bikin kotak berkedip saat diklik
         StartCoroutine(FlashBox(index));
+
+        if (clickAudio != null) clickAudio.Play(); // SFX saat klik kotak
 
         if (playerInput.Count >= requiredClicks)
         {
@@ -116,7 +123,7 @@ public class FamilyHistoryGame : MonoBehaviour
         Image img = boxes[index].GetComponent<Image>();
         Color originalColor = img.color;
 
-        img.color = Color.green; 
+        img.color = Color.green;
         yield return new WaitForSeconds(0.2f);
         img.color = originalColor;
     }
@@ -128,11 +135,51 @@ public class FamilyHistoryGame : MonoBehaviour
         Patient p = PatientUI.Instance != null ? PatientUI.Instance.currentPatient : null;
         if (p == null) return;
 
-        string familyText = p.family == 0 ? "None" : p.family == 1 ? "Level1" : "Level2";
-        string sequenceStr = string.Join(", ", generatedSequence);
+        bool correct = true;
+        for (int i = 0; i < requiredClicks; i++)
+        {
+            if (playerInput[i] != generatedSequence[i])
+            {
+                correct = false;
+                break;
+            }
+        }
 
+        if (!correct)
+        {
+            p.family = Mathf.Clamp(p.family + 1, 0, 2); 
+            if (failAudio != null) failAudio.Play(); // SFX gagal
+        }
+        else
+        {
+            if (successAudio != null) successAudio.Play(); // SFX sukses
+        }
+
+        string familyText = p.family == 0 ? "None" : p.family == 1 ? "Level1" : "Level2";
         if (feedbackText != null)
-            feedbackText.text = $"Family: {familyText}\nSequence: {sequenceStr}\n(Result: Benar)";
+            feedbackText.text = $"Family: {familyText}";
+
+        if (correct)
+        {
+            if (successText != null) successText.gameObject.SetActive(true);
+            if (failedText != null) failedText.gameObject.SetActive(false);
+        }
+        else
+        {
+            if (failedText != null) failedText.gameObject.SetActive(true);
+            if (successText != null) successText.gameObject.SetActive(false);
+        }
+
+        if (PatientUI.Instance != null)
+        {
+            PatientUI.Instance.FillField("Family");
+            PatientUI.Instance.RefreshDropdowns(p);
+        }
+
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.AddGameResult(correct);
+        }
     }
 
     private void ClosePanel()

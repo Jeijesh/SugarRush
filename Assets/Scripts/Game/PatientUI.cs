@@ -9,7 +9,7 @@ public class PatientUI : MonoBehaviour
     public static PatientUI Instance;
 
     private bool muteSound = false;
-    private int patientIndex = 0; // hitung pasien yang ditampilkan (dimulai 0)
+    private int patientIndex = 0;
     private List<TMP_Dropdown> emptyDropdowns = new List<TMP_Dropdown>();
 
     [Header("UI References")]
@@ -54,12 +54,9 @@ public class PatientUI : MonoBehaviour
         waistDropdown.ClearOptions();
         waistDropdown.AddOptions(new List<string> { "<94", "94-102", ">102" });
 
-        // NOTE: order here matters for mapping below:
-        // index 0 = "Active" (good), index 1 = "Inactive" (bad)
         activityDropdown.ClearOptions();
         activityDropdown.AddOptions(new List<string> { "Active", "Inactive" });
 
-        // index 0 = "Sufficient" (good), index 1 = "Insufficient" (bad)
         fruitDropdown.ClearOptions();
         fruitDropdown.AddOptions(new List<string> { "Sufficient", "Insufficient" });
 
@@ -75,40 +72,42 @@ public class PatientUI : MonoBehaviour
 
     private void SetupListeners()
     {
-        if (ageDropdown != null) ageDropdown.onValueChanged.AddListener(_ => OnDropdownChanged());
-        if (bmiDropdown != null) bmiDropdown.onValueChanged.AddListener(_ => OnDropdownChanged());
-        if (waistDropdown != null) waistDropdown.onValueChanged.AddListener(_ => OnDropdownChanged());
-        if (activityDropdown != null) activityDropdown.onValueChanged.AddListener(_ => OnDropdownChanged());
-        if (fruitDropdown != null) fruitDropdown.onValueChanged.AddListener(_ => OnDropdownChanged());
-        if (bpDropdown != null) bpDropdown.onValueChanged.AddListener(_ => OnDropdownChanged());
-        if (glucoseDropdown != null) glucoseDropdown.onValueChanged.AddListener(_ => OnDropdownChanged());
-        if (familyDropdown != null) familyDropdown.onValueChanged.AddListener(_ => OnDropdownChanged());
+        TMP_Dropdown[] dropdowns =
+        { ageDropdown, bmiDropdown, waistDropdown, activityDropdown, fruitDropdown,
+          bpDropdown, glucoseDropdown, familyDropdown };
 
-        if (submitButton != null) submitButton.onClick.AddListener(OnSubmit);
+        foreach (var dd in dropdowns)
+        {
+            if (dd != null)
+                dd.onValueChanged.AddListener(_ => OnDropdownChanged());
+        }
+
+        if (submitButton != null)
+            submitButton.onClick.AddListener(OnSubmit);
     }
 
     public void OnDropdownChanged()
     {
         UpdateRisk();
 
-        if (muteSound) return;
-
-        if (audioSource != null && dropdownSfx != null)
+        if (!muteSound && audioSource != null && dropdownSfx != null)
             audioSource.PlayOneShot(dropdownSfx);
+
+        UpdateSubmitButtonState();
     }
 
     public void RefreshRiskFromDropdown()
     {
         UpdateRisk();
+        UpdateSubmitButtonState();
     }
 
-    // Show pasien: reset dropdowns -> acak field kosong (selalu acak tiap pasien) -> tampilkan visuals
     public void ShowPatient(Patient p)
     {
         if (p == null) return;
 
         currentPatient = p;
-        patientIndex++; // sekarang patientIndex = 1 untuk pasien pertama
+        patientIndex++;
 
         if (idText != null) idText.text = $"ID\t: {p.patientID}";
         if (nameText != null) nameText.text = $"Name\t: {p.patientName}";
@@ -135,26 +134,14 @@ public class PatientUI : MonoBehaviour
 
         if (patientInfoText != null) patientInfoText.text = info;
 
-        // Set semua dropdown sesuai data asli pasien (mapping yang benar)
         ResetDropdownsToPatientData(p);
-
-        // Nonaktifkan dropdown agar pasien tidak bisa ubah
         SetDropdownInteractable(false);
 
-        // --- PENTING: acak ulang field kosong setiap pasien baru ---
         emptyDropdowns.Clear();
-
         int emptyFields = (patientIndex - 1) / 5 + 1;
-        // Pastikan pasien pertama minimal 1 field kosong
         if (patientIndex == 1 && emptyFields < 1) emptyFields = 1;
-
         SetEmptyDropdowns(emptyFields);
-
-        // Update visual (teks "-" merah atau teks asli)
         UpdateDropdownVisuals();
-
-        // Update risk (berdasarkan dropdown sekarang)
-        UpdateRisk();
     }
 
     private void ResetDropdownsToPatientData(Patient p)
@@ -164,44 +151,34 @@ public class PatientUI : MonoBehaviour
         ageDropdown.value = MapAgeToDropdown(p.age);
         bmiDropdown.value = MapBmiToDropdown(p.bmi);
         waistDropdown.value = MapWaistToDropdown(p.waist);
-
-        // === MAPPING YANG BENAR untuk activity & fruit ===
-        // Patient.activity: 0 = Inactive (buruk), 1 = Active (baik)
-        // Dropdown order: [0] "Active", [1] "Inactive"
-        // Jadi: dropdownIndex = (p.activity == 1) ? 0 : 1
-        if (activityDropdown != null)
-            activityDropdown.value = (p.activity == 1) ? 0 : 1;
-
-        if (fruitDropdown != null)
-            fruitDropdown.value = (p.fruit == 1) ? 0 : 1;
-
-        if (bpDropdown != null) bpDropdown.value = p.bp;
-        if (glucoseDropdown != null) glucoseDropdown.value = p.glucose;
-        if (familyDropdown != null) familyDropdown.value = p.family;
+        activityDropdown.value = (p.activity == 1) ? 0 : 1;
+        fruitDropdown.value = (p.fruit == 1) ? 0 : 1;
+        bpDropdown.value = p.bp;
+        glucoseDropdown.value = p.glucose;
+        familyDropdown.value = p.family;
 
         muteSound = false;
     }
 
     private void SetDropdownInteractable(bool state)
     {
-        if (ageDropdown != null) ageDropdown.interactable = state;
-        if (bmiDropdown != null) bmiDropdown.interactable = state;
-        if (waistDropdown != null) waistDropdown.interactable = state;
-        if (activityDropdown != null) activityDropdown.interactable = state;
-        if (fruitDropdown != null) fruitDropdown.interactable = state;
-        if (bpDropdown != null) bpDropdown.interactable = state;
-        if (glucoseDropdown != null) glucoseDropdown.interactable = state;
-        if (familyDropdown != null) familyDropdown.interactable = state;
+        TMP_Dropdown[] dropdowns =
+        { ageDropdown, bmiDropdown, waistDropdown, activityDropdown, fruitDropdown,
+          bpDropdown, glucoseDropdown, familyDropdown };
+
+        foreach (var dd in dropdowns)
+            if (dd != null) dd.interactable = state;
     }
 
-    // Pilih 'count' dropdown random untuk dijadikan kosong (unique)
     private void SetEmptyDropdowns(int count)
     {
-        TMP_Dropdown[] dropdowns = { ageDropdown, bmiDropdown, waistDropdown, activityDropdown, fruitDropdown, bpDropdown, glucoseDropdown, familyDropdown };
+        TMP_Dropdown[] dropdowns =
+        { ageDropdown, bmiDropdown, waistDropdown, activityDropdown, fruitDropdown,
+          bpDropdown, glucoseDropdown, familyDropdown };
+
         List<int> indices = new List<int>();
         for (int i = 0; i < dropdowns.Length; i++) indices.Add(i);
 
-        // acak
         for (int i = 0; i < indices.Count; i++)
         {
             int rnd = Random.Range(i, indices.Count);
@@ -210,26 +187,20 @@ public class PatientUI : MonoBehaviour
             indices[rnd] = tmp;
         }
 
-        // pilih pertama 'count' index
         count = Mathf.Clamp(count, 0, dropdowns.Length);
         for (int i = 0; i < count; i++)
         {
             TMP_Dropdown dd = dropdowns[indices[i]];
             if (dd != null && !emptyDropdowns.Contains(dd))
-            {
                 emptyDropdowns.Add(dd);
-            }
         }
     }
 
-    // Update caption text & warna. Untuk mengatasi race-update Unity, kita juga force-set di frame berikutnya.
     public void UpdateDropdownVisuals()
     {
         TMP_Dropdown[] dropdowns =
-        {
-            ageDropdown, bmiDropdown, waistDropdown, activityDropdown,
-            fruitDropdown, bpDropdown, glucoseDropdown, familyDropdown
-        };
+        { ageDropdown, bmiDropdown, waistDropdown, activityDropdown, fruitDropdown,
+          bpDropdown, glucoseDropdown, familyDropdown };
 
         foreach (var dd in dropdowns)
         {
@@ -240,52 +211,55 @@ public class PatientUI : MonoBehaviour
 
             if (emptyDropdowns.Contains(dd))
             {
-                // Force kosong: tampil "-" merah
                 label.text = "-";
                 label.color = Color.red;
-
-                // Pastikan tidak di-overwrite oleh Unity di frame berikutnya
                 StartCoroutine(ForceSetCaptionNextFrame(dd, "-", Color.red));
             }
             else
             {
-                // Tampilkan isi asli: option sesuai value, warna hitam
-                // Safety: guard index
                 int v = Mathf.Clamp(dd.value, 0, dd.options.Count - 1);
                 label.text = dd.options[v].text;
                 label.color = Color.black;
             }
         }
+
+        StartCoroutine(UpdateSubmitNextFrame());
     }
 
     private IEnumerator ForceSetCaptionNextFrame(TMP_Dropdown dd, string txt, Color col)
     {
-        yield return null; // next frame
-        if (dd == null) yield break;
-        if (!emptyDropdowns.Contains(dd)) yield break;
+        yield return null;
+        if (dd == null || !emptyDropdowns.Contains(dd)) yield break;
+        dd.captionText.text = txt;
+        dd.captionText.color = col;
+    }
 
-        if (dd.captionText != null)
-        {
-            dd.captionText.text = txt;
-            dd.captionText.color = col;
-        }
+    private IEnumerator UpdateSubmitNextFrame()
+    {
+        yield return null;
+        UpdateSubmitButtonState();
+    }
+
+    private void UpdateSubmitButtonState()
+    {
+        if (submitButton != null)
+            submitButton.interactable = emptyDropdowns.Count == 0;
     }
 
     public void FillField(string fieldName)
     {
-        TMP_Dropdown target = null;
-
-        switch (fieldName)
+        TMP_Dropdown target = fieldName switch
         {
-            case "Age": target = ageDropdown; break;
-            case "BMI": target = bmiDropdown; break;
-            case "Waist": target = waistDropdown; break;
-            case "Activity": target = activityDropdown; break;
-            case "Fruit": target = fruitDropdown; break;
-            case "BP": target = bpDropdown; break;
-            case "Glucose": target = glucoseDropdown; break;
-            case "Family": target = familyDropdown; break;
-        }
+            "Age" => ageDropdown,
+            "BMI" => bmiDropdown,
+            "Waist" => waistDropdown,
+            "Activity" => activityDropdown,
+            "Fruit" => fruitDropdown,
+            "BP" => bpDropdown,
+            "Glucose" => glucoseDropdown,
+            "Family" => familyDropdown,
+            _ => null
+        };
 
         if (target != null && emptyDropdowns.Contains(target))
         {
@@ -296,7 +270,6 @@ public class PatientUI : MonoBehaviour
 
     public void RefreshDropdowns(Patient p)
     {
-        // Reset visuals according to current patient data (dipanggil mis. dari minigame setelah update)
         ResetDropdownsToPatientData(p);
         UpdateDropdownVisuals();
         UpdateRisk();
@@ -356,11 +329,9 @@ public class PatientUI : MonoBehaviour
         if (!emptyDropdowns.Contains(waistDropdown))
             score += waistDropdown.value switch { 0 => 0, 1 => 3, 2 => 4, _ => 0 };
 
-        // activityDropdown: index 1 == Inactive -> penalize
         if (!emptyDropdowns.Contains(activityDropdown))
             score += activityDropdown.value == 1 ? 2 : 0;
 
-        // fruitDropdown: index 1 == Insufficient -> penalize
         if (!emptyDropdowns.Contains(fruitDropdown))
             score += fruitDropdown.value == 1 ? 1 : 0;
 
@@ -376,7 +347,6 @@ public class PatientUI : MonoBehaviour
         return score;
     }
 
-    // Mapping metode untuk index dropdown (untuk set awal dari Patient data)
     private int MapAgeToDropdown(int age)
     {
         if (age < 45) return 0;
