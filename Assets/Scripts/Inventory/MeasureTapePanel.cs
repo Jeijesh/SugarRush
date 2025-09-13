@@ -25,22 +25,19 @@ public class MeasuringTapeAutoPingPong : MonoBehaviour
     private Vector2 startPos;
     private Patient lastPatient;
 
-private void Start()
-{
-    if (tapeBar != null)
+    private void Start()
     {
-        tapeBar.pivot = new Vector2(0f, tapeBar.pivot.y); // pivot kiri
-        startPos = tapeBar.anchoredPosition;
-        startWidth = 0f; // mulai dari 0 cm
-        tapeBar.sizeDelta = new Vector2(startWidth, tapeBar.sizeDelta.y);
+        if (tapeBar != null)
+        {
+            tapeBar.pivot = new Vector2(0f, tapeBar.pivot.y); // pivot kiri
+            startPos = tapeBar.anchoredPosition;
+        }
+
+        ResetTape();
+
+        if (exitButton != null)
+            exitButton.onClick.AddListener(() => gameObject.SetActive(false));
     }
-
-    ResetTape();
-    if (exitButton != null)
-        exitButton.onClick.AddListener(() => gameObject.SetActive(false));
-}
-
-
 
     private void Update()
     {
@@ -53,9 +50,14 @@ private void Start()
                 lastPatient = p;
                 targetValue = Mathf.Clamp(p.waist, minWaist, maxWaist);
 
-                // simpan posisi & ukuran awal
-                startPos = tapeBar != null ? tapeBar.anchoredPosition : Vector2.zero;
-                startWidth = tapeBar != null ? tapeBar.sizeDelta.x : 0f;
+                // Reset posisi & ukuran tape bar
+                if (tapeBar != null)
+                {
+                    tapeBar.pivot = new Vector2(0f, tapeBar.pivot.y);
+                    startPos = tapeBar.anchoredPosition;
+                    startWidth = 80f; // minimal kepala tape
+                    tapeBar.sizeDelta = new Vector2(startWidth, tapeBar.sizeDelta.y);
+                }
 
                 SetTargetZone(targetValue);
                 ResetTape();
@@ -67,7 +69,6 @@ private void Start()
         if (Input.GetKey(KeyCode.Space))
         {
             float delta = growSpeed * Time.deltaTime;
-            // maju atau mundur
             if (growingRight)
                 tapeBar.sizeDelta = new Vector2(tapeBar.sizeDelta.x + delta, tapeBar.sizeDelta.y);
             else
@@ -101,45 +102,57 @@ private void Start()
 
     private void CheckResult(float value)
     {
-        if (Mathf.Abs(value - targetValue) <= 2f)
+        bool success = Mathf.Abs(value - targetValue) <= 2f;
+
+        if (PatientUI.Instance != null && PatientUI.Instance.currentPatient != null)
         {
-            if (feedbackText != null) feedbackText.text = "Perfect!";
-            if (valueText != null) valueText.text = targetValue.ToString("F1");
+            Patient p = PatientUI.Instance.currentPatient;
+
+            if (success)
+            {
+                if (feedbackText != null) feedbackText.text = "Success!";
+                p.waist = targetValue;
+            }
+            else
+            {
+                if (feedbackText != null) feedbackText.text = "Failed!";
+                p.waist = value;
+            }
+
+            // Update dropdown / field BMI
+            PatientUI.Instance.FillField("Waist");
+            PatientUI.Instance.RefreshDropdowns(p);
         }
-        else
-        {
-            if (feedbackText != null) feedbackText.text = "Miss!";
-            if (valueText != null) valueText.text = value.ToString("F1");
-        }
+
+        if (valueText != null)
+            valueText.text = $"{(success ? targetValue : value):F1} cm";
+
+        // Update ScoreManager jika ada
+        if (ScoreManager.Instance != null)
+            ScoreManager.Instance.AddGameResult(success);
     }
 
-    // Reset otomatis seperti ScalePanel / ActivityMinigame
-private void ResetTape()
-{
-    stopped = false;
-    growingRight = true;
-
-    if (tapeBar != null)
+    private void ResetTape()
     {
-        tapeBar.anchoredPosition = startPos;
+        stopped = false;
+        growingRight = true;
 
-        // kasih lebar minimal biar kepala tape kelihatan
-        float minHeadWidth = 80f;
-        tapeBar.sizeDelta = new Vector2(minHeadWidth, tapeBar.sizeDelta.y);
+        if (tapeBar != null)
+        {
+            tapeBar.anchoredPosition = startPos;
+            tapeBar.sizeDelta = new Vector2(startWidth, tapeBar.sizeDelta.y);
+            tapeBar.gameObject.SetActive(true);
+        }
 
-        tapeBar.gameObject.SetActive(true);
+        if (targetZone != null)
+            targetZone.gameObject.SetActive(true);
+
+        if (feedbackText != null)
+            feedbackText.text = "Hold Space to measure!";
+
+        if (valueText != null)
+            valueText.text = $"{minWaist:F1} cm";
     }
-
-    if (targetZone != null)
-        targetZone.gameObject.SetActive(true);
-
-    if (feedbackText != null)
-        feedbackText.text = "Hold Space to measure!";
-    if (valueText != null)
-        valueText.text = $"{minWaist:F1} cm"; // mulai dari batas min
-}
-
-
 
     private void SetTargetZone(float target)
     {

@@ -151,4 +151,20 @@ public void UpdateScore(int totalScore, int delta)
         if (timerText != null)
             timerText.text = time <= 0f ? "Times Up!" : $"Time: {Mathf.CeilToInt(time)}s";
     }
+
+    public void AddGameResult(bool success)
+{
+    int delta = success ? 50 : -50;
+
+    // Ambil score saat ini dari UI
+    int totalScore = 0;
+    if (int.TryParse(scoreText.text.Replace("Score: ", ""), out int parsed))
+        totalScore = parsed;
+
+    totalScore += delta;
+
+    // Update UI + feedback
+    UpdateScore(totalScore, delta);
+}
+
 }

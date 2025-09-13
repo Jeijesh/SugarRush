@@ -8,7 +8,10 @@ public class ScalePanel : MonoBehaviour
     public RectTransform track;         
     public RectTransform movingBar;     
     public RectTransform targetZone;    
-    public TextMeshProUGUI feedbackText;
+
+    [Header("Feedback UI")]
+    public TextMeshProUGUI successText;
+    public TextMeshProUGUI failedText;
     public TextMeshProUGUI valueText;
     public Button exitButton;
 
@@ -81,19 +84,42 @@ public class ScalePanel : MonoBehaviour
         float targetRight = targetZone.localPosition.x + targetZone.rect.width / 2;
         float barCenter = movingBar.localPosition.x;
 
-        if (barCenter >= targetLeft && barCenter <= targetRight)
+        bool success = false;
+
+        if (PatientUI.Instance != null && PatientUI.Instance.currentPatient != null)
         {
-            if (feedbackText != null) 
-                feedbackText.text = "Perfect!";
-            if (valueText != null) 
-                valueText.text = targetBMI.ToString("F1");
+            Patient p = PatientUI.Instance.currentPatient;
+
+            if (barCenter >= targetLeft && barCenter <= targetRight)
+            {
+                // 🎯 Kena target → pakai BMI asli pasien
+                p.bmi = Mathf.Clamp(targetBMI, minValue, maxValue);
+                success = true;
+
+                if (successText != null) successText.gameObject.SetActive(true);
+                if (failedText != null) failedText.gameObject.SetActive(false);
+                if (valueText != null) valueText.text = targetBMI.ToString("F1");
+            }
+            else
+            {
+                // ❌ Miss → pakai nilai bar
+                p.bmi = Mathf.Clamp(value, minValue, maxValue);
+                success = false;
+
+                if (successText != null) successText.gameObject.SetActive(false);
+                if (failedText != null) failedText.gameObject.SetActive(true);
+                if (valueText != null) valueText.text = value.ToString("F1");
+            }
+
+            // Hapus BMI dari field kosong & update UI
+            PatientUI.Instance.FillField("BMI");
+            PatientUI.Instance.RefreshDropdowns(p);
         }
-        else
+
+        // ⬇️ Update skor lewat ScoreManager
+        if (ScoreManager.Instance != null)
         {
-            if (feedbackText != null) 
-                feedbackText.text = "Miss!";
-            if (valueText != null) 
-                valueText.text = value.ToString("F1");
+            ScoreManager.Instance.AddGameResult(success);
         }
     }
 
@@ -103,7 +129,9 @@ public class ScalePanel : MonoBehaviour
         if (movingBar != null)
             movingBar.localPosition = new Vector3(leftLimit, fixedY, 0f);
 
-        if (feedbackText != null) feedbackText.text = "Press Space!";
+        if (successText != null) successText.gameObject.SetActive(false);
+        if (failedText != null) failedText.gameObject.SetActive(false);
+
         if (valueText != null) valueText.text = minValue.ToString("F1");
 
         movingRight = true;
