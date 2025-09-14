@@ -12,21 +12,36 @@ public class LeaderboardManager : MonoBehaviour
         public int score;
     }
 
+    [System.Serializable]
+    private class LeaderboardWrapper
+    {
+        public List<LeaderboardEntry> entries;
+    }
+
     private List<LeaderboardEntry> leaderboard = new List<LeaderboardEntry>();
     private const int maxEntries = 10;
+    private const string playerPrefsKey = "LeaderboardJSON";
 
     private void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // tetap hidup lintas scene
+            LoadLeaderboard();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>
-    /// Tambah skor pemain baru ke leaderboard
+    /// Tambah skor pemain baru dan simpan
     /// </summary>
     public void AddScore(string initials, int score)
     {
-        if (string.IsNullOrEmpty(initials)) initials = "AAA"; // default
+        if (string.IsNullOrEmpty(initials)) initials = "AAA";
 
         leaderboard.Add(new LeaderboardEntry
         {
@@ -34,12 +49,12 @@ public class LeaderboardManager : MonoBehaviour
             score = score
         });
 
-        // Urutkan descending
         leaderboard.Sort((a, b) => b.score.CompareTo(a.score));
 
-        // Hanya simpan maxEntries
         if (leaderboard.Count > maxEntries)
             leaderboard.RemoveAt(leaderboard.Count - 1);
+
+        SaveLeaderboard();
     }
 
     /// <summary>
@@ -47,6 +62,32 @@ public class LeaderboardManager : MonoBehaviour
     /// </summary>
     public List<LeaderboardEntry> GetLeaderboard()
     {
-        return leaderboard;
+        return new List<LeaderboardEntry>(leaderboard);
+    }
+
+    /// <summary>
+    /// Simpan leaderboard ke PlayerPrefs
+    /// </summary>
+    public void SaveLeaderboard()
+    {
+        LeaderboardWrapper wrapper = new LeaderboardWrapper { entries = leaderboard };
+        string json = JsonUtility.ToJson(wrapper);
+        PlayerPrefs.SetString(playerPrefsKey, json);
+        PlayerPrefs.Save();
+    }
+
+    /// <summary>
+    /// Load leaderboard dari PlayerPrefs
+    /// </summary>
+    public void LoadLeaderboard()
+    {
+        if (!PlayerPrefs.HasKey(playerPrefsKey)) return;
+
+        string json = PlayerPrefs.GetString(playerPrefsKey);
+        LeaderboardWrapper wrapper = JsonUtility.FromJson<LeaderboardWrapper>(json);
+        if (wrapper != null && wrapper.entries != null)
+        {
+            leaderboard = new List<LeaderboardEntry>(wrapper.entries);
+        }
     }
 }

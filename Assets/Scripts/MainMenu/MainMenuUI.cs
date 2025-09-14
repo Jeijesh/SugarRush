@@ -7,9 +7,10 @@ using System.Collections.Generic;
 public class MainMenuManager : MonoBehaviour
 {
     [Header("Panels")]
-    public GameObject initialsPanel;       // panel input initials
-    public GameObject leaderboardPanel;    // panel leaderboard
-    public GameObject creditsPanel;        // panel credits
+    public GameObject initialsPanel;
+    public GameObject leaderboardPanel;
+    public GameObject creditsPanel;
+    public GameObject exitConfirmationPanel; // panel konfirmasi keluar
 
     [Header("Initials Input")]
     public TMP_InputField initialsInput;
@@ -21,13 +22,19 @@ public class MainMenuManager : MonoBehaviour
     public Button creditsButton;
     public Button exitButton;
 
-    [Header("Leaderboard")]
-    public Transform leaderboardContent;
-    public GameObject leaderboardEntryPrefab;
+    [Header("Panel Exit Buttons")]
+    public Button initialsExitButton;
+    public Button leaderboardExitButton;
+    public Button creditsExitButton;
+    public Button confirmExitYesButton;
+    public Button confirmExitNoButton;
+
+    [Header("Leaderboard (10 entries)")]
+    public TMP_Text[] leaderboardTexts = new TMP_Text[10]; // assign 10 TextMeshPro di Inspector
 
     private void Start()
     {
-        // --- Setup button listeners ---
+        // Setup main buttons
         if (startButton != null) startButton.onClick.AddListener(OnStartClicked);
         if (leaderboardButton != null) leaderboardButton.onClick.AddListener(OnLeaderboardClicked);
         if (creditsButton != null) creditsButton.onClick.AddListener(OnCreditsClicked);
@@ -35,21 +42,36 @@ public class MainMenuManager : MonoBehaviour
 
         if (initialsSubmitButton != null) initialsSubmitButton.onClick.AddListener(OnInitialsSubmit);
 
+        // Setup panel exit buttons
+        if (initialsExitButton != null) initialsExitButton.onClick.AddListener(CloseInitialsPanel);
+        if (leaderboardExitButton != null) leaderboardExitButton.onClick.AddListener(CloseLeaderboardPanel);
+        if (creditsExitButton != null) creditsExitButton.onClick.AddListener(CloseCreditsPanel);
+
+        // Konfirmasi exit
+        if (confirmExitYesButton != null) confirmExitYesButton.onClick.AddListener(Application.Quit);
+        if (confirmExitNoButton != null) confirmExitNoButton.onClick.AddListener(() =>
+        {
+            if (exitConfirmationPanel != null)
+                exitConfirmationPanel.SetActive(false);
+        });
+
         // Hide all secondary panels at start
         if (initialsPanel != null) initialsPanel.SetActive(false);
         if (leaderboardPanel != null) leaderboardPanel.SetActive(false);
         if (creditsPanel != null) creditsPanel.SetActive(false);
+        if (exitConfirmationPanel != null) exitConfirmationPanel.SetActive(false);
 
-        ShowLeaderboard(); // optional: show last leaderboard entries
+        ShowLeaderboard(); // tampilkan leaderboard terakhir
     }
 
-    // ================== MAIN MENU BUTTONS ==================
     private void OnStartClicked()
     {
-        // Show panel input initials
+
+        // Buka panel input initials
         if (initialsPanel != null)
         {
             initialsPanel.SetActive(true);
+            initialsInput.text = PlayerPrefs.GetString("PlayerInitials", "");
         }
     }
 
@@ -70,10 +92,12 @@ public class MainMenuManager : MonoBehaviour
 
     private void OnExitClicked()
     {
-        Application.Quit();
+        if (exitConfirmationPanel != null)
+            exitConfirmationPanel.SetActive(true);
+        else
+            Application.Quit();
     }
 
-    // ================== INITIALS INPUT ==================
     private void OnInitialsSubmit()
     {
         if (initialsInput == null) return;
@@ -81,44 +105,35 @@ public class MainMenuManager : MonoBehaviour
         string initials = initialsInput.text.Trim();
         if (string.IsNullOrEmpty(initials)) return;
 
-        // Set initials ke GameManager
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.SetPlayerInitials(initials);
-        }
+        PlayerPrefs.SetString("PlayerInitials", initials.ToUpper());
+        PlayerPrefs.Save();
 
-        // Load RushMode scene
         SceneManager.LoadScene("RushMode");
     }
 
-    // ================== LEADERBOARD ==================
-private void ShowLeaderboard()
-{
-    if (leaderboardContent == null || leaderboardEntryPrefab == null)
+    private void ShowLeaderboard()
     {
-        Debug.LogWarning("LeaderboardContent atau LeaderboardEntryPrefab belum diassign!");
-        return;
+        if (leaderboardTexts == null || leaderboardTexts.Length == 0) return;
+
+        var entries = LeaderboardManager.Instance?.GetLeaderboard();
+        if (entries == null) entries = new List<LeaderboardManager.LeaderboardEntry>();
+
+        for (int i = 0; i < leaderboardTexts.Length; i++)
+        {
+            if (leaderboardTexts[i] == null) continue;
+
+            if (i < entries.Count)
+            {
+                var entry = entries[i];
+                string name = entry.initials.Length > 10 ? entry.initials.Substring(0, 10) : entry.initials;
+                leaderboardTexts[i].text = $"{i + 1}. {name}: {entry.score} Poin";
+            }
+            else
+            {
+                leaderboardTexts[i].text = $"{i + 1}. ---";
+            }
+        }
     }
-
-    foreach (Transform child in leaderboardContent)
-        Destroy(child.gameObject);
-
-    var entries = LeaderboardManager.Instance?.GetLeaderboard();
-    if (entries == null)
-    {
-        Debug.LogWarning("LeaderboardManager.Instance.GetLeaderboard() mengembalikan null!");
-        return;
-    }
-
-    foreach (var entry in entries)
-    {
-        GameObject go = Instantiate(leaderboardEntryPrefab, leaderboardContent);
-        TMP_Text text = go.GetComponent<TMP_Text>();
-        if (text != null)
-            text.text = $"{entry.initials} - {entry.score}";
-    }
-}
-
 
     // ================== CLOSE PANELS ==================
     public void CloseInitialsPanel()

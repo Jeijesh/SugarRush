@@ -146,6 +146,17 @@ public void SetupPatient(Patient patient)
     clothesRenderer.color = patient.clothesColor;
     clothesRenderer.transform.localPosition = defaultClothesPos + (Vector3)clothesOffsets[clothesIndex];
 }
+public void ResetVisuals()
+{
+    if (bodyRenderer != null) bodyRenderer.sprite = null;
+    if (faceRenderer != null) faceRenderer.sprite = null;
+    if (hairRenderer != null) hairRenderer.sprite = null;
+    if (clothesRenderer != null) clothesRenderer.sprite = null;
+
+    // Reset posisi hair dan clothes
+    if (hairRenderer != null) hairRenderer.transform.localPosition = defaultHairPos;
+    if (clothesRenderer != null) clothesRenderer.transform.localPosition = defaultClothesPos;
+}
 
     
 }

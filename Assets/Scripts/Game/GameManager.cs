@@ -1,8 +1,9 @@
+// di GameManager.cs
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 using System.Collections;
-using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -32,99 +33,103 @@ public class GameManager : MonoBehaviour
     public GameObject leaderboardEntryPrefab;
     public Button backToMenuButton;
 
-    private string playerInitials = "AAA"; // default, bisa di-set dari menu
+    private string playerInitials = "AAA";
 
     private void Awake()
     {
-        if (Instance == null) 
-        { 
-            Instance = this; 
-            DontDestroyOnLoad(gameObject); // tetap ada saat pindah scene
+        // Destroy old instance supaya benar-benar fresh saat start ulang
+        if (Instance != null && Instance != this)
+        {
+            Destroy(Instance.gameObject);
         }
-        else Destroy(gameObject);
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        playerInitials = PlayerPrefs.GetString("PlayerInitials", "AAA");
     }
 
     private void Start()
     {
         remainingTime = totalTime;
+        score = 0;
+        gameEnded = false;
         ScoreManager.Instance.UpdateScore(score, 0);
+
         StartCoroutine(TimerCoroutine());
         SpawnNextPatient();
 
-        // setup tombol
+        // Setup tombol back to menu
         if (backToMenuButton != null)
-            backToMenuButton.onClick.AddListener(() => UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu"));
+        {
+            backToMenuButton.onClick.RemoveAllListeners();
+            backToMenuButton.onClick.AddListener(() =>
+            {
+                // Stop semua coroutine
+                StopAllCoroutines();
+
+                // Destroy GameManager supaya fresh saat Start lagi
+                Destroy(gameObject);
+
+                // Kembali ke MainMenu
+                SceneManager.LoadScene("MainMenu");
+            });
+        }
 
         if (gameOverPanel != null)
             gameOverPanel.SetActive(false);
     }
 
-private IEnumerator TimerCoroutine()
-{
-    while (remainingTime > 0f)
+    private IEnumerator TimerCoroutine()
     {
-        remainingTime -= Time.deltaTime;
-        ScoreManager.Instance.UpdateTimer(remainingTime);
-        yield return null;
+        while (remainingTime > 0f && !gameEnded)
+        {
+            remainingTime -= Time.deltaTime;
+            ScoreManager.Instance.UpdateTimer(remainingTime);
+            yield return null;
+        }
+
+        if (!gameEnded)
+        {
+            remainingTime = 0f;
+            ScoreManager.Instance.UpdateTimer(remainingTime);
+            EndGame();
+        }
     }
 
-    remainingTime = 0f;
-    ScoreManager.Instance.UpdateTimer(remainingTime);
-
-    gameEnded = true; // hentikan input & spawn pasien
-    EndGame();        // langsung tampilkan popup
-}
-
-
-private void EndGame()
-{
-    if (gameEnded) return; // mencegah pemanggilan ganda
-    gameEnded = true;
-    remainingTime = 0f;
-
-    if (ScoreManager.Instance != null)
-        ScoreManager.Instance.UpdateTimer(remainingTime);
-
-    if (LeaderboardManager.Instance != null)
-        LeaderboardManager.Instance.AddScore(playerInitials, score);
-
-    // Tampilkan panel
-    if (gameOverPanel != null)
+    private void EndGame()
     {
-        gameOverPanel.SetActive(true);
+        gameEnded = true;
 
-        if (playerNameText != null)
-            playerNameText.text = $"Player: {playerInitials}";
-
-        if (finalScoreText != null)
-            finalScoreText.text = $"Score: {score}";
-
-        // Ranking
         if (LeaderboardManager.Instance != null)
         {
-            var leaderboard = LeaderboardManager.Instance.GetLeaderboard();
-            int rank = leaderboard.FindIndex(e => e.initials == playerInitials && e.score == score) + 1;
+            LeaderboardManager.Instance.AddScore(playerInitials, score);
+            LeaderboardManager.Instance.SaveLeaderboard();
+        }
 
-            if (rankText != null)
-                rankText.text = rank > 0 ? $"Rank: {rank}" : "Rank: N/A";
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(true);
+            if (playerNameText != null) playerNameText.text = $"Player: {playerInitials}";
+            if (finalScoreText != null) finalScoreText.text = $"Score: {score}";
 
-            if (leaderboardContent != null && leaderboardEntryPrefab != null)
+            if (LeaderboardManager.Instance != null && leaderboardContent != null && leaderboardEntryPrefab != null)
             {
-                foreach (Transform child in leaderboardContent)
-                    Destroy(child.gameObject);
+                foreach (Transform child in leaderboardContent) Destroy(child.gameObject);
 
+                var leaderboard = LeaderboardManager.Instance.GetLeaderboard();
                 foreach (var entry in leaderboard)
                 {
                     GameObject go = Instantiate(leaderboardEntryPrefab, leaderboardContent);
                     TMP_Text text = go.GetComponent<TMP_Text>();
-                    if (text != null)
-                        text.text = $"{entry.initials} - {entry.score}";
+                    if (text != null) text.text = $"{entry.initials} - {entry.score}";
                 }
+
+                int rank = leaderboard.FindIndex(e => e.initials == playerInitials && e.score == score) + 1;
+                if (rankText != null) rankText.text = rank > 0 ? $"Rank: {rank}" : "Rank: N/A";
             }
         }
     }
-}
-
 
     public void SubmitAnswer(int submittedScore)
     {
@@ -155,8 +160,7 @@ private void EndGame()
         ScoreManager.Instance.UpdateScore(score, delta);
 
         StartCoroutine(CameraShake(0.15f, 0.05f));
-        if (gameEnded) return; // jangan proses pasien baru atau input
-        SpawnNextPatient();
+        if (!gameEnded) SpawnNextPatient();
     }
 
     private void SpawnNextPatient()
@@ -164,10 +168,8 @@ private void EndGame()
         currentPatient = patientManager.GeneratePatient();
         patientStartTime = Time.time;
 
-        if (visualManager != null)
-            visualManager.SetupPatient(currentPatient);
-        if (patientUI != null)
-            patientUI.ShowPatient(currentPatient);
+        if (visualManager != null) visualManager.SetupPatient(currentPatient);
+        if (patientUI != null) patientUI.ShowPatient(currentPatient);
     }
 
     private IEnumerator CameraShake(float duration, float magnitude)
@@ -192,7 +194,11 @@ private void EndGame()
     public void SetPlayerInitials(string initials)
     {
         if (!string.IsNullOrEmpty(initials))
+        {
             playerInitials = initials.ToUpper();
+            PlayerPrefs.SetString("PlayerInitials", playerInitials);
+            PlayerPrefs.Save();
+        }
     }
 
     public int GetScore() => score;
