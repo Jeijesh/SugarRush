@@ -5,14 +5,14 @@ using TMPro;
 
 public class GlukometerShellGame : MonoBehaviour
 {
-    [Header("UI References")]
+    [Header("Referensi UI")]
     public Button[] strips;                  // tombol strip
     public Button exitButton;
     public TextMeshProUGUI feedbackText;     // hasil Glukometer
     public TextMeshProUGUI successText;
     public TextMeshProUGUI failedText;
 
-    [Header("Settings")]
+    [Header("Pengaturan")]
     public float shuffleDuration = 0.5f;     // durasi swap animasi
     public int shuffleCount = 5;             // jumlah swap
 
@@ -31,7 +31,7 @@ public class GlukometerShellGame : MonoBehaviour
     {
         if (strips == null || strips.Length < 1)
         {
-            Debug.LogError("Assign strips in inspector!");
+            Debug.LogError("Tentukan strips di inspector!");
             enabled = false;
             return;
         }
@@ -165,7 +165,7 @@ public class GlukometerShellGame : MonoBehaviour
         }
 
         if (feedbackText != null)
-            feedbackText.text = $"Glucose: {(glucoseValue == 1 ? "High" : "Normal")}";
+            feedbackText.text = $"Glukosa: {(glucoseValue == 1 ? "Tinggi" : "Normal")}";
 
         if (success)
         {

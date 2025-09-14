@@ -11,7 +11,7 @@ public class PatientUI : MonoBehaviour
     private bool muteSound = false;
     private int patientIndex = 0;
 
-    [Header("UI References")]
+    [Header("Referensi UI")]
     public TextMeshProUGUI idText;
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI riskLevelText;
@@ -23,7 +23,7 @@ public class PatientUI : MonoBehaviour
                         activityDropdown, fruitDropdown, bpDropdown,
                         glucoseDropdown, familyDropdown;
 
-    [Header("Button")]
+    [Header("Tombol")]
     public Button submitButton;
 
     [Header("Audio")]
@@ -32,11 +32,9 @@ public class PatientUI : MonoBehaviour
 
     [HideInInspector] public Patient currentPatient;
 
-    // 🔹 list dropdown merah (empty)
     private List<TMP_Dropdown> emptyDropdowns = new List<TMP_Dropdown>();
     public List<TMP_Dropdown> EmptyDropdowns => emptyDropdowns;
 
-    // 🔹 event untuk inventory tombol
     public event System.Action OnEmptyDropdownChanged;
 
     private void Awake()
@@ -60,19 +58,19 @@ public class PatientUI : MonoBehaviour
         waistDropdown.AddOptions(new List<string> { "<94", "94-102", ">102" });
 
         activityDropdown.ClearOptions();
-        activityDropdown.AddOptions(new List<string> { "Active", "Inactive" });
+        activityDropdown.AddOptions(new List<string> { "Aktif", "Tidak Aktif" });
 
         fruitDropdown.ClearOptions();
-        fruitDropdown.AddOptions(new List<string> { "Sufficient", "Insufficient" });
+        fruitDropdown.AddOptions(new List<string> { "Cukup", "Kurang" });
 
         bpDropdown.ClearOptions();
-        bpDropdown.AddOptions(new List<string> { "Normal", "High" });
+        bpDropdown.AddOptions(new List<string> { "Normal", "Tinggi" });
 
         glucoseDropdown.ClearOptions();
-        glucoseDropdown.AddOptions(new List<string> { "Normal", "High" });
+        glucoseDropdown.AddOptions(new List<string> { "Normal", "Tinggi" });
 
         familyDropdown.ClearOptions();
-        familyDropdown.AddOptions(new List<string> { "None", "Level1", "Level2" });
+        familyDropdown.AddOptions(new List<string> { "Tidak Ada", "Level1", "Level2" });
     }
 
     private void SetupListeners()
@@ -109,12 +107,12 @@ public class PatientUI : MonoBehaviour
         currentPatient = p;
         patientIndex++;
 
-        if (idText != null) idText.text = $"ID\t: {p.patientID}";
-        if (nameText != null) nameText.text = $"Name\t: {p.patientName}";
+        if (idText != null) idText.text = $"ID\t  : {p.patientID}";
+        if (nameText != null) nameText.text = $"Nama\t  : {p.patientName}";
         if (riskLevelText != null) riskLevelText.text = p.riskLevel;
         if (riskScoreText != null) riskScoreText.text = p.GetTotalScore().ToString();
         if (genderText != null)
-            genderText.text = $"Sex\t: {(p.gender == 0 ? "Female" : "Male")}";
+            genderText.text = $"Gender: {(p.gender == 0 ? "Perempuan" : "Laki-laki")}";
 
         ResetDropdownsToPatientData(p);
         SetDropdownInteractable(false);
@@ -125,10 +123,9 @@ public class PatientUI : MonoBehaviour
         SetEmptyDropdowns(emptyFields);
         UpdateDropdownVisuals();
 
-        // 🔥 Tambahin ini supaya dialog random keluar tiap patient baru
         PatientDialogue.Instance?.ShowRandomDialogue();
 
-        OnEmptyDropdownChanged?.Invoke(); // trigger event
+        OnEmptyDropdownChanged?.Invoke();
     }
 
     private void ResetDropdownsToPatientData(Patient p)
@@ -272,38 +269,51 @@ public class PatientUI : MonoBehaviour
         GameManager.Instance.SubmitAnswer(userScore);
     }
 
-    private void UpdateRisk()
+private void UpdateRisk()
+{
+    if (currentPatient == null) return;
+
+    int currentScore = CalculateRisk();
+    string riskEnglish = Patient.CalculateRiskLevel(currentScore);
+
+    // Konversi ke bahasa Indonesia
+    string riskIndo = riskEnglish switch
     {
-        if (currentPatient == null) return;
+        "Low" => "Rendah",
+        "Slightly Elevated" => "Sedikit Meningkat",
+        "Moderate" => "Sedang",
+        "High" => "Tinggi",
+        "Very High" => "Sangat Tinggi",
+        _ => riskEnglish
+    };
 
-        int currentScore = CalculateRisk();
-        string currentRiskTextStr = Patient.CalculateRiskLevel(currentScore);
-
-        if (riskLevelText != null)
-        {
-            riskLevelText.text = currentRiskTextStr;
-            riskLevelText.fontSize = currentRiskTextStr == "Slightly Elevated" ? 14 : 20;
-        }
-
-        if (riskScoreText != null)
-        {
-            riskScoreText.text = currentScore.ToString();
-            riskScoreText.color = GetRiskColor(currentRiskTextStr);
-        }
+    if (riskLevelText != null)
+    {
+        riskLevelText.text = riskIndo;
+        riskLevelText.fontSize = riskIndo == "Sedikit Meningkat" ? 14 : 20;
     }
 
-    private Color GetRiskColor(string riskLevel)
+    if (riskScoreText != null)
     {
-        return riskLevel switch
-        {
-            "Low"               => new Color(0.0f, 0.6f, 0.0f),
-            "Slightly Elevated" => new Color(0.8f, 0.6f, 0.0f),
-            "Moderate"          => new Color(1.0f, 0.4f, 0.0f),
-            "High"              => new Color(0.8f, 0.0f, 0.0f),
-            "Very High"         => new Color(0.5f, 0.0f, 0.0f),
-            _                   => Color.white
-        };
+        riskScoreText.text = currentScore.ToString();
+        // Gunakan string bahasa Indonesia untuk warna
+        riskScoreText.color = GetRiskColor(riskIndo);
     }
+}
+
+private Color GetRiskColor(string riskLevel)
+{
+    return riskLevel switch
+    {
+        "Rendah" => new Color(0.0f, 0.6f, 0.0f),
+        "Sedikit Meningkat" => new Color(0.8f, 0.6f, 0.0f),
+        "Sedang" => new Color(1.0f, 0.4f, 0.0f),
+        "Tinggi" => new Color(0.8f, 0.0f, 0.0f),
+        "Sangat Tinggi" => new Color(0.5f, 0.0f, 0.0f),
+        _ => Color.white
+    };
+}
+
 
     private int CalculateRisk()
     {
@@ -353,7 +363,8 @@ public class PatientUI : MonoBehaviour
 
     private int MapWaistToDropdown(float waist)
     {
-        if (waist < 94f) return 0;
+        if (waist < 94f) return 
+0;
         if (waist <= 102f) return 1;
         return 2;
     }

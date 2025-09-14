@@ -157,7 +157,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 103, y: -25.183}
+  m_AnchoredPosition: {x: 110, y: -25.183}
   m_SizeDelta: {x: 200, y: 30.9461}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7203064
@@ -1899,8 +1899,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Hold Space and release at the perfect moment to measure the patient\u2019s
-    waist!"
+  m_text: Tahan spasi dan lepaskan pada saat yang tepat untuk mengukur lingkar pinggang
+    pasien!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -2423,7 +2423,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Expiration XX/XX/XXXX
+  m_text: Kadaluarsa XX/XX/XXXX
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -3165,7 +3165,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -46.5, y: 191.44006}
+  m_AnchoredPosition: {x: -50, y: 191.44006}
   m_SizeDelta: {x: 315, y: 30.9461}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &201628591
@@ -4024,7 +4024,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 103, y: 26.394}
+  m_AnchoredPosition: {x: 110, y: 26.394}
   m_SizeDelta: {x: 200, y: 30.9461}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &237852440
@@ -4448,81 +4448,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -0.000030517578}
   m_SizeDelta: {x: 0, y: 28}
   m_Pivot: {x: 0.5, y: 1}
---- !u!1 &274650430
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 274650431}
-  - component: {fileID: 274650433}
-  - component: {fileID: 274650432}
-  m_Layer: 5
-  m_Name: Border
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &274650431
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 274650430}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 359256894}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1620, y: 780}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &274650432
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 274650430}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 8890950975128512391, guid: b5c8fb2b97157b573a643cdae01d6678, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &274650433
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 274650430}
-  m_CullTransparentMesh: 1
 --- !u!1 &282892522
 GameObject:
   m_ObjectHideFlags: 0
@@ -4597,115 +4522,6 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 282892522}
-  m_CullTransparentMesh: 1
---- !u!1 &308198185
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 308198186}
-  - component: {fileID: 308198189}
-  - component: {fileID: 308198188}
-  - component: {fileID: 308198187}
-  m_Layer: 5
-  m_Name: Scroll View
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &308198186
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 308198185}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1042340647}
-  - {fileID: 1849123851}
-  - {fileID: 1417836667}
-  m_Father: {fileID: 1114013224}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -258}
-  m_SizeDelta: {x: 886.1262, y: 200}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &308198187
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 308198185}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Content: {fileID: 691114015}
-  m_Horizontal: 1
-  m_Vertical: 1
-  m_MovementType: 1
-  m_Elasticity: 0.1
-  m_Inertia: 1
-  m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
-  m_Viewport: {fileID: 1042340647}
-  m_HorizontalScrollbar: {fileID: 1849123852}
-  m_VerticalScrollbar: {fileID: 1417836668}
-  m_HorizontalScrollbarVisibility: 2
-  m_VerticalScrollbarVisibility: 2
-  m_HorizontalScrollbarSpacing: -3
-  m_VerticalScrollbarSpacing: -3
-  m_OnValueChanged:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &308198188
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 308198185}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &308198189
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 308198185}
   m_CullTransparentMesh: 1
 --- !u!1 &310097026
 GameObject:
@@ -5519,81 +5335,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 28}
   m_Pivot: {x: 0.5, y: 1}
---- !u!1 &350769264
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 350769265}
-  - component: {fileID: 350769267}
-  - component: {fileID: 350769266}
-  m_Layer: 5
-  m_Name: Handle
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &350769265
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 350769264}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1245241173}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 20}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &350769266
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 350769264}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &350769267
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 350769264}
-  m_CullTransparentMesh: 1
 --- !u!1 &353881414
 GameObject:
   m_ObjectHideFlags: 0
@@ -5701,7 +5442,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 274650431}
   - {fileID: 257113173}
   - {fileID: 560669958}
   - {fileID: 314686059}
@@ -7758,7 +7498,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1471681867}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81333333
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -8359,8 +8099,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Left click and wipe the dirt off the card to reveal the patient\u2019s
-    age!"
+  m_text: Klik kiri dan usap kotoran di kartu untuk melihat usia pasien!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -8572,7 +8311,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 103, y: 77.970985}
+  m_AnchoredPosition: {x: 110, y: 77.970985}
   m_SizeDelta: {x: 200, y: 30.9461}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &552583582
@@ -9636,7 +9375,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Signature
+  m_text: Tanda Tangan
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -10030,7 +9769,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1989474861}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81333333
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -10471,7 +10210,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -90, y: -76.75946}
+  m_AnchoredPosition: {x: -95, y: -76.75946}
   m_SizeDelta: {x: 230, y: 30.9461}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &669673138
@@ -10494,7 +10233,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 4. Activity
+  m_text: 4. Aktifitas
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -11421,41 +11160,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 28}
   m_Pivot: {x: 0.5, y: 1}
---- !u!1 &691114014
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 691114015}
-  m_Layer: 5
-  m_Name: Content
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &691114015
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 691114014}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1042340647}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 300}
-  m_Pivot: {x: 0, y: 1}
 --- !u!1 &699303090
 GameObject:
   m_ObjectHideFlags: 0
@@ -11544,8 +11248,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Click Start, then Stop when the timer ends or the patient crosses the finish
-    line.
+  m_text: Klik Mulai, lalu Hentikan ketika timer habis atau pasien mencapai garis
+    finish.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -11930,8 +11634,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 161, y: 124.39015}
-  m_SizeDelta: {x: 100, y: 20.6307}
+  m_AnchoredPosition: {x: 158.75, y: 124.39015}
+  m_SizeDelta: {x: 102.5, y: 20.6307}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &711545381
 MonoBehaviour:
@@ -11953,7 +11657,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Slightly Elevated
+  m_text: Sedikit Meningkat
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -12425,7 +12129,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -90, y: -231.48997}
+  m_AnchoredPosition: {x: -95, y: -231.48997}
   m_SizeDelta: {x: 230, y: 30.9461}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &728687575
@@ -12448,7 +12152,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 7. Glucose Level
+  m_text: 7. Level Glukosa
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -12638,13 +12342,12 @@ MonoBehaviour:
   visualManager: {fileID: 730971921}
   patientUI: {fileID: 1798480873}
   totalTime: 20
-  gameOverPanel: {fileID: 1114013223}
-  playerNameText: {fileID: 1639263671}
-  finalScoreText: {fileID: 1033905081}
-  rankText: {fileID: 2087407364}
-  leaderboardContent: {fileID: 308198186}
-  leaderboardEntryPrefab: {fileID: 4790679380152554685, guid: b8efd51e8ded16a2ab961f33ed91005d, type: 3}
-  backToMenuButton: {fileID: 1653097411}
+  panelGameOver: {fileID: 1114013223}
+  namaPemainText: {fileID: 1639263671}
+  skorAkhirText: {fileID: 2087407364}
+  peringkatText: {fileID: 1033905081}
+  tombolKembaliMenu: {fileID: 1653097411}
+  timerText: {fileID: 776219735}
 --- !u!4 &730971920
 Transform:
   m_ObjectHideFlags: 0
@@ -12901,7 +12604,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 103, y: -231.48999}
+  m_AnchoredPosition: {x: 110, y: -231.48999}
   m_SizeDelta: {x: 200, y: 30.9461}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &751155320
@@ -13094,7 +12797,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Repeat the blinking pattern to reveal the patient's family level!
+  m_text: Ulangi pola kedip untuk menampilkan tingkat keluarga pasien!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -13230,7 +12933,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Tools
+  m_text: Alat
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -13512,7 +13215,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Time: 69.69 s'
+  m_text: Overtime!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -15150,7 +14853,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Submit
+  m_text: Kirim
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -15228,81 +14931,6 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 876143584}
-  m_CullTransparentMesh: 1
---- !u!1 &876898374
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 876898375}
-  - component: {fileID: 876898377}
-  - component: {fileID: 876898376}
-  m_Layer: 5
-  m_Name: Handle
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &876898375
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 876898374}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1652151663}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 20}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &876898376
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 876898374}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &876898377
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 876898374}
   m_CullTransparentMesh: 1
 --- !u!1 &883933857
 GameObject:
@@ -15429,7 +15057,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 103, y: -128.34}
+  m_AnchoredPosition: {x: 110, y: -128.34}
   m_SizeDelta: {x: 200, y: 30.9461}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &887499110
@@ -15622,7 +15250,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Quickly Tap the Screen to discover the patient's blood pressure
+  m_text: Ketuk layar dengan cepat untuk mengetahui tekanan darah pasien.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -15953,7 +15581,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: DOB XX/XX/XXXX
+  m_text: Ulang Tahun XX/XX/XXXX
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -16468,6 +16096,81 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 947222749}
+  m_CullTransparentMesh: 1
+--- !u!1 &960716094
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 960716095}
+  - component: {fileID: 960716097}
+  - component: {fileID: 960716096}
+  m_Layer: 5
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &960716095
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 960716094}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1114013224}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1720, y: 880}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &960716096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 960716094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 8890950975128512391, guid: b5c8fb2b97157b573a643cdae01d6678, type: 3}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &960716097
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 960716094}
   m_CullTransparentMesh: 1
 --- !u!1 &967235853
 GameObject:
@@ -17801,8 +17504,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 116}
-  m_SizeDelta: {x: 1000, y: 50}
+  m_AnchoredPosition: {x: 250, y: 25}
+  m_SizeDelta: {x: 500, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1033905081
 MonoBehaviour:
@@ -17824,7 +17527,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Permainan Berakhir!
+  m_text: 'Skor: 696969'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -17851,14 +17554,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
-  m_fontSizeBase: 72
+  m_fontSize: 48
+  m_fontSizeBase: 48
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -17902,96 +17605,6 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1033905079}
-  m_CullTransparentMesh: 1
---- !u!1 &1042340646
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1042340647}
-  - component: {fileID: 1042340650}
-  - component: {fileID: 1042340649}
-  - component: {fileID: 1042340648}
-  m_Layer: 5
-  m_Name: Viewport
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1042340647
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1042340646}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 691114015}
-  m_Father: {fileID: 308198186}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 1}
---- !u!114 &1042340648
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1042340646}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ShowMaskGraphic: 0
---- !u!114 &1042340649
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1042340646}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1042340650
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1042340646}
   m_CullTransparentMesh: 1
 --- !u!1 &1044541297
 GameObject:
@@ -18291,7 +17904,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Sugar Rush Hospital
+  m_text: Rumah Sakit Sugar Rush
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -19147,12 +18760,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 960716095}
   - {fileID: 1683173105}
   - {fileID: 1639263670}
-  - {fileID: 1033905080}
   - {fileID: 2087407363}
+  - {fileID: 1033905080}
   - {fileID: 1653097410}
-  - {fileID: 308198186}
   m_Father: {fileID: 1798480877}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -19180,8 +18793,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 0}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -19345,7 +18958,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Diabetes Assesment Risk '
+  m_text: Penilaian Risiko Diabetes
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -19825,7 +19438,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 214061289}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81333333
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -20661,8 +20274,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 160.99994, y: 191.44008}
-  m_SizeDelta: {x: 100, y: 30.9461}
+  m_AnchoredPosition: {x: 158.75, y: 191.44008}
+  m_SizeDelta: {x: 102.5, y: 30.9461}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1210994715
 MonoBehaviour:
@@ -20684,7 +20297,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Risk:'
+  m_text: 'Risiko:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -21073,7 +20686,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 103, y: -179.91}
+  m_AnchoredPosition: {x: 110, y: -179.91}
   m_SizeDelta: {x: 200, y: 30.9461}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1238965675
@@ -21286,42 +20899,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1243779405}
   m_CullTransparentMesh: 1
---- !u!1 &1245241172
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1245241173}
-  m_Layer: 5
-  m_Name: Sliding Area
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1245241173
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1245241172}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 350769265}
-  m_Father: {fileID: 1417836667}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -20, y: -20}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1247848661
 GameObject:
   m_ObjectHideFlags: 0
@@ -22010,8 +21587,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4279966498
-  m_fontColor: {r: 0.13207549, g: 0.10653259, b: 0.10653259, a: 1}
+    rgba: 4285750599
+  m_fontColor: {r: 0.2784314, g: 0.3647059, b: 0.4509804, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -22398,7 +21975,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Digitally Signed
+  m_text: Ditandatangani Digital
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -22560,7 +22137,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1089011645}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81333333
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -23136,7 +22713,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -90, y: 77.97101}
+  m_AnchoredPosition: {x: -95, y: 77.97101}
   m_SizeDelta: {x: 230, y: 30.9461}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1384942694
@@ -23159,7 +22736,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1. Age
+  m_text: 1. Umur
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -23520,7 +23097,7 @@ MonoBehaviour:
   failText: {fileID: 163677026}
   audioSource: {fileID: 1410179873}
   pumpSfx: {fileID: 8300000, guid: ffcab072ca78dab479f97763bf0c81e4, type: 3}
-  pumpDuration: 3
+  pumpDuration: 5
   targetClicks: 10
   clickEffectRatio: 0.05
   pumpAnimScale: 1.05
@@ -23734,132 +23311,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1416912616}
   m_CullTransparentMesh: 1
---- !u!1 &1417836666
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1417836667}
-  - component: {fileID: 1417836670}
-  - component: {fileID: 1417836669}
-  - component: {fileID: 1417836668}
-  m_Layer: 5
-  m_Name: Scrollbar Vertical
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1417836667
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1417836666}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1245241173}
-  m_Father: {fileID: 308198186}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 0}
-  m_Pivot: {x: 1, y: 1}
---- !u!114 &1417836668
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1417836666}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a4db7a114972834c8e4117be1d82ba3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 350769266}
-  m_HandleRect: {fileID: 350769265}
-  m_Direction: 2
-  m_Value: 1
-  m_Size: 0.61
-  m_NumberOfSteps: 0
-  m_OnValueChanged:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &1417836669
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1417836666}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1417836670
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1417836666}
-  m_CullTransparentMesh: 1
 --- !u!1 &1447337810
 GameObject:
   m_ObjectHideFlags: 0
@@ -23917,7 +23368,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\xA9 Property of Sugar Rush Hospital"
+  m_text: "\xA9 Properti Naget Production"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -24465,7 +23916,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -90, y: 26.394218}
+  m_AnchoredPosition: {x: -95, y: 26.394218}
   m_SizeDelta: {x: 230, y: 30.9461}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1521345243
@@ -24655,7 +24106,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press space at the right moment to get the patient's BMI!
+  m_text: Tekan spasi pada saat yang tepat untuk mengetahui BMI pasien!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -25359,7 +24810,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 103, y: -283.07}
+  m_AnchoredPosition: {x: 110, y: -283.07}
   m_SizeDelta: {x: 200, y: 30.9461}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1551193957
@@ -25764,8 +25215,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 161, y: 155.33629}
-  m_SizeDelta: {x: 100, y: 41.2615}
+  m_AnchoredPosition: {x: 158.75, y: 155.33629}
+  m_SizeDelta: {x: 102.5, y: 41.2615}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1581450089
 GameObject:
@@ -26257,8 +25708,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 166}
-  m_SizeDelta: {x: 1000, y: 50}
+  m_AnchoredPosition: {x: -250, y: 25}
+  m_SizeDelta: {x: 500, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1639263671
 MonoBehaviour:
@@ -26280,7 +25731,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Permainan Berakhir!
+  m_text: 'Nama: Gikicik'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -26307,14 +25758,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
-  m_fontSizeBase: 72
+  m_fontSize: 48
+  m_fontSizeBase: 48
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -26504,42 +25955,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1644714475}
   m_CullTransparentMesh: 1
---- !u!1 &1652151662
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1652151663}
-  m_Layer: 5
-  m_Name: Sliding Area
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1652151663
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1652151662}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 876898375}
-  m_Father: {fileID: 1849123851}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -20, y: -20}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1652405430
 GameObject:
   m_ObjectHideFlags: 0
@@ -26712,7 +26127,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -56.5}
+  m_AnchoredPosition: {x: 0, y: -320}
   m_SizeDelta: {x: 300, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1653097411
@@ -27059,7 +26474,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Medical Patient
+  m_text: Pasien Medis
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -27173,7 +26588,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 319}
+  m_AnchoredPosition: {x: 0, y: 320}
   m_SizeDelta: {x: 1000, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1683173106
@@ -27889,7 +27304,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -46.5, y: 129.54785}
+  m_AnchoredPosition: {x: -50, y: 129.54785}
   m_SizeDelta: {x: 315, y: 30.9461}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1758625396
@@ -28436,7 +27851,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1150276855}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81333333
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -29655,8 +29070,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Use the mouse to catch falling fruits and veggies and track the patient's
-    intake!
+  m_text: Gunakan mouse untuk menangkap buah dan sayuran yang jatuh untuk mencatat
+    asupan pasien!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -29818,7 +29233,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 191051681}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81333333
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -29895,7 +29310,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -46.5, y: 160.49396}
+  m_AnchoredPosition: {x: -50, y: 160.49396}
   m_SizeDelta: {x: 315, y: 30.9461}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1843643074
@@ -30141,132 +29556,6 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1846399568}
-  m_CullTransparentMesh: 1
---- !u!1 &1849123850
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1849123851}
-  - component: {fileID: 1849123854}
-  - component: {fileID: 1849123853}
-  - component: {fileID: 1849123852}
-  m_Layer: 5
-  m_Name: Scrollbar Horizontal
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1849123851
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1849123850}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1652151663}
-  m_Father: {fileID: 308198186}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 20}
-  m_Pivot: {x: 0, y: 0}
---- !u!114 &1849123852
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1849123850}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a4db7a114972834c8e4117be1d82ba3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 876898376}
-  m_HandleRect: {fileID: 876898375}
-  m_Direction: 0
-  m_Value: 0
-  m_Size: 1
-  m_NumberOfSteps: 0
-  m_OnValueChanged:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &1849123853
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1849123850}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1849123854
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1849123850}
   m_CullTransparentMesh: 1
 --- !u!1 &1850017303
 GameObject:
@@ -30539,7 +29828,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -90, y: -128.3363}
+  m_AnchoredPosition: {x: -95, y: -128.3363}
   m_SizeDelta: {x: 230, y: 30.9461}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1875705014
@@ -30562,7 +29851,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 5. Fruit/Veggie
+  m_text: 5. Buah/Sayur
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -30991,7 +30280,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 103, y: -76.759}
+  m_AnchoredPosition: {x: 110, y: -76.759}
   m_SizeDelta: {x: 200, y: 30.9461}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1907231276
@@ -31130,7 +30419,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -90, y: -179.91315}
+  m_AnchoredPosition: {x: -95, y: -179.91315}
   m_SizeDelta: {x: 230, y: 30.9461}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1908018702
@@ -31153,7 +30442,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 6. Blood Pressure
+  m_text: 6. Tekanan Darah
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -32541,7 +31830,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1779465805}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81333333
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -33057,7 +32346,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Select the correct test strip (green) to insert into the glucometer.
+  m_text: Pilih strip tes yang benar (hijau) untuk dimasukkan ke dalam glukometer.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -33306,7 +32595,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -90, y: -25.182617}
+  m_AnchoredPosition: {x: -95, y: -25.182617}
   m_SizeDelta: {x: 230, y: 30.9461}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2068208085
@@ -33329,7 +32618,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 3. Waist Girth
+  m_text: 3. Lingkar Pinggang
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -33745,7 +33034,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 66}
+  m_AnchoredPosition: {x: 0, y: -91}
   m_SizeDelta: {x: 1000, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2087407364
@@ -33768,7 +33057,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Permainan Berakhir!
+  m_text: 'Peingkat: #7'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -33795,8 +33084,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
-  m_fontSizeBase: 72
+  m_fontSize: 64
+  m_fontSizeBase: 64
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -34622,7 +33911,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -90, y: -283.06677}
+  m_AnchoredPosition: {x: -95, y: -283.06677}
   m_SizeDelta: {x: 230, y: 30.9461}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2124863750
@@ -34645,7 +33934,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 8. Family History
+  m_text: 8. Riwayat Keluarga
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}

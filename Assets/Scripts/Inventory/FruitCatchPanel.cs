@@ -4,19 +4,19 @@ using UnityEngine.UI;
 
 public class FruitCatchMinigame : MonoBehaviour
 {
-    [Header("References")]
+    [Header("Referensi")]
     public RectTransform[] fruitPrefabs;
     public RectTransform spawnArea;        
     public RectTransform basket;           
 
-    [Header("Feedback Texts")]
+    [Header("Teks Feedback")]
     public TextMeshProUGUI successText;
     public TextMeshProUGUI failedText;
     public TextMeshProUGUI intakeText;
 
     public Button exitButton;
 
-    [Header("Settings")]
+    [Header("Pengaturan")]
     public float gameDuration = 10f;          
     public float spawnIntervalEasy = 1.5f;
     public float spawnIntervalHard = 0.8f;
@@ -123,7 +123,7 @@ public class FruitCatchMinigame : MonoBehaviour
 
         if (successText != null) successText.gameObject.SetActive(false);
         if (failedText != null) failedText.gameObject.SetActive(false);
-        if (intakeText != null) intakeText.text = $"Patient's fruit intake: {fruitsCaught}/{fruitsToSpawn}";
+        if (intakeText != null) intakeText.text = $"Asupan buah pasien: {fruitsCaught}/{fruitsToSpawn}";
     }
 
     private void SpawnFruit()
@@ -149,12 +149,12 @@ public class FruitCatchMinigame : MonoBehaviour
         if (failedText != null) failedText.gameObject.SetActive(!success);
 
         if (intakeText != null)
-            intakeText.text = $"Patient's fruit intake: {fruitsCaught}/{fruitsToSpawn}";
+            intakeText.text = $"Asupan buah pasien: {fruitsCaught}/{fruitsToSpawn}";
 
-        // Update dropdown pasien: 0 = insufficient, 1 = sufficient
+        // Update dropdown pasien: 0 = kurang, 1 = cukup
         if (lastPatient != null)
         {
-            int requiredFruits = 3; // threshold sufficient
+            int requiredFruits = 3; // threshold cukup
             lastPatient.fruit = (fruitsCaught >= requiredFruits) ? 1 : 0;
 
             if (PatientUI.Instance != null)
@@ -213,7 +213,7 @@ public class FruitCatchMinigame : MonoBehaviour
 
                 game.fruitsCaught++;
                 if (game.intakeText != null)
-                    game.intakeText.text = $"Patient's fruit intake: {game.fruitsCaught}/{game.fruitsToSpawn}";
+                    game.intakeText.text = $"Asupan buah pasien: {game.fruitsCaught}/{game.fruitsToSpawn}";
 
                 Destroy(gameObject);
             }

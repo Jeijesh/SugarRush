@@ -5,7 +5,7 @@ public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance;
 
-    [Header("UI References")]
+    [Header("Referensi UI")]
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI timerText;
 
@@ -24,7 +24,7 @@ public class ScoreManager : MonoBehaviour
 
     private AudioSource audioSource;
 
-    [Header("Animation Settings")]
+    [Header("Pengaturan Animasi")]
     public float floatDistance = 50f;
     public float floatDuration = 1f;
 
@@ -38,6 +38,8 @@ public class ScoreManager : MonoBehaviour
 
     private bool firstFeedbackSkipped = true;
 
+    private int totalScore = 0;
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -45,7 +47,6 @@ public class ScoreManager : MonoBehaviour
 
         audioSource = gameObject.AddComponent<AudioSource>();
 
-        // Default: semua feedback & delta mati
         deltaScoreText.gameObject.SetActive(false);
         perfectText.gameObject.SetActive(false);
         goodText.gameObject.SetActive(false);
@@ -57,7 +58,6 @@ public class ScoreManager : MonoBehaviour
 
     private void Update()
     {
-        // Floating delta
         if (deltaActive)
         {
             deltaTimer += Time.deltaTime;
@@ -74,7 +74,6 @@ public class ScoreManager : MonoBehaviour
             }
         }
 
-        // Feedback timer berdasarkan durasi audio
         if (currentFeedback != null)
         {
             feedbackTimer += Time.deltaTime;
@@ -85,37 +84,35 @@ public class ScoreManager : MonoBehaviour
             }
         }
     }
-public void UpdateScore(int totalScore, int delta)
-{
-    if (scoreText != null)
-        scoreText.text = $"Score: {totalScore}";
 
-    // Spawn delta hanya jika delta ≠ 0
-    if (delta != 0 && deltaScoreText != null)
+    public void UpdateScore(int newScore, int delta)
     {
-        deltaScoreText.text = delta > 0 ? $"+{delta}" : $"{delta}";
-        deltaScoreText.color = delta > 0 ? Color.green : Color.red;  // ⬅ Warna hijau/merah
-        deltaScoreText.transform.position = deltaStartPos;
-        deltaScoreText.alpha = 1f;
-        deltaScoreText.gameObject.SetActive(true);
-        deltaTimer = 0f;
-        deltaActive = true;
+        totalScore = newScore;
+
+        if (scoreText != null)
+            scoreText.text = $"Skor: {totalScore}";
+
+        if (delta != 0 && deltaScoreText != null)
+        {
+            deltaScoreText.text = delta > 0 ? $"+{delta}" : $"{delta}";
+            deltaScoreText.color = delta > 0 ? Color.green : Color.red;
+            deltaScoreText.transform.position = deltaStartPos;
+            deltaScoreText.alpha = 1f;
+            deltaScoreText.gameObject.SetActive(true);
+            deltaTimer = 0f;
+            deltaActive = true;
+        }
+
+        ShowFeedback(delta);
     }
-
-    // Spawn feedback
-    ShowFeedback(delta);
-}
-
 
     private void ShowFeedback(int delta)
     {
-        // Nonaktifkan dulu semua
         perfectText.gameObject.SetActive(false);
         goodText.gameObject.SetActive(false);
         badText.gameObject.SetActive(false);
         awfulText.gameObject.SetActive(false);
 
-        // Skip feedback pertama kali muncul
         if (firstFeedbackSkipped)
         {
             firstFeedbackSkipped = false;
@@ -133,38 +130,30 @@ public void UpdateScore(int totalScore, int delta)
         {
             currentFeedback.gameObject.SetActive(true);
             feedbackTimer = 0f;
+            currentFeedbackDuration = clipToPlay != null ? clipToPlay.length : 0.7f;
 
-            if (clipToPlay != null)
-            {
+            if (audioSource != null && clipToPlay != null)
                 audioSource.PlayOneShot(clipToPlay);
-                currentFeedbackDuration = clipToPlay.length;
-            }
-            else
-            {
-                currentFeedbackDuration = 0.7f; // default durasi
-            }
         }
     }
 
     public void UpdateTimer(float time)
     {
         if (timerText != null)
-            timerText.text = time <= 0f ? "Times Up!" : $"Time: {Mathf.CeilToInt(time)}s";
+            timerText.text = time <= 0f ? "Waktu Habis!" : $"Waktu: {Mathf.CeilToInt(time)}s";
     }
 
-    public void AddGameResult(bool success)
+    // **Method baru**: menerima delta int dari GameManager
+    public void AddGameResult(int delta)
+    {
+        totalScore += delta;
+        UpdateScore(totalScore, delta);
+    }
+public void AddGameResult(bool success)
 {
     int delta = success ? 50 : -50;
-
-    // Ambil score saat ini dari UI
-    int totalScore = 0;
-    if (int.TryParse(scoreText.text.Replace("Score: ", ""), out int parsed))
-        totalScore = parsed;
-
-    totalScore += delta;
-
-    // Update UI + feedback
-    UpdateScore(totalScore, delta);
+    AddGameResult(delta);
 }
 
+    public int GetTotalScore() => totalScore;
 }

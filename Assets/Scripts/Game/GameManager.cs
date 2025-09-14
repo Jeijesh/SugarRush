@@ -1,4 +1,3 @@
-// di GameManager.cs
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -9,7 +8,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    [Header("Managers")]
+    [Header("Manager")]
     public PatientManager patientManager;
     public PatientVisualManager visualManager;
     public PatientUI patientUI;
@@ -18,67 +17,60 @@ public class GameManager : MonoBehaviour
     public float totalTime = 60f;
     private float remainingTime;
     private bool gameEnded = false;
+    private bool overtime = false; // true saat timer habis tapi pasien terakhir belum selesai
 
-    [Header("Score")]
-    private int score = 0;
+    [Header("Skor")]
+    private int skor = 0;
     private Patient currentPatient;
     private float patientStartTime;
 
-    [Header("Game Over UI")]
-    public GameObject gameOverPanel;
-    public TMP_Text playerNameText;
-    public TMP_Text finalScoreText;
-    public TMP_Text rankText;
-    public Transform leaderboardContent;
-    public GameObject leaderboardEntryPrefab;
-    public Button backToMenuButton;
+    [Header("UI Game Over")]
+    public GameObject panelGameOver;
+    public TMP_Text namaPemainText;
+    public TMP_Text skorAkhirText;
+    public TMP_Text peringkatText;
+    public Button tombolKembaliMenu;
 
-    private string playerInitials = "AAA";
+    [Header("UI Timer")]
+    public TMP_Text timerText;
 
-private void Awake()
-{
-    // Singleton pattern tapi tanpa DontDestroyOnLoad
-    if (Instance != null && Instance != this)
+    private string inisialPemain = "AAA";
+
+    private void Awake()
     {
-        Destroy(gameObject);
-        return;
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        inisialPemain = PlayerPrefs.GetString("PlayerInitials", "Anonymous");
     }
-
-    Instance = this;
-
-    playerInitials = PlayerPrefs.GetString("PlayerInitials", "Anonymous");
-}
-
 
     private void Start()
     {
         remainingTime = totalTime;
-        score = 0;
+        skor = 0;
         gameEnded = false;
-        ScoreManager.Instance.UpdateScore(score, 0);
+        overtime = false;
 
         StartCoroutine(TimerCoroutine());
         SpawnNextPatient();
 
-        // Setup tombol back to menu
-        if (backToMenuButton != null)
+        if (tombolKembaliMenu != null)
         {
-            backToMenuButton.onClick.RemoveAllListeners();
-            backToMenuButton.onClick.AddListener(() =>
+            tombolKembaliMenu.onClick.RemoveAllListeners();
+            tombolKembaliMenu.onClick.AddListener(() =>
             {
-                // Stop semua coroutine
                 StopAllCoroutines();
-
-                // Destroy GameManager supaya fresh saat Start lagi
                 Destroy(gameObject);
-
-                // Kembali ke MainMenu
                 SceneManager.LoadScene("MainMenu");
             });
         }
 
-        if (gameOverPanel != null)
-            gameOverPanel.SetActive(false);
+        if (panelGameOver != null)
+            panelGameOver.SetActive(false);
     }
 
     private IEnumerator TimerCoroutine()
@@ -86,86 +78,116 @@ private void Awake()
         while (remainingTime > 0f && !gameEnded)
         {
             remainingTime -= Time.deltaTime;
-            ScoreManager.Instance.UpdateTimer(remainingTime);
+            UpdateTimerUI();
             yield return null;
         }
 
         if (!gameEnded)
         {
             remainingTime = 0f;
-            ScoreManager.Instance.UpdateTimer(remainingTime);
-            EndGame();
+            overtime = true;
+            UpdateTimerUI();
+            Debug.Log("OVERTIME: Selesaikan pasien terakhir!");
         }
     }
 
-    private void EndGame()
+    private void UpdateTimerUI()
     {
-        gameEnded = true;
+        if (timerText == null) return;
 
-        if (LeaderboardManager.Instance != null)
+        if (!overtime)
         {
-            LeaderboardManager.Instance.AddScore(playerInitials, score);
-            LeaderboardManager.Instance.SaveLeaderboard();
-        }
-
-        if (gameOverPanel != null)
-        {
-            gameOverPanel.SetActive(true);
-            if (playerNameText != null) playerNameText.text = $"Player: {playerInitials}";
-            if (finalScoreText != null) finalScoreText.text = $"Score: {score}";
-
-            if (LeaderboardManager.Instance != null && leaderboardContent != null && leaderboardEntryPrefab != null)
-            {
-                foreach (Transform child in leaderboardContent) Destroy(child.gameObject);
-
-                var leaderboard = LeaderboardManager.Instance.GetLeaderboard();
-                foreach (var entry in leaderboard)
-                {
-                    GameObject go = Instantiate(leaderboardEntryPrefab, leaderboardContent);
-                    TMP_Text text = go.GetComponent<TMP_Text>();
-                    if (text != null) text.text = $"{entry.initials} - {entry.score}";
-                }
-
-                int rank = leaderboard.FindIndex(e => e.initials == playerInitials && e.score == score) + 1;
-                if (rankText != null) rankText.text = rank > 0 ? $"Rank: {rank}" : "Rank: N/A";
-            }
-        }
-    }
-
-    public void SubmitAnswer(int submittedScore)
-    {
-        if (currentPatient == null || gameEnded) return;
-
-        int patientScore = currentPatient.GetTotalScore();
-        int deviation = Mathf.Abs(patientScore - submittedScore);
-        float timeUsed = Time.time - patientStartTime;
-        int delta = 0;
-        int baseScore = 400;
-
-        if (submittedScore == patientScore)
-        {
-            float timeFactor = Mathf.Clamp01((30f - timeUsed) / 20f);
-            int timeBonus = Mathf.RoundToInt(timeFactor * 100f);
-            delta = baseScore + timeBonus;
+            timerText.color = Color.white;
+            timerText.text = Mathf.CeilToInt(remainingTime).ToString();
         }
         else
         {
-            delta = baseScore - 100 * deviation;
-            float timeFactor = Mathf.Clamp01((30f - timeUsed) / 20f);
-            int timeAdjustment = Mathf.RoundToInt(timeFactor * 100f);
-            delta += timeAdjustment;
+            timerText.color = Color.red;
+            timerText.text = "OVERTIME";
         }
-
-        delta = Mathf.Clamp(delta, -400, 500);
-        score += delta;
-        ScoreManager.Instance.UpdateScore(score, delta);
-
-        StartCoroutine(CameraShake(0.15f, 0.05f));
-        if (!gameEnded) SpawnNextPatient();
     }
+
+private void EndGame()
+{
+    gameEnded = true;
+
+    int finalScore = ScoreManager.Instance.GetTotalScore(); // skor aktual
+
+    // Tambah ke leaderboard
+    if (LeaderboardManager.Instance != null)
+    {
+        LeaderboardManager.Instance.AddScore(inisialPemain, finalScore);
+        LeaderboardManager.Instance.SaveLeaderboard();
+    }
+
+    if (panelGameOver != null)
+    {
+        panelGameOver.SetActive(true);
+        if (namaPemainText != null) namaPemainText.text = $"Pemain: {inisialPemain}";
+        if (skorAkhirText != null) skorAkhirText.text = $"Skor\t: {finalScore}";
+
+        if (LeaderboardManager.Instance != null)
+        {
+            var leaderboard = LeaderboardManager.Instance.GetLeaderboard();
+            int rank = leaderboard.FindIndex(e => e.initials == inisialPemain && e.score == finalScore) + 1;
+            if (peringkatText != null)
+                peringkatText.text = rank > 0 ? $"Peringkat: {rank}" : "Peringkat: N/A";
+        }
+    }
+}
+
+
+public void SubmitAnswer(int submittedScore)
+{
+    if (currentPatient == null || gameEnded) return;
+
+    int patientScore = currentPatient.GetTotalScore();
+    int deviasi = Mathf.Abs(patientScore - submittedScore);
+    float waktuDipakai = Time.time - patientStartTime;
+    int delta = 0;
+    int skorDasar = 400;
+
+    if (submittedScore == patientScore)
+    {
+        float faktorWaktu = Mathf.Clamp01((30f - waktuDipakai) / 20f);
+        int bonusWaktu = Mathf.RoundToInt(faktorWaktu * 100f);
+        delta = skorDasar + bonusWaktu;
+    }
+    else
+    {
+        delta = skorDasar - 100 * deviasi;
+        float faktorWaktu = Mathf.Clamp01((30f - waktuDipakai) / 20f);
+        int penyesuaianWaktu = Mathf.RoundToInt(faktorWaktu * 100f);
+        delta += penyesuaianWaktu;
+    }
+
+    delta = Mathf.Clamp(delta, -400, 500);
+
+    // Update skor internal & UI
+    ScoreManager.Instance.AddGameResult(delta);
+
+    StartCoroutine(CameraShake(0.15f, 0.05f));
+
+    if (!gameEnded && !overtime)
+        SpawnNextPatient();
+    else if (overtime)
+    {
+        currentPatient = null;
+        EndGame();
+    }
+}
+
+
 
     private void SpawnNextPatient()
     {
+        if (gameEnded) return;
+        if (overtime)
+        {
+            currentPatient = null;
+            return;
+        }
+
         currentPatient = patientManager.GeneratePatient();
         patientStartTime = Time.time;
 
@@ -177,31 +199,31 @@ private void Awake()
     {
         if (Camera.main == null) yield break;
 
-        Vector3 originalPos = Camera.main.transform.localPosition;
+        Vector3 posisiAwal = Camera.main.transform.localPosition;
         float elapsed = 0f;
 
         while (elapsed < duration)
         {
             float offsetX = Random.Range(-1f, 1f) * magnitude;
             float offsetY = Random.Range(-1f, 1f) * magnitude;
-            Camera.main.transform.localPosition = originalPos + new Vector3(offsetX, offsetY, 0f);
+            Camera.main.transform.localPosition = posisiAwal + new Vector3(offsetX, offsetY, 0f);
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        Camera.main.transform.localPosition = originalPos;
+        Camera.main.transform.localPosition = posisiAwal;
     }
 
     public void SetPlayerInitials(string initials)
     {
         if (!string.IsNullOrEmpty(initials))
         {
-            playerInitials = initials.ToUpper();
-            PlayerPrefs.SetString("PlayerInitials", playerInitials);
+            inisialPemain = initials.ToUpper();
+            PlayerPrefs.SetString("PlayerInitials", inisialPemain);
             PlayerPrefs.Save();
         }
     }
 
-    public int GetScore() => score;
-    public string GetPlayerInitials() => playerInitials;
+    public int GetScore() => skor;
+    public string GetPlayerInitials() => inisialPemain;
 }

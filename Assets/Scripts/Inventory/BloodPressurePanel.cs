@@ -5,12 +5,12 @@ using System.Collections;
 
 public class BloodPressureMinigame : MonoBehaviour
 {
-    [Header("UI References")]
-    public TextMeshProUGUI statusText;   // Status Normal/High
+    [Header("Referensi UI")]
+    public TextMeshProUGUI statusText;   // Status Normal/Tinggi
     public TextMeshProUGUI timerText;    // Timer
-    public TextMeshProUGUI counterText;  // Pumps
-    public TextMeshProUGUI bpText;       // 110/80 dll
-    public Image pumpImage;               // Pump UI
+    public TextMeshProUGUI counterText;  // Jumlah pompa
+    public TextMeshProUGUI bpText;       // Tekanan darah, misal 110/80
+    public Image pumpImage;               // UI Pompa
     public Button exitButton;
     public TextMeshProUGUI successText;
     public TextMeshProUGUI failText;
@@ -19,9 +19,9 @@ public class BloodPressureMinigame : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip pumpSfx;
 
-    [Header("Settings")]
-    public float pumpDuration = 5f;      // durasi game
-    public int targetClicks = 10;        // jumlah klik ideal
+    [Header("Pengaturan")]
+    public float pumpDuration = 5f;      // Durasi permainan
+    public int targetClicks = 10;        // Jumlah klik ideal
     public float clickEffectRatio = 0.05f;
     public float pumpAnimScale = 1.05f;
 
@@ -101,14 +101,14 @@ public class BloodPressureMinigame : MonoBehaviour
             patientSystolic = Random.Range(110, 121);
             patientDiastolic = Random.Range(70, 81);
         }
-        else // High
+        else // Tinggi
         {
             patientSystolic = Random.Range(130, 151);
             patientDiastolic = Random.Range(85, 96);
         }
 
         // Reset UI
-        if (counterText != null) counterText.text = $"Pumps: 0/{targetClicks}";
+        if (counterText != null) counterText.text = $"Jumlah pompa: 0/{targetClicks}";
         if (bpText != null) bpText.text = $"{systolic}/{diastolic}";
         UpdateStatusText();
 
@@ -122,15 +122,15 @@ public class BloodPressureMinigame : MonoBehaviour
         if (bpText != null) bpText.text = $"{systolic}/{diastolic}";
         UpdateStatusText();
 
-        if (counterText != null) counterText.text = $"Pumps: {clickCount}/{targetClicks}";
-        if (timerText != null) timerText.text = $"Time: {timer:F1}s";
+        if (counterText != null) counterText.text = $"Jumlah pompa: {clickCount}/{targetClicks}";
+        if (timerText != null) timerText.text = $"Waktu: {timer:F1}s";
     }
 
     private void UpdateStatusText()
     {
         if (statusText != null)
         {
-            string status = (systolic >= 130 || diastolic >= 85) ? "High" : "Normal";
+            string status = (systolic >= 130 || diastolic >= 85) ? "Tinggi" : "Normal";
             statusText.text = $"Status: {status}";
         }
     }
@@ -197,7 +197,7 @@ public class BloodPressureMinigame : MonoBehaviour
         running = false;
         if (lastPatient == null) return;
 
-        // Show feedback
+        // Tampilkan feedback
         if (success)
         {
             if (successText != null) successText.gameObject.SetActive(true);
@@ -209,10 +209,10 @@ public class BloodPressureMinigame : MonoBehaviour
             if (successText != null) successText.gameObject.SetActive(false);
         }
 
-        // Update patient BP value
+        // Update nilai tekanan darah pasien
         lastPatient.bp = (systolic >= 130 || diastolic >= 85) ? 1 : 0;
 
-        // Update UI
+        // Update UI dropdown
         if (PatientUI.Instance != null)
         {
             PatientUI.Instance.FillField("BP");

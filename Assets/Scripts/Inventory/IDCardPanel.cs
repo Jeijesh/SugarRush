@@ -59,9 +59,9 @@ private void Update()
     }
 
     // update info pasien
-    if (nameText != null) nameText.text = $"Name: {p.patientName}";
-    if (idText != null) idText.text = $"ID: {p.patientID}";
-    if (ageText != null) ageText.text = $"Age: {p.age}";
+    if (nameText != null) nameText.text = $"{p.patientName}";
+    if (idText != null) idText.text = $"{p.patientID}";
+    if (ageText != null) ageText.text = $"Umur: {p.age}";
 
     // tutup panel dengan Escape
     if (Input.GetKeyDown(KeyCode.Escape) && panel.activeSelf)
@@ -72,7 +72,7 @@ private void Update()
     // update timer
     timer -= Time.deltaTime;
     if (timerText != null)
-        timerText.text = $"Time: {Mathf.CeilToInt(timer)}";
+        timerText.text = $"Waktu: {Mathf.CeilToInt(timer)}";
 
     // cek jumlah dirt tersisa di parent
     int currentDirt = dirtParent != null ? dirtParent.childCount : 0;
@@ -83,7 +83,7 @@ private void Update()
         progress = 1f;
 
     if (progressText != null)
-        progressText.text = $"Progress: {(progress * 100f):F0}%";
+        progressText.text = $"Progres: {(progress * 100f):F0}%";
 
     // end game otomatis jika progress >= 90%
     if (progress >= 0.9f)
@@ -132,9 +132,9 @@ private void Update()
         if (failedText != null) failedText.gameObject.SetActive(false);
 
         if (timerText != null)
-            timerText.text = $"Time: {Mathf.CeilToInt(timer)}";
+            timerText.text = $"Waktu: {Mathf.CeilToInt(timer)}";
         if (progressText != null)
-            progressText.text = "Progress: 0%";
+            progressText.text = "Progres: 0%";
     }
 
     // 🔹 self-healing dirtParent

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class ActivityMinigame : MonoBehaviour
 {
-    [Header("UI References")]
+    [Header("Referensi UI")]
     public RectTransform patient;   
     public Image patientImage;      
     public RectTransform finishLine;
@@ -17,11 +17,11 @@ public class ActivityMinigame : MonoBehaviour
     public TextMeshProUGUI failText;
     public Button closeButton;
 
-    [Header("Settings")]
+    [Header("Pengaturan")]
     public float countdownTime = 3f;
     public float trackLength = 1200f;
 
-    [Header("Animation")]
+    [Header("Animasi")]
     public List<Sprite> runSprites; 
     public float frameRate = 0.1f;  
     public Sprite idleSprite;       
@@ -91,7 +91,7 @@ public class ActivityMinigame : MonoBehaviour
         // Update timer
         timer -= Time.deltaTime;
         if (timerText != null)
-            timerText.text = $"Time: {timer:F1}s";
+            timerText.text = $"Waktu: {timer:F1}s";
 
         // Move patient
         patient.anchoredPosition += new Vector2(moveSpeed * Time.deltaTime, 0f);
@@ -102,7 +102,7 @@ public class ActivityMinigame : MonoBehaviour
         if (feedbackText != null && lastPatient != null)
         {
             bool passedFinish = patient.anchoredPosition.x >= finishLine.anchoredPosition.x;
-            feedbackText.text = $"Current patient's activity level: {(passedFinish ? "Active" : "Inactive")}";
+            feedbackText.text = $"Tingkat aktivitas pasien saat ini: {(passedFinish ? "Aktif" : "Tidak Aktif")}";
         }
 
         // Auto-fail jika patient melewati end track
@@ -132,7 +132,7 @@ public class ActivityMinigame : MonoBehaviour
         if (toggleClicks == 1)
         {
             StartMinigame(lastPatient != null ? lastPatient.activity : 1);
-            if (toggleButtonText != null) toggleButtonText.text = "Stop";
+            if (toggleButtonText != null) toggleButtonText.text = "Berhenti";
         }
         else if (toggleClicks == 2)
         {
@@ -158,7 +158,7 @@ public class ActivityMinigame : MonoBehaviour
             patientImage.sprite = runSprites[0];
 
         if (feedbackText != null && lastPatient != null)
-            feedbackText.text = $"Current patient's activity level: {(lastPatient.activity == 1 ? "Active" : "Inactive")}";
+            feedbackText.text = $"Tingkat aktivitas pasien saat ini: {(lastPatient.activity == 1 ? "Aktif" : "Tidak Aktif")}";
 
         if (successText != null) successText.gameObject.SetActive(false);
         if (failText != null) failText.gameObject.SetActive(false);
@@ -201,7 +201,7 @@ public class ActivityMinigame : MonoBehaviour
             patientImage.sprite = idleSprite;
 
         if (toggleButtonText != null)
-            toggleButtonText.text = "Start";
+            toggleButtonText.text = "Mulai";
     }
 
     private void ForceFail()
@@ -212,7 +212,7 @@ public class ActivityMinigame : MonoBehaviour
         if (runAudio != null && runAudio.isPlaying) runAudio.Stop();
 
         if (feedbackText != null && lastPatient != null)
-            feedbackText.text = $"Current patient's activity level: Active";
+            feedbackText.text = $"Tingkat aktivitas pasien saat ini: Aktif";
 
         if (lastPatient != null)
         {
@@ -231,7 +231,7 @@ public class ActivityMinigame : MonoBehaviour
             patientImage.sprite = idleSprite;
 
         if (toggleButtonText != null)
-            toggleButtonText.text = "Start";
+            toggleButtonText.text = "Mulai";
     }
 
     private void ResetMinigame(int activity = 1)
@@ -246,7 +246,7 @@ public class ActivityMinigame : MonoBehaviour
             toggleButton.gameObject.SetActive(true);
 
         if (toggleButtonText != null)
-            toggleButtonText.text = "Start";
+            toggleButtonText.text = "Mulai";
 
         timer = countdownTime;
         isMoving = false;
@@ -262,13 +262,13 @@ public class ActivityMinigame : MonoBehaviour
             patientImage.sprite = runSprites[0];
 
         if (feedbackText != null)
-            feedbackText.text = "Current patient's activity level: Inactive";
+            feedbackText.text = "Tingkat aktivitas pasien saat ini: Tidak Aktif";
 
         if (successText != null) successText.gameObject.SetActive(false);
         if (failText != null) failText.gameObject.SetActive(false);
 
         if (timerText != null)
-            timerText.text = $"Time: {timer:F1}s";
+            timerText.text = $"Waktu: {timer:F1}s";
     }
 
     private void UpdateFeedback(bool success)
