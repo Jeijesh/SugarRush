@@ -17,7 +17,6 @@ public class PatientUI : MonoBehaviour
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI riskLevelText;
     public TextMeshProUGUI riskScoreText;
-    public TextMeshProUGUI patientInfoText;
     public TextMeshProUGUI genderText;
 
     [Header("Dropdowns")]
@@ -102,47 +101,33 @@ public class PatientUI : MonoBehaviour
         UpdateSubmitButtonState();
     }
 
-    public void ShowPatient(Patient p)
-    {
-        if (p == null) return;
+public void ShowPatient(Patient p)
+{
+    if (p == null) return;
 
-        currentPatient = p;
-        patientIndex++;
+    currentPatient = p;
+    patientIndex++;
 
-        if (idText != null) idText.text = $"ID\t: {p.patientID}";
-        if (nameText != null) nameText.text = $"Name\t: {p.patientName}";
-        if (riskLevelText != null) riskLevelText.text = p.riskLevel;
-        if (riskScoreText != null) riskScoreText.text = p.GetTotalScore().ToString();
-        if (genderText != null)
-            genderText.text = $"Sex\t: {(p.gender == 0 ? "Female" : "Male")}";
+    if (idText != null) idText.text = $"ID\t: {p.patientID}";
+    if (nameText != null) nameText.text = $"Name\t: {p.patientName}";
+    if (riskLevelText != null) riskLevelText.text = p.riskLevel;
+    if (riskScoreText != null) riskScoreText.text = p.GetTotalScore().ToString();
+    if (genderText != null)
+        genderText.text = $"Sex\t: {(p.gender == 0 ? "Female" : "Male")}";
 
-        string info =
-            $"ID: {p.patientID}\n" +
-            $"Name: {p.patientName}\n" +
-            $"Age: {p.age}\n" +
-            $"BMI: {p.bmi:F1}\n" +
-            $"Waist: {p.waist:F1}\n" +
-            $"Activity: {(p.activity == 1 ? "Active" : "Inactive")}\n" +
-            $"Fruit: {(p.fruit == 1 ? "Sufficient" : "Insufficient")}\n" +
-            $"BP: {(p.bp == 1 ? "High" : "Normal")}\n" +
-            $"Glucose: {(p.glucose == 1 ? "High" : "Normal")}\n" +
-            $"Family: {(p.family == 0 ? "None" : p.family == 1 ? "Level1" : "Level2")}\n" +
-            $"Gender: {(p.gender == 0 ? "Female" : "Male")}\n" +
-            $"BodyType: {(p.bodyType == 0 ? "Normal" : "Overweight")}\n" +
-            $"Skin: #{ColorUtility.ToHtmlStringRGB(p.skinColor)}\n" +
-            $"Risk: {p.riskLevel}";
+    ResetDropdownsToPatientData(p);
+    SetDropdownInteractable(false);
 
-        if (patientInfoText != null) patientInfoText.text = info;
+    emptyDropdowns.Clear();
+    int emptyFields = (patientIndex - 1) / 5 + 1;
+    if (patientIndex == 1 && emptyFields < 1) emptyFields = 1;
+    SetEmptyDropdowns(emptyFields);
+    UpdateDropdownVisuals();
 
-        ResetDropdownsToPatientData(p);
-        SetDropdownInteractable(false);
+    // 🔥 Tambahin ini supaya dialog random keluar tiap patient baru
+    PatientDialogue.Instance?.ShowRandomDialogue();
+}
 
-        emptyDropdowns.Clear();
-        int emptyFields = (patientIndex - 1) / 5 + 1;
-        if (patientIndex == 1 && emptyFields < 1) emptyFields = 1;
-        SetEmptyDropdowns(emptyFields);
-        UpdateDropdownVisuals();
-    }
 
     private void ResetDropdownsToPatientData(Patient p)
     {
