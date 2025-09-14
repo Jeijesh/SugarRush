@@ -1,44 +1,78 @@
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class InventoryManager : MonoBehaviour
 {
     [System.Serializable]
-    public class InventoryItem
+    public class InventoryButton
     {
-        public string name;
-        public GameObject popupPanel; // minigame panel yg akan muncul
+        public string fieldName;
+        public Button button;
+        public TMP_Dropdown targetDropdown;
+        public GameObject popupPanel;
     }
 
-    [Header("Inventory Items")]
-    public InventoryItem[] items;
+    [Header("Inventory Buttons")]
+    public InventoryButton[] inventoryButtons;
 
     private GameObject currentOpenPanel;
 
     private void Start()
     {
         CloseAll();
+
+        foreach (var ib in inventoryButtons)
+        {
+            if (ib.button != null)
+                ib.button.interactable = false;
+        }
+
+        if (PatientUI.Instance != null)
+            PatientUI.Instance.OnEmptyDropdownChanged += UpdateButtons;
     }
 
     private void Update()
     {
-        // cek tombol Escape
-        if (Input.GetKeyDown(KeyCode.Escape))
+        UpdateButtons();
+    }
+
+    private void UpdateButtons()
+    {
+        if (PatientUI.Instance == null)
         {
-            CloseCurrent();
+            Debug.LogWarning("PatientUI.Instance belum siap");
+            return;
+        }
+
+        Debug.Log($"--- UpdateButtons --- EmptyDropdowns count: {PatientUI.Instance.EmptyDropdowns.Count}");
+
+        foreach (var ib in inventoryButtons)
+        {
+            if (ib.button == null || ib.targetDropdown == null)
+            {
+                Debug.LogWarning($"Button atau targetDropdown null: {ib.fieldName}");
+                continue;
+            }
+
+            bool isEmpty = PatientUI.Instance.EmptyDropdowns.Contains(ib.targetDropdown);
+            ib.button.interactable = isEmpty;
+
+            Debug.Log($"Button {ib.fieldName} | Dropdown: {ib.targetDropdown.name} | IsEmpty: {isEmpty} | Interactable: {ib.button.interactable}");
         }
     }
 
-    // panggil dari Button OnClick
     public void OpenItem(int index)
     {
         CloseAll();
 
-        if (index >= 0 && index < items.Length)
+        if (index >= 0 && index < inventoryButtons.Length)
         {
-            if (items[index].popupPanel != null)
+            var ib = inventoryButtons[index];
+            if (ib.popupPanel != null)
             {
-                items[index].popupPanel.SetActive(true);
-                currentOpenPanel = items[index].popupPanel;
+                ib.popupPanel.SetActive(true);
+                currentOpenPanel = ib.popupPanel;
             }
         }
     }
@@ -54,11 +88,10 @@ public class InventoryManager : MonoBehaviour
 
     public void CloseAll()
     {
-        foreach (var item in items)
-        {
-            if (item.popupPanel != null)
-                item.popupPanel.SetActive(false);
-        }
+        foreach (var ib in inventoryButtons)
+            if (ib.popupPanel != null)
+                ib.popupPanel.SetActive(false);
+
         currentOpenPanel = null;
     }
 }

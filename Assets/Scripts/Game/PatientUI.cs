@@ -10,7 +10,6 @@ public class PatientUI : MonoBehaviour
 
     private bool muteSound = false;
     private int patientIndex = 0;
-    private List<TMP_Dropdown> emptyDropdowns = new List<TMP_Dropdown>();
 
     [Header("UI References")]
     public TextMeshProUGUI idText;
@@ -32,6 +31,13 @@ public class PatientUI : MonoBehaviour
     public AudioClip dropdownSfx;
 
     [HideInInspector] public Patient currentPatient;
+
+    // 🔹 list dropdown merah (empty)
+    private List<TMP_Dropdown> emptyDropdowns = new List<TMP_Dropdown>();
+    public List<TMP_Dropdown> EmptyDropdowns => emptyDropdowns;
+
+    // 🔹 event untuk inventory tombol
+    public event System.Action OnEmptyDropdownChanged;
 
     private void Awake()
     {
@@ -93,41 +99,37 @@ public class PatientUI : MonoBehaviour
             audioSource.PlayOneShot(dropdownSfx);
 
         UpdateSubmitButtonState();
+        OnEmptyDropdownChanged?.Invoke();
     }
 
-    public void RefreshRiskFromDropdown()
+    public void ShowPatient(Patient p)
     {
-        UpdateRisk();
-        UpdateSubmitButtonState();
+        if (p == null) return;
+
+        currentPatient = p;
+        patientIndex++;
+
+        if (idText != null) idText.text = $"ID\t: {p.patientID}";
+        if (nameText != null) nameText.text = $"Name\t: {p.patientName}";
+        if (riskLevelText != null) riskLevelText.text = p.riskLevel;
+        if (riskScoreText != null) riskScoreText.text = p.GetTotalScore().ToString();
+        if (genderText != null)
+            genderText.text = $"Sex\t: {(p.gender == 0 ? "Female" : "Male")}";
+
+        ResetDropdownsToPatientData(p);
+        SetDropdownInteractable(false);
+
+        emptyDropdowns.Clear();
+        int emptyFields = (patientIndex - 1) / 5 + 1;
+        if (patientIndex == 1 && emptyFields < 1) emptyFields = 1;
+        SetEmptyDropdowns(emptyFields);
+        UpdateDropdownVisuals();
+
+        // 🔥 Tambahin ini supaya dialog random keluar tiap patient baru
+        PatientDialogue.Instance?.ShowRandomDialogue();
+
+        OnEmptyDropdownChanged?.Invoke(); // trigger event
     }
-
-public void ShowPatient(Patient p)
-{
-    if (p == null) return;
-
-    currentPatient = p;
-    patientIndex++;
-
-    if (idText != null) idText.text = $"ID\t: {p.patientID}";
-    if (nameText != null) nameText.text = $"Name\t: {p.patientName}";
-    if (riskLevelText != null) riskLevelText.text = p.riskLevel;
-    if (riskScoreText != null) riskScoreText.text = p.GetTotalScore().ToString();
-    if (genderText != null)
-        genderText.text = $"Sex\t: {(p.gender == 0 ? "Female" : "Male")}";
-
-    ResetDropdownsToPatientData(p);
-    SetDropdownInteractable(false);
-
-    emptyDropdowns.Clear();
-    int emptyFields = (patientIndex - 1) / 5 + 1;
-    if (patientIndex == 1 && emptyFields < 1) emptyFields = 1;
-    SetEmptyDropdowns(emptyFields);
-    UpdateDropdownVisuals();
-
-    // 🔥 Tambahin ini supaya dialog random keluar tiap patient baru
-    PatientDialogue.Instance?.ShowRandomDialogue();
-}
-
 
     private void ResetDropdownsToPatientData(Patient p)
     {
@@ -209,6 +211,7 @@ public void ShowPatient(Patient p)
         }
 
         StartCoroutine(UpdateSubmitNextFrame());
+        OnEmptyDropdownChanged?.Invoke();
     }
 
     private IEnumerator ForceSetCaptionNextFrame(TMP_Dropdown dd, string txt, Color col)
@@ -250,6 +253,7 @@ public void ShowPatient(Patient p)
         {
             emptyDropdowns.Remove(target);
             UpdateDropdownVisuals();
+            OnEmptyDropdownChanged?.Invoke();
         }
     }
 

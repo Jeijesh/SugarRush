@@ -9725,6 +9725,7 @@ GameObject:
   m_Component:
   - component: {fileID: 608713329}
   - component: {fileID: 608713330}
+  - component: {fileID: 608713331}
   m_Layer: 0
   m_Name: Patient
   m_TagString: Untagged
@@ -9770,8 +9771,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotateAmount: 3
   rotateSpeed: 1
-  positionSwayAmount: {x: 0.1, y: 0.2, z: 0}
+  positionSwayAmount: {x: 0.2, y: 0.1, z: 0}
   positionSwaySpeed: 1
+  fadeDuration: 0.5
+  popupOffsetY: 7.5
+--- !u!225 &608713331
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608713328}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &611201778
 GameObject:
   m_ObjectHideFlags: 0
@@ -17719,22 +17734,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e98f9a0879c6a0579a73fc9556c4cf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  items:
-  - name: IDCard
+  inventoryButtons:
+  - fieldName: Age
+    button: {fileID: 1617375748}
+    targetDropdown: {fileID: 552583580}
     popupPanel: {fileID: 457725426}
-  - name: Scale
+  - fieldName: BMI
+    button: {fileID: 1887127859}
+    targetDropdown: {fileID: 237852440}
     popupPanel: {fileID: 2111531138}
-  - name: MeasureTape
+  - fieldName: Waist
+    button: {fileID: 1846399570}
+    targetDropdown: {fileID: 7203064}
     popupPanel: {fileID: 1051844989}
-  - name: StepTracker
+  - fieldName: Activity
+    button: {fileID: 412264763}
+    targetDropdown: {fileID: 1907231276}
     popupPanel: {fileID: 1494948066}
-  - name: FruitCatch
+  - fieldName: Fruit
+    button: {fileID: 234951857}
+    targetDropdown: {fileID: 887499110}
     popupPanel: {fileID: 349445093}
-  - name: BP
+  - fieldName: BP
+    button: {fileID: 1644714477}
+    targetDropdown: {fileID: 1238965675}
     popupPanel: {fileID: 1410179868}
-  - name: Glucometer
+  - fieldName: Glucose
+    button: {fileID: 839030216}
+    targetDropdown: {fileID: 751155320}
     popupPanel: {fileID: 421943238}
-  - name: Family
+  - fieldName: Family
+    button: {fileID: 195411649}
+    targetDropdown: {fileID: 1551193957}
     popupPanel: {fileID: 359256893}
 --- !u!1 &1033905079
 GameObject:
@@ -21970,7 +22001,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
@@ -21979,8 +22010,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4279966498
+  m_fontColor: {r: 0.13207549, g: 0.10653259, b: 0.10653259, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -22004,8 +22035,8 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 4096
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -22035,7 +22066,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: -0.2006836}
+  m_margin: {x: 2.1044922, y: 0, z: 0, w: -0.2006836}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -22065,8 +22096,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000061035156, y: 0.000030517578}
-  m_SizeDelta: {x: 525.8186, y: 340}
+  m_AnchoredPosition: {x: -1.0909, y: 22.7805}
+  m_SizeDelta: {x: 487.8181, y: 267.0387}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1333379583
 GameObject:
@@ -27784,7 +27815,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -483, y: 220}
-  m_SizeDelta: {x: 525.82, y: 340}
+  m_SizeDelta: {x: 510, y: 330}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1749731401
 MonoBehaviour:
@@ -27799,14 +27830,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.39215687}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 791336545582589345, guid: ad9cef8dd6e36e07bbb444d817939675, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -28904,6 +28935,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueText: {fileID: 1314437860}
+  dialogueImage: {fileID: 1749731401}
+  dialoguePanel: {fileID: 1314437862}
+  animDuration: 0.5
 --- !u!1 &1811313413
 GameObject:
   m_ObjectHideFlags: 0
