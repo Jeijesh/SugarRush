@@ -10,13 +10,13 @@ public class MainMenuManager : MonoBehaviour
     public GameObject initialsPanel;
     public GameObject leaderboardPanel;
     public GameObject creditsPanel;
-    public GameObject exitConfirmationPanel; // panel konfirmasi keluar
+    public GameObject exitConfirmationPanel;
 
     [Header("Initials Input")]
     public TMP_InputField initialsInput;
     public Button initialsSubmitButton;
 
-    [Header("Buttons")]
+    [Header("Main Buttons")]
     public Button startButton;
     public Button leaderboardButton;
     public Button creditsButton;
@@ -30,44 +30,70 @@ public class MainMenuManager : MonoBehaviour
     public Button confirmExitNoButton;
 
     [Header("Leaderboard (10 entries)")]
-    public TMP_Text[] leaderboardTexts = new TMP_Text[10]; // assign 10 TextMeshPro di Inspector
+    public TMP_Text[] leaderboardTexts = new TMP_Text[10];
+
+    [Header("Audio Clips")]
+    public AudioClip bgmMainMenu;
+    public AudioClip buttonSFX;
 
     private void Start()
     {
-        // Setup main buttons
-        if (startButton != null) startButton.onClick.AddListener(OnStartClicked);
-        if (leaderboardButton != null) leaderboardButton.onClick.AddListener(OnLeaderboardClicked);
-        if (creditsButton != null) creditsButton.onClick.AddListener(OnCreditsClicked);
-        if (exitButton != null) exitButton.onClick.AddListener(OnExitClicked);
+        // Main Menu BGM (pakai BGMManager langsung, dicek biar ga duplikat)
+        if (BGMManager.Instance != null && bgmMainMenu != null)
+            BGMManager.Instance.PlayBGM(bgmMainMenu);
 
-        if (initialsSubmitButton != null) initialsSubmitButton.onClick.AddListener(OnInitialsSubmit);
+        // Setup main buttons
+        startButton.onClick.AddListener(() => { PlayButtonSFX(); OnStartClicked(); });
+        leaderboardButton.onClick.AddListener(() => { PlayButtonSFX(); OnLeaderboardClicked(); });
+        creditsButton.onClick.AddListener(() => { PlayButtonSFX(); OnCreditsClicked(); });
+        exitButton.onClick.AddListener(() => { PlayButtonSFX(); OnExitClicked(); });
+
+        if (initialsSubmitButton != null)
+            initialsSubmitButton.onClick.AddListener(() => { PlayButtonSFX(); OnInitialsSubmit(); });
 
         // Setup panel exit buttons
-        if (initialsExitButton != null) initialsExitButton.onClick.AddListener(CloseInitialsPanel);
-        if (leaderboardExitButton != null) leaderboardExitButton.onClick.AddListener(CloseLeaderboardPanel);
-        if (creditsExitButton != null) creditsExitButton.onClick.AddListener(CloseCreditsPanel);
+        if (initialsExitButton != null)
+            initialsExitButton.onClick.AddListener(() => { PlayButtonSFX(); CloseInitialsPanel(); });
+        if (leaderboardExitButton != null)
+            leaderboardExitButton.onClick.AddListener(() => { PlayButtonSFX(); CloseLeaderboardPanel(); });
+        if (creditsExitButton != null)
+            creditsExitButton.onClick.AddListener(() => { PlayButtonSFX(); CloseCreditsPanel(); });
 
-        // Konfirmasi exit
-        if (confirmExitYesButton != null) confirmExitYesButton.onClick.AddListener(Application.Quit);
-        if (confirmExitNoButton != null) confirmExitNoButton.onClick.AddListener(() =>
-        {
-            if (exitConfirmationPanel != null)
-                exitConfirmationPanel.SetActive(false);
-        });
+        // Confirm exit
+        if (confirmExitYesButton != null)
+            confirmExitYesButton.onClick.AddListener(() => { PlayButtonSFX(); Application.Quit(); });
+        if (confirmExitNoButton != null)
+            confirmExitNoButton.onClick.AddListener(() => { PlayButtonSFX(); exitConfirmationPanel.SetActive(false); EnableMainButtons(); });
 
-        // Hide all secondary panels at start
-        if (initialsPanel != null) initialsPanel.SetActive(false);
-        if (leaderboardPanel != null) leaderboardPanel.SetActive(false);
-        if (creditsPanel != null) creditsPanel.SetActive(false);
-        if (exitConfirmationPanel != null) exitConfirmationPanel.SetActive(false);
+        // Hide all panels
+        initialsPanel.SetActive(false);
+        leaderboardPanel.SetActive(false);
+        creditsPanel.SetActive(false);
+        exitConfirmationPanel.SetActive(false);
 
-        ShowLeaderboard(); // tampilkan leaderboard terakhir
+        ShowLeaderboard();
     }
+
+    private void PlayButtonSFX()
+    {
+        if (BGMManager.Instance != null && buttonSFX != null)
+            BGMManager.Instance.PlaySFX(buttonSFX);
+    }
+
+    private void SetMainButtonsActive(bool active)
+    {
+        startButton.interactable = active;
+        leaderboardButton.interactable = active;
+        creditsButton.interactable = active;
+        exitButton.interactable = active;
+    }
+
+    private void EnableMainButtons() => SetMainButtonsActive(true);
+    private void DisableMainButtons() => SetMainButtonsActive(false);
 
     private void OnStartClicked()
     {
-
-        // Buka panel input initials
+        DisableMainButtons();
         if (initialsPanel != null)
         {
             initialsPanel.SetActive(true);
@@ -77,6 +103,7 @@ public class MainMenuManager : MonoBehaviour
 
     private void OnLeaderboardClicked()
     {
+        DisableMainButtons();
         if (leaderboardPanel != null)
         {
             leaderboardPanel.SetActive(true);
@@ -86,12 +113,14 @@ public class MainMenuManager : MonoBehaviour
 
     private void OnCreditsClicked()
     {
+        DisableMainButtons();
         if (creditsPanel != null)
             creditsPanel.SetActive(true);
     }
 
     private void OnExitClicked()
     {
+        DisableMainButtons();
         if (exitConfirmationPanel != null)
             exitConfirmationPanel.SetActive(true);
         else
@@ -115,8 +144,7 @@ public class MainMenuManager : MonoBehaviour
     {
         if (leaderboardTexts == null || leaderboardTexts.Length == 0) return;
 
-        var entries = LeaderboardManager.Instance?.GetLeaderboard();
-        if (entries == null) entries = new List<LeaderboardManager.LeaderboardEntry>();
+        var entries = LeaderboardManager.Instance?.GetLeaderboard() ?? new List<LeaderboardManager.LeaderboardEntry>();
 
         for (int i = 0; i < leaderboardTexts.Length; i++)
         {
@@ -140,17 +168,20 @@ public class MainMenuManager : MonoBehaviour
     {
         if (initialsPanel != null)
             initialsPanel.SetActive(false);
+        EnableMainButtons();
     }
 
     public void CloseLeaderboardPanel()
     {
         if (leaderboardPanel != null)
             leaderboardPanel.SetActive(false);
+        EnableMainButtons();
     }
 
     public void CloseCreditsPanel()
     {
         if (creditsPanel != null)
             creditsPanel.SetActive(false);
+        EnableMainButtons();
     }
 }

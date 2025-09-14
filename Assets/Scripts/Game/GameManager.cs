@@ -35,19 +35,20 @@ public class GameManager : MonoBehaviour
 
     private string playerInitials = "AAA";
 
-    private void Awake()
+private void Awake()
+{
+    // Singleton pattern tapi tanpa DontDestroyOnLoad
+    if (Instance != null && Instance != this)
     {
-        // Destroy old instance supaya benar-benar fresh saat start ulang
-        if (Instance != null && Instance != this)
-        {
-            Destroy(Instance.gameObject);
-        }
-
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-
-        playerInitials = PlayerPrefs.GetString("PlayerInitials", "AAA");
+        Destroy(gameObject);
+        return;
     }
+
+    Instance = this;
+
+    playerInitials = PlayerPrefs.GetString("PlayerInitials", "Anonymous");
+}
+
 
     private void Start()
     {

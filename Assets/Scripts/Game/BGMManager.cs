@@ -1,50 +1,112 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BGMManager : MonoBehaviour
 {
     public static BGMManager Instance;
 
     [Header("Audio Sources")]
-    public AudioSource bgmSource;        // untuk music utama
-    public AudioSource ambienceSource;   // untuk ambience
+    public AudioSource bgmSource;        
+    public AudioSource ambienceSource;   
+    public AudioSource sfxSource;        
 
     [Header("Settings")]
     [Range(0f, 1f)] public float bgmVolume = 0.7f;
     [Range(0f, 1f)] public float ambienceVolume = 0.5f;
+    [Range(0f, 1f)] public float sfxVolume = 1f;
+
+    [Header("Clips")]
+    public AudioClip bgmMainMenu;
+    public AudioClip bgmRush;
+    public AudioClip ambienceRush;
+
+    [Header("Transition Settings")]
+    public float fadeTime = 1f; // durasi fade in/out
 
     private void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded; // subscribe event
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
-        DontDestroyOnLoad(gameObject);
+        ApplyVolumes();
+    }
 
-        if (bgmSource != null)
-            bgmSource.volume = bgmVolume;
-        if (ambienceSource != null)
-            ambienceSource.volume = ambienceVolume;
+    private void ApplyVolumes()
+    {
+        if (bgmSource != null) bgmSource.volume = bgmVolume;
+        if (ambienceSource != null) ambienceSource.volume = ambienceVolume;
+        if (sfxSource != null) sfxSource.volume = sfxVolume;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "MainMenu")
+        {
+            CrossfadeBGM(bgmMainMenu, fadeTime);
+            StopAmbience(); // ga pake ambience di menu
+        }
+        else if (scene.name == "RushMode")
+        {
+            CrossfadeBGM(bgmRush, fadeTime);
+            PlayAmbience(ambienceRush);
+        }
     }
 
     #region BGM Controls
     public void PlayBGM(AudioClip clip, bool loop = true)
     {
         if (bgmSource == null || clip == null) return;
+        if (bgmSource.isPlaying && bgmSource.clip == clip) return; // anti dupe
         bgmSource.clip = clip;
         bgmSource.loop = loop;
+        bgmSource.volume = bgmVolume;
         bgmSource.Play();
     }
 
     public void StopBGM()
     {
-        if (bgmSource == null) return;
-        bgmSource.Stop();
+        if (bgmSource != null) bgmSource.Stop();
     }
 
-    public void SetBGMVolume(float volume)
+    public void CrossfadeBGM(AudioClip newClip, float duration)
     {
-        bgmVolume = Mathf.Clamp01(volume);
-        if (bgmSource != null)
-            bgmSource.volume = bgmVolume;
+        if (bgmSource == null || newClip == null) return;
+        if (bgmSource.clip == newClip && bgmSource.isPlaying) return;
+        StartCoroutine(CrossfadeRoutine(newClip, duration));
+    }
+
+    private System.Collections.IEnumerator CrossfadeRoutine(AudioClip newClip, float duration)
+    {
+        // Fade out
+        float startVol = bgmSource.volume;
+        for (float t = 0; t < duration; t += Time.deltaTime)
+        {
+            bgmSource.volume = Mathf.Lerp(startVol, 0f, t / duration);
+            yield return null;
+        }
+        bgmSource.Stop();
+
+        // Ganti clip
+        bgmSource.clip = newClip;
+        bgmSource.loop = true;
+        bgmSource.Play();
+
+        // Fade in
+        for (float t = 0; t < duration; t += Time.deltaTime)
+        {
+            bgmSource.volume = Mathf.Lerp(0f, bgmVolume, t / duration);
+            yield return null;
+        }
+        bgmSource.volume = bgmVolume;
     }
     #endregion
 
@@ -52,49 +114,24 @@ public class BGMManager : MonoBehaviour
     public void PlayAmbience(AudioClip clip, bool loop = true)
     {
         if (ambienceSource == null || clip == null) return;
+        if (ambienceSource.isPlaying && ambienceSource.clip == clip) return; // anti dupe
         ambienceSource.clip = clip;
         ambienceSource.loop = loop;
+        ambienceSource.volume = ambienceVolume;
         ambienceSource.Play();
     }
 
     public void StopAmbience()
     {
-        if (ambienceSource == null) return;
-        ambienceSource.Stop();
-    }
-
-    public void SetAmbienceVolume(float volume)
-    {
-        ambienceVolume = Mathf.Clamp01(volume);
-        if (ambienceSource != null)
-            ambienceSource.volume = ambienceVolume;
+        if (ambienceSource != null) ambienceSource.Stop();
     }
     #endregion
 
-    #region Fade (Optional)
-    public void FadeBGM(float targetVolume, float duration)
+    #region SFX Controls
+    public void PlaySFX(AudioClip clip)
     {
-        if (bgmSource != null)
-            StartCoroutine(FadeVolume(bgmSource, targetVolume, duration));
-    }
-
-    public void FadeAmbience(float targetVolume, float duration)
-    {
-        if (ambienceSource != null)
-            StartCoroutine(FadeVolume(ambienceSource, targetVolume, duration));
-    }
-
-    private System.Collections.IEnumerator FadeVolume(AudioSource source, float target, float duration)
-    {
-        float startVolume = source.volume;
-        float t = 0f;
-        while (t < duration)
-        {
-            t += Time.deltaTime;
-            source.volume = Mathf.Lerp(startVolume, target, t / duration);
-            yield return null;
-        }
-        source.volume = target;
+        if (sfxSource != null && clip != null)
+            sfxSource.PlayOneShot(clip, sfxVolume);
     }
     #endregion
 }
