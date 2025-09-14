@@ -34,7 +34,20 @@ public class GameManager : MonoBehaviour
     [Header("UI Timer")]
     public TMP_Text timerText;
 
-    private string inisialPemain = "AAA";
+[Header("UI Pause")]
+public Button tombolPause;      // tombol kecil di pojok kanan atas
+public GameObject panelPause;   // panel overlay pause
+public Button tombolLanjut;     // tombol lanjut di panel pause
+public Button tombolKeluar;     // tombol keluar ke menu di panel pause
+
+private bool isPaused = false;
+
+
+    [Header("Quotes Diabetes")]
+public TMP_Text quotesText;
+
+
+    private string inisialPemain = "Anonymous";
 
     private void Awake()
     {
@@ -47,31 +60,72 @@ public class GameManager : MonoBehaviour
         Instance = this;
         inisialPemain = PlayerPrefs.GetString("PlayerInitials", "Anonymous");
     }
+public void TogglePause()
+{
+    isPaused = !isPaused;
+    Time.timeScale = isPaused ? 0f : 1f; // pause / resume game
+    if (panelPause != null)
+        panelPause.SetActive(isPaused);
+}
 
-    private void Start()
+private void Start()
+{
+    // Inisialisasi game
+    remainingTime = totalTime;
+    skor = 0;
+    gameEnded = false;
+    overtime = false;
+
+    // Mulai timer dan spawn pasien pertama
+    StartCoroutine(TimerCoroutine());
+    SpawnNextPatient();
+
+    // Tombol kembali ke menu (di Game Over)
+    if (tombolKembaliMenu != null)
     {
-        remainingTime = totalTime;
-        skor = 0;
-        gameEnded = false;
-        overtime = false;
-
-        StartCoroutine(TimerCoroutine());
-        SpawnNextPatient();
-
-        if (tombolKembaliMenu != null)
+        tombolKembaliMenu.onClick.RemoveAllListeners();
+        tombolKembaliMenu.onClick.AddListener(() =>
         {
-            tombolKembaliMenu.onClick.RemoveAllListeners();
-            tombolKembaliMenu.onClick.AddListener(() =>
-            {
-                StopAllCoroutines();
-                Destroy(gameObject);
-                SceneManager.LoadScene("MainMenu");
-            });
-        }
-
-        if (panelGameOver != null)
-            panelGameOver.SetActive(false);
+            StopAllCoroutines();
+            Destroy(gameObject);
+            SceneManager.LoadScene("MainMenu");
+        });
     }
+
+    // Tombol pause kecil di pojok kanan atas
+    if (tombolPause != null)
+    {
+        tombolPause.onClick.RemoveAllListeners();
+        tombolPause.onClick.AddListener(TogglePause);
+    }
+
+    // Panel pause awalnya disembunyikan
+    if (panelPause != null)
+        panelPause.SetActive(false);
+
+    // Tombol Lanjut di panel pause
+    if (tombolLanjut != null)
+    {
+        tombolLanjut.onClick.RemoveAllListeners();
+        tombolLanjut.onClick.AddListener(TogglePause); // Resume game
+    }
+
+    // Tombol Keluar di panel pause
+    if (tombolKeluar != null)
+    {
+        tombolKeluar.onClick.RemoveAllListeners();
+        tombolKeluar.onClick.AddListener(() =>
+        {
+            Time.timeScale = 1f; // pastikan game berjalan normal sebelum load menu
+            SceneManager.LoadScene("MainMenu");
+        });
+    }
+
+    // Panel Game Over awalnya disembunyikan
+    if (panelGameOver != null)
+        panelGameOver.SetActive(false);
+}
+
 
     private IEnumerator TimerCoroutine()
     {
@@ -91,21 +145,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void UpdateTimerUI()
-    {
-        if (timerText == null) return;
+private void UpdateTimerUI()
+{
+    if (timerText == null) return;
 
-        if (!overtime)
-        {
-            timerText.color = Color.white;
-            timerText.text = Mathf.CeilToInt(remainingTime).ToString();
-        }
-        else
-        {
-            timerText.color = Color.red;
-            timerText.text = "OVERTIME";
-        }
+    if (!overtime)
+    {
+        timerText.color = Color.white;
+        timerText.text = $"Waktu: {Mathf.CeilToInt(remainingTime)}d";
     }
+    else
+    {
+        timerText.color = Color.red;
+        timerText.text = "DETIK TERAKHIR!";
+    }
+}
+
 
 private void EndGame()
 {
@@ -133,7 +188,14 @@ private void EndGame()
             if (peringkatText != null)
                 peringkatText.text = rank > 0 ? $"Peringkat: {rank}" : "Peringkat: N/A";
         }
+        if (quotesText != null && diabetesQuotes.Length > 0)
+{
+    int randomIndex = Random.Range(0, diabetesQuotes.Length);
+    quotesText.text = $"\"{diabetesQuotes[randomIndex]}\"";
+}
+
     }
+    
 }
 
 
@@ -223,6 +285,16 @@ public void SubmitAnswer(int submittedScore)
             PlayerPrefs.Save();
         }
     }
+
+private string[] diabetesQuotes = new string[]
+{
+    "Diabetes adalah sebuah perjalanan, bukan perlombaan.",
+    "Langkah kecil setiap hari bisa membuat perbedaan besar dalam mengelola diabetes.",
+    "Hidup sehat adalah obat terbaik untuk diabetes.",
+    "Gula darahmu bukan identitasmu; jaga dirimu dengan baik.",
+    "Mengelola diabetes tentang keseimbangan, bukan kesempurnaan."
+};
+
 
     public int GetScore() => skor;
     public string GetPlayerInitials() => inisialPemain;

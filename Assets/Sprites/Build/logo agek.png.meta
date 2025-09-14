@@ -1,0 +1,533 @@
+fileFormatVersion: 2
+guid: 8e96312e92ffd339f85c37cd3471b20b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7469288466128693399
+    second: logo agek_0
+  - first:
+      213: 537851758213816389
+    second: logo agek_1
+  - first:
+      213: -3895208091427673163
+    second: logo agek_2
+  - first:
+      213: 4633923522915510692
+    second: logo agek_3
+  - first:
+      213: -4394333198409439357
+    second: logo agek_4
+  - first:
+      213: 3324920558122504116
+    second: logo agek_5
+  - first:
+      213: 2353987390946522173
+    second: logo agek_6
+  - first:
+      213: 5921392032033228199
+    second: logo agek_7
+  - first:
+      213: -2918175400508402224
+    second: logo agek_8
+  - first:
+      213: 3725136913725485686
+    second: logo agek_9
+  - first:
+      213: 4121141619005854869
+    second: logo agek_10
+  - first:
+      213: -5747405233571608911
+    second: logo agek_11
+  - first:
+      213: 5583098595274491399
+    second: logo agek_12
+  - first:
+      213: -6896060149314878261
+    second: logo agek_13
+  - first:
+      213: -3802589476408722642
+    second: logo agek_14
+  - first:
+      213: -7015048486933005591
+    second: logo agek_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: logo agek_0
+      rect:
+        serializedVersion: 2
+        x: 3074
+        y: 3138
+        width: 2520
+        height: 2108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 798e584394e38a760800000000000000
+      internalID: 7469288466128693399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: logo agek_1
+      rect:
+        serializedVersion: 2
+        x: 2151
+        y: 2460
+        width: 331
+        height: 342
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 540672e0355d67700800000000000000
+      internalID: 537851758213816389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: logo agek_2
+      rect:
+        serializedVersion: 2
+        x: 2502
+        y: 2460
+        width: 396
+        height: 342
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5bbe938e0e071f9c0800000000000000
+      internalID: -3895208091427673163
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: logo agek_3
+      rect:
+        serializedVersion: 2
+        x: 2896
+        y: 2451
+        width: 340
+        height: 359
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a9a4bb74e00f4040800000000000000
+      internalID: 4633923522915510692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: logo agek_4
+      rect:
+        serializedVersion: 2
+        x: 3284
+        y: 2460
+        width: 276
+        height: 342
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 387691cfc313403c0800000000000000
+      internalID: -4394333198409439357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: logo agek_5
+      rect:
+        serializedVersion: 2
+        x: 3574
+        y: 2460
+        width: 308
+        height: 342
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4bf0945a1ad742e20800000000000000
+      internalID: 3324920558122504116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: logo agek_6
+      rect:
+        serializedVersion: 2
+        x: 4006
+        y: 2460
+        width: 204
+        height: 258
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d34bd136f0b0ba020800000000000000
+      internalID: 2353987390946522173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: logo agek_7
+      rect:
+        serializedVersion: 2
+        x: 4262
+        y: 2460
+        width: 206
+        height: 258
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a54b252ea20d2250800000000000000
+      internalID: 5921392032033228199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: logo agek_8
+      rect:
+        serializedVersion: 2
+        x: 4498
+        y: 2458
+        width: 272
+        height: 262
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d5d9643fee8087d0800000000000000
+      internalID: -2918175400508402224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: logo agek_9
+      rect:
+        serializedVersion: 2
+        x: 4824
+        y: 2460
+        width: 244
+        height: 258
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6727d42594852b330800000000000000
+      internalID: 3725136913725485686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: logo agek_10
+      rect:
+        serializedVersion: 2
+        x: 5118
+        y: 2458
+        width: 214
+        height: 260
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5941cedb77c313930800000000000000
+      internalID: 4121141619005854869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: logo agek_11
+      rect:
+        serializedVersion: 2
+        x: 5384
+        y: 2458
+        width: 230
+        height: 262
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b64eb0246d1d30b0800000000000000
+      internalID: -5747405233571608911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: logo agek_12
+      rect:
+        serializedVersion: 2
+        x: 5622
+        y: 2460
+        width: 210
+        height: 258
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 706815587962b7d40800000000000000
+      internalID: 5583098595274491399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: logo agek_13
+      rect:
+        serializedVersion: 2
+        x: 5868
+        y: 2460
+        width: 34
+        height: 258
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc40c52c4d54c40a0800000000000000
+      internalID: -6896060149314878261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: logo agek_14
+      rect:
+        serializedVersion: 2
+        x: 5954
+        y: 2458
+        width: 272
+        height: 262
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2bf408a40d7a3bc0800000000000000
+      internalID: -3802589476408722642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: logo agek_15
+      rect:
+        serializedVersion: 2
+        x: 6278
+        y: 2460
+        width: 218
+        height: 258
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ea7736819a85ae90800000000000000
+      internalID: -7015048486933005591
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      logo agek_0: 7469288466128693399
+      logo agek_1: 537851758213816389
+      logo agek_10: 4121141619005854869
+      logo agek_11: -5747405233571608911
+      logo agek_12: 5583098595274491399
+      logo agek_13: -6896060149314878261
+      logo agek_14: -3802589476408722642
+      logo agek_15: -7015048486933005591
+      logo agek_2: -3895208091427673163
+      logo agek_3: 4633923522915510692
+      logo agek_4: -4394333198409439357
+      logo agek_5: 3324920558122504116
+      logo agek_6: 2353987390946522173
+      logo agek_7: 5921392032033228199
+      logo agek_8: -2918175400508402224
+      logo agek_9: 3725136913725485686
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

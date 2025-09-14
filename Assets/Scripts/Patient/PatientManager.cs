@@ -51,7 +51,7 @@ public class PatientManager : MonoBehaviour
     // Tambah last name
     private string[] lastNames = {
         "Hidayat","Santoso","Wijaya","Pratama","Wibowo","Cahya","Purnama","Anggara","Permana","Lesmana",
-        "Saputra","Putra","Ramadhan","Utama","Setiawan","Gunawan","Prasetyo","Kusuma","Rahman","Nugroho"
+        "Saputra","Alam","Ramadhan","Utama","Setiawan","Gunawan","Prasetyo","Kusuma","Rahman","Nugroho"
     };
 
     public Patient GeneratePatient()
