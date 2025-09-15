@@ -90,4 +90,5 @@ public class LeaderboardManager : MonoBehaviour
             leaderboard = new List<LeaderboardEntry>(wrapper.entries);
         }
     }
+
 }

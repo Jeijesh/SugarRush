@@ -7586,7 +7586,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1471681867}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81333333
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -10138,7 +10138,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1989474861}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81333333
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -12834,8 +12834,8 @@ MonoBehaviour:
   totalTime: 180
   panelGameOver: {fileID: 1114013223}
   namaPemainText: {fileID: 1639263671}
-  skorAkhirText: {fileID: 2087407364}
-  peringkatText: {fileID: 1033905081}
+  skorAkhirText: {fileID: 1033905081}
+  peringkatText: {fileID: 2087407364}
   tombolKembaliMenu: {fileID: 1653097411}
   timerText: {fileID: 776219735}
   tombolPause: {fileID: 576429327}
@@ -20217,7 +20217,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 214061289}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81333333
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -22916,7 +22916,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1089011645}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81333333
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -28952,7 +28952,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1150276855}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81333333
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -30411,7 +30411,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 191051681}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81333333
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -33162,7 +33162,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1779465805}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81333333
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -34390,7 +34390,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Peingkat: #7'
+  m_text: 'Peringkat: N/A'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
   m_sharedMaterial: {fileID: 7974440492402943412, guid: 847c97746dc97f1b287f5d272cd9b426, type: 2}
